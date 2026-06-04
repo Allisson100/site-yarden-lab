@@ -559,6 +559,7 @@ export default function AISection() {
                 <motion.div key="form"
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
+                  className="ai-form-content"
                   style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
                 >
                   <Field label="Descrição da marca">
@@ -635,7 +636,7 @@ export default function AISection() {
 
                   <TurnstileWidget onVerify={handleTurnstileVerify} />
 
-                  <div style={{ flex: 1 }} />
+                  <div className="ai-form-spacer" style={{ flex: 1 }} />
 
                   <button onClick={handleSubmit} disabled={!canSubmit}
                     style={{
@@ -838,6 +839,9 @@ export default function AISection() {
           }
           .ai-features { grid-template-columns: repeat(2, 1fr) !important; }
           .ai-fields-row { grid-template-columns: 1fr !important; }
+          /* remove o spacer flex e libera overflow para o botão aparecer */
+          .ai-form-spacer { display: none !important; }
+          .ai-form-content { overflow: visible !important; flex: unset !important; }
         }
         @media (max-width: 540px) {
           .ai-features { grid-template-columns: 1fr !important; }

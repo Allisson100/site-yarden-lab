@@ -29,6 +29,17 @@ function GridCell({ item, index, inView, onOpen }) {
   const [error, setError]     = useState(false)
   const videoRef              = useRef(null)
 
+  /* iOS/Android não renderiza o 1º frame com preload="metadata".
+     Setar currentTime = 0.001 força o browser a exibir o thumbnail. */
+  useEffect(() => {
+    if (item.type !== 'video' || !videoRef.current) return
+    const v = videoRef.current
+    const show = () => { try { v.currentTime = 0.001 } catch {} }
+    v.addEventListener('loadedmetadata', show)
+    if (v.readyState >= 1) show()          // já carregou antes do listener
+    return () => v.removeEventListener('loadedmetadata', show)
+  }, [item.type])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
