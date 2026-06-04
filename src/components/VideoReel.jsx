@@ -405,10 +405,13 @@ export default function VideoReel() {
           display: flex;
           flex-direction: column;
           gap: 2px;
+          /* sem height explícito — o grid stretch preenche a linha sozinho */
         }
         .vr-side > * {
           flex: 1;
           min-height: 0;
+          height: 0 !important; /* !important sobrescreve o inline height:'100%' do VideoCard;
+                                   flex:1 assume o controle e divide o espaço igualmente */
         }
 
         /* ── Bottom row: 3 equal cards (height set inline per card) ── */

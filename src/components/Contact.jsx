@@ -130,7 +130,7 @@ export default function Contact() {
   ]
 
   return (
-    <section id="contact" style={{
+    <section id="contact" className="contact-section" style={{
       background: 'var(--burgundy)',
       padding: '140px 0',
       position: 'relative',
@@ -231,6 +231,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, delay: 0.15 }}
+            className="contact-form-box"
             style={{
               background: 'rgba(12,3,5,0.5)',
               border: '1px solid rgba(243,235,226,0.08)',
@@ -283,7 +284,7 @@ export default function Contact() {
                     Iniciar Conversa
                   </p>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', marginBottom: '2px' }}>
+                  <div className="contact-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', marginBottom: '2px' }}>
                     <input
                       name="name"
                       placeholder="Nome completo"
@@ -305,7 +306,7 @@ export default function Contact() {
                     />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', marginBottom: '2px' }}>
+                  <div className="contact-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', marginBottom: '2px' }}>
                     <input
                       name="email"
                       type="email"
@@ -391,15 +392,6 @@ export default function Contact() {
                     )}
                   </button>
 
-                  <p style={{
-                    color: 'rgba(243,235,226,0.25)',
-                    fontSize: '11px',
-                    textAlign: 'center',
-                    marginTop: '16px',
-                    lineHeight: 1.5,
-                  }}>
-                    Resposta em até 24 horas úteis. Sem compromisso.
-                  </p>
                 </motion.form>
               )}
             </AnimatePresence>
@@ -409,7 +401,12 @@ export default function Contact() {
 
       <style>{`
         @media (max-width: 900px) {
-          .contact-grid { grid-template-columns: 1fr !important; gap: 60px !important; }
+          .contact-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+        }
+        @media (max-width: 768px) {
+          .contact-section { padding: 72px 0 60px !important; }
+          .contact-form-box { padding: 28px 20px !important; }
+          .contact-fields-row { grid-template-columns: 1fr !important; }
         }
         input::placeholder, textarea::placeholder {
           color: rgba(243,235,226,0.3);

@@ -158,8 +158,8 @@ export async function handleAnalyze(body, emitter, ip) {
   } = body || {}
 
   // Basic validation
-  if (!brandDescription || brandDescription.trim().length < 20) {
-    return emitter.error('Descreva sua marca com pelo menos 20 caracteres para continuar.')
+  if (!brandDescription || brandDescription.trim().length < 1) {
+    return emitter.error('A descrição da marca é obrigatória.')
   }
 
   // 1. Security

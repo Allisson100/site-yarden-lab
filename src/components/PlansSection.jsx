@@ -139,7 +139,7 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
         display: 'grid',
         gridTemplateColumns: plan.featured ? '1fr 1fr' : '1fr',
         gap: plan.featured ? '60px' : '24px',
-        alignItems: 'start',
+        alignItems: 'stretch',
         flex: 1,
       }}>
         {/* Esquerda: para quem + descrição */}
@@ -155,11 +155,11 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
         </div>
 
         {/* Direita: features + CTA */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <p style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '0.26em', textTransform: 'uppercase', color: gold, marginBottom: '14px' }}>
             O que está incluído
           </p>
-          <ul style={{ listStyle: 'none', marginBottom: '28px' }}>
+          <ul style={{ listStyle: 'none', flex: 1 }}>
             {plan.features.map(f => (
               <li key={f} style={{ display: 'flex', gap: '10px', marginBottom: '9px', color: hl ? 'rgba(243,235,226,0.7)' : 'rgba(54,15,17,0.65)', fontSize: '13px', lineHeight: 1.5 }}>
                 <span style={{ color: hl ? goldL : gold, flexShrink: 0, marginTop: '2px' }}>✓</span>
@@ -175,6 +175,7 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '10px',
               padding: '14px 28px',
+              marginTop: '28px',
               background: hl ? gold : 'var(--burgundy)',
               color: '#fff', fontSize: '11px', fontWeight: 600,
               letterSpacing: '0.12em', textTransform: 'uppercase',

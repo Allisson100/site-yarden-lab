@@ -158,7 +158,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section style={{
+    <section className="hero-section" style={{
       position: 'relative',
       height: '100vh',
       minHeight: '640px',
@@ -258,36 +258,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        style={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-          color: 'rgba(243,235,226,0.4)',
-          cursor: 'pointer',
-        }}
-        onClick={() => document.querySelector('#manifesto')?.scrollIntoView({ behavior: 'smooth' })}
-      >
-        <span style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Scroll</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-            <path d="M12 5v14M5 12l7 7 7-7" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.div>
-      </motion.div>
-
       {/* Bottom stats bar */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -329,6 +299,13 @@ export default function Hero() {
       <style>{`
         @media (max-width: 768px) {
           .hero-stats { display: none !important; }
+          .hero-section {
+            height: auto !important;
+            min-height: unset !important;
+            justify-content: flex-start !important;
+            padding-top: 110px !important;
+            padding-bottom: 72px !important;
+          }
         }
       `}</style>
     </section>

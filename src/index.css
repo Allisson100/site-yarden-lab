@@ -173,11 +173,21 @@ button {
   .mobile-only  { display: block !important; }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--sand); }
-::-webkit-scrollbar-thumb:hover { background: var(--burgundy-mid); }
+/* Scrollbar — visível no desktop */
+::-webkit-scrollbar { width: 11px; }
+::-webkit-scrollbar-track { background: var(--burgundy-deep); }
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border: 2px solid var(--burgundy-deep);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) var(--burgundy-deep);
+}
 
 /* Selection */
 ::selection {

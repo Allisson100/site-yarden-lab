@@ -37,7 +37,7 @@ function GridCell({ item, index, inView, onOpen }) {
       onClick={() => onOpen(item.id)}
       style={{
         position: 'relative',
-        aspectRatio: '1 / 1',   /* quadrado — igual ao Instagram */
+        aspectRatio: '4 / 5',   /* portrait Instagram — mais alto que largo */
         overflow: 'hidden',
         cursor: 'pointer',
         background: item.type === 'video'
@@ -152,9 +152,28 @@ function Lightbox({ items, initialIdx, onClose }) {
         <AnimatePresence mode="wait">
           <motion.div key={idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} style={{ width: '100%' }}>
             {item.type === 'photo'
-              ? <img src={item.src} alt={item.label} style={{ width: '100%', maxHeight: '80vh', objectFit: 'contain', display: 'block' }} />
-              : <video ref={videoRef} src={item.src} controls autoPlay playsInline
-                  style={{ width: '100%', maxHeight: '80vh', display: 'block', background: '#000' }} />
+              ? <img
+                  src={item.src}
+                  alt={item.label}
+                  style={{ maxWidth: '100vw', maxHeight: '85vh', objectFit: 'contain', display: 'block' }}
+                />
+              : <video
+                  ref={videoRef}
+                  src={item.src}
+                  controls
+                  autoPlay
+                  playsInline
+                  style={{
+                    /* 9:16 portrait: altura máxima 88vh, largura proporcional */
+                    height: '88vh',
+                    maxHeight: '88vh',
+                    width: 'auto',
+                    maxWidth: '100vw',
+                    display: 'block',
+                    background: '#000',
+                    aspectRatio: '9 / 16',
+                  }}
+                />
             }
           </motion.div>
         </AnimatePresence>
@@ -214,39 +233,44 @@ export default function InstagramFeed() {
     <section
       ref={sectionRef}
       id="portfolio"
-      style={{ background: '#090104', paddingTop: '72px', paddingBottom: '48px', position: 'relative' }}
+      style={{ background: '#000', position: 'relative', paddingBottom: '48px' }}
     >
-      {/* Cabeçalho compacto */}
-      <div style={{ padding: '0 16px', marginBottom: '24px' }}>
+      {/* Cabeçalho mobile */}
+      <div style={{ padding: '52px 24px 28px' }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55 }}
+          transition={{ duration: 0.6 }}
         >
           <p style={{
-            fontSize: '9px', fontWeight: 700, letterSpacing: '0.26em',
-            textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '8px',
+            fontSize: '9px', fontWeight: 700, letterSpacing: '0.28em',
+            textTransform: 'uppercase', color: 'var(--gold)',
             display: 'flex', alignItems: 'center', gap: '10px',
+            marginBottom: '14px',
           }}>
-            <span style={{ width: 28, height: 1, background: 'var(--gold)', display: 'inline-block', opacity: 0.45 }} />
-            Laboratório Yarden
+            <span style={{ width: 24, height: 1, background: 'var(--gold)', display: 'inline-block', opacity: 0.5 }} />
+            Nossa Produção
           </p>
           <h2 style={{
             fontFamily: 'var(--font-serif)', fontWeight: 300,
-            fontSize: 'clamp(26px, 7vw, 36px)', lineHeight: 1.1,
-            color: 'var(--cream)',
+            fontSize: 'clamp(28px, 8vw, 42px)', lineHeight: 1.1,
+            color: 'var(--cream)', marginBottom: '10px',
           }}>
-            Estética que converte{' '}
+            Estética que converte<br />
             <em style={{ fontStyle: 'italic', color: 'var(--gold-light)' }}>e posiciona.</em>
           </h2>
+          <p style={{ color: 'rgba(243,235,226,0.4)', fontSize: '13px', lineHeight: 1.65, fontWeight: 300 }}>
+            Cada projeto nasce de uma estratégia — e termina com uma identidade que o mercado reconhece.
+          </p>
         </motion.div>
       </div>
 
-      {/* Grade 3 colunas — exatamente como o Instagram */}
+      {/* Grade 3 colunas — full-width, 1px gap, idêntico ao Instagram */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '2px',
+        gap: '1px',
+        background: '#000', /* a cor do gap */
       }}>
         {MEDIA.map((item, i) => (
           <GridCell
@@ -258,20 +282,6 @@ export default function InstagramFeed() {
           />
         ))}
       </div>
-
-      {/* Rodapé */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.6 }}
-        style={{
-          textAlign: 'center', color: 'rgba(243,235,226,0.2)',
-          fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase',
-          margin: '20px 0 0',
-        }}
-      >
-        Portfólio completo sob solicitação
-      </motion.p>
 
       {/* Lightbox */}
       <AnimatePresence>

@@ -11,6 +11,53 @@ const PLAN_CATEGORIES = {
   'Operação Yarden 360':       'Recorrente',
 }
 
+// ─── Input normalization & validation ────────────────────────────────────────
+
+/**
+ * Instagram — aceita qualquer formato:
+ *   @yardenlab_  ·  yardenlab_  ·  instagram.com/yardenlab_
+ *   https://www.instagram.com/yardenlab_/  ·  instagr.am/yardenlab_
+ * Retorna o username limpo (sem @ e sem URL).
+ */
+function normalizeInstagram(raw) {
+  if (!raw) return ''
+  const s = raw.trim()
+  // Extrai usuário de URL do Instagram
+  const urlMatch = s.match(/(?:instagram\.com|instagr\.am)\/([A-Za-z0-9._]+)/i)
+  if (urlMatch) return urlMatch[1]
+  // Remove @ inicial
+  return s.replace(/^@+/, '').trim()
+}
+
+/**
+ * Site — aceita meusite.com, www.meusite.com, https://meusite.com
+ * Adiciona https:// se não houver protocolo.
+ */
+function normalizeUrl(raw) {
+  if (!raw) return ''
+  const s = raw.trim()
+  if (!s) return ''
+  if (/^https?:\/\//i.test(s)) return s
+  if (s.startsWith('//')) return 'https:' + s
+  if (s.includes('.')) return 'https://' + s
+  return s
+}
+
+/** Valida username do Instagram após normalização. '' = válido */
+function validateInstagram(val) {
+  if (!val) return ''
+  if (!/^[A-Za-z0-9._]{1,30}$/.test(val))
+    return 'Usuário inválido — use letras, números, _ ou .'
+  return ''
+}
+
+/** Valida URL após normalização. '' = válido */
+function validateUrl(val) {
+  if (!val) return ''
+  try { new URL(val); return '' }
+  catch { return 'URL inválida — ex: meusite.com.br' }
+}
+
 // ─── Left panel: clean oversized brand symbol only ───────────────────────────
 function BrandSymbolPanel({ phase }) {
   const isActive = phase === 'loading' || phase === 'streaming'
@@ -77,6 +124,29 @@ function BrandSymbolPanel({ phase }) {
   )
 }
 
+// ─── Inline markdown: renders **bold** (and hides stray ** while typing) ──────
+function renderInline(text) {
+  let t = text
+  // Remove a dangling unmatched ** mid-typing so the asterisks never flash
+  const markers = (t.match(/\*\*/g) || []).length
+  if (markers % 2 === 1) {
+    const last = t.lastIndexOf('**')
+    t = t.slice(0, last) + t.slice(last + 2)
+  }
+  const parts = t.split(/(\*\*[^*]+?\*\*)/g)
+  return parts.map((part, idx) => {
+    const m = part.match(/^\*\*([^*]+?)\*\*$/)
+    if (m) {
+      return (
+        <strong key={idx} style={{ color: 'var(--cream)', fontWeight: 600 }}>
+          {m[1]}
+        </strong>
+      )
+    }
+    return <span key={idx}>{part}</span>
+  })
+}
+
 // ─── Streaming text renderer with section formatting ──────────────────────────
 function StreamText({ text, streaming }) {
   const lines = text.split('\n')
@@ -95,7 +165,7 @@ function StreamText({ text, streaming }) {
               paddingBottom: '8px',
               borderBottom: '1px solid rgba(184,147,90,0.15)',
             }}>
-              {headerMatch[1]}
+              {renderInline(headerMatch[1])}
             </div>
           )
         }
@@ -104,7 +174,7 @@ function StreamText({ text, streaming }) {
             <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '7px', color: 'rgba(243,235,226,0.75)' }}>
               <span style={{ color: 'var(--gold)', flexShrink: 0, marginTop: '2px' }}>—</span>
               <span style={{ fontSize: '13px', lineHeight: 1.75, fontWeight: 300 }}>
-                {line.trim().replace(/^[•\-]\s*/, '')}
+                {renderInline(line.trim().replace(/^[•\-]\s*/, ''))}
               </span>
             </div>
           )
@@ -114,7 +184,7 @@ function StreamText({ text, streaming }) {
         const isLast = i === lines.length - 1
         return (
           <div key={i} style={{ color: 'rgba(243,235,226,0.72)', fontSize: '13px', lineHeight: 1.78, fontWeight: 300, marginBottom: '2px' }}>
-            {line}
+            {renderInline(line)}
             {streaming && isLast && (
               <motion.span
                 animate={{ opacity: [1, 0, 1] }}
@@ -217,13 +287,54 @@ export default function AISection() {
   const [displayedText, setDisplayedText] = useState('')
   const [planName, setPlanName] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({ instagram: '', siteUrl: '' })
+  const [fieldHints,  setFieldHints]  = useState({ instagram: '', siteUrl: '' })
 
   const handleTurnstileVerify = useCallback(token => setTurnstileToken(token), [])
   const setField = key => e => setForm(prev => ({ ...prev, [key]: e.target.value }))
 
+  // ── Blur handlers: normaliza e valida ────────────────────────────────────
+  const handleInstagramBlur = useCallback(e => {
+    const raw        = e.target.value
+    const normalized = normalizeInstagram(raw)
+    const error      = validateInstagram(normalized)
+    const changed    = normalized !== raw && raw.trim() !== ''
+
+    if (normalized !== raw) setForm(prev => ({ ...prev, instagram: normalized }))
+    setFieldErrors(prev => ({ ...prev, instagram: error }))
+    e.target.style.borderColor = error
+      ? 'rgba(220,80,80,0.5)'
+      : 'rgba(243,235,226,0.09)'
+
+    if (changed && !error) {
+      setFieldHints(prev => ({ ...prev, instagram: '✓ formato detectado automaticamente' }))
+      setTimeout(() => setFieldHints(prev => ({ ...prev, instagram: '' })), 2800)
+    }
+  }, [])
+
+  const handleUrlBlur = useCallback(e => {
+    const raw        = e.target.value
+    const normalized = normalizeUrl(raw)
+    const error      = validateUrl(normalized)
+    const changed    = normalized !== raw && raw.trim() !== ''
+
+    if (normalized !== raw) setForm(prev => ({ ...prev, siteUrl: normalized }))
+    setFieldErrors(prev => ({ ...prev, siteUrl: error }))
+    e.target.style.borderColor = error
+      ? 'rgba(220,80,80,0.5)'
+      : 'rgba(243,235,226,0.09)'
+
+    if (changed && !error) {
+      setFieldHints(prev => ({ ...prev, siteUrl: '✓ https:// adicionado' }))
+      setTimeout(() => setFieldHints(prev => ({ ...prev, siteUrl: '' })), 2800)
+    }
+  }, [])
+
   const canSubmit =
     phase === 'form' &&
-    form.brandDescription.trim().length >= 20 &&
+    form.brandDescription.trim().length >= 1 &&
+    !fieldErrors.instagram &&
+    !fieldErrors.siteUrl &&
     (import.meta.env.DEV || !siteKey || turnstileToken.length > 0)
 
   const handleSubmit = async () => {
@@ -234,20 +345,61 @@ export default function AISection() {
     setPlanName(null)
     setErrorMsg('')
 
-    // Local buffer — batches SSE tokens into ~4-word chunks every 120 ms
-    let textBuffer = ''
-    let flushTimer = null
-    const flush = () => {
-      const chunk = textBuffer
-      textBuffer = ''
-      if (chunk) setDisplayedText(prev => prev + chunk)
+    // Typewriter — SSE tokens accumulate into `target`; a timer reveals the
+    // text character-by-character for a natural "AI typing" effect.
+    let target      = ''     // tudo que já foi recebido
+    let revealed    = 0      // caracteres já exibidos
+    let typeTimer   = null
+    let streamEnded = false
+    let pendingPlan = null
+
+    const finish = () => {
+      if (!streamEnded || revealed < target.length) return
+      clearInterval(typeTimer); typeTimer = null
+      setPlanName(pendingPlan)
+      setPhase('done')
+    }
+
+    const ensureTyping = () => {
+      if (typeTimer) return
+      typeTimer = setInterval(() => {
+        if (revealed < target.length) {
+          const remaining = target.length - revealed
+          // acelera quando está muito atrás, desacelera perto do fim
+          const step = remaining > 160 ? 4 : remaining > 60 ? 2 : 1
+          revealed = Math.min(target.length, revealed + step)
+          setDisplayedText(target.slice(0, revealed))
+        } else {
+          finish()
+        }
+      }, 14)
+    }
+
+    // Normaliza campos opcionais antes de enviar
+    const normalizedInstagram = normalizeInstagram(form.instagram)
+    const normalizedUrl       = normalizeUrl(form.siteUrl)
+
+    // Valida após normalização (caso usuário não tenha saído do campo)
+    const instaErr = validateInstagram(normalizedInstagram)
+    const urlErr   = validateUrl(normalizedUrl)
+    if (instaErr || urlErr) {
+      setFieldErrors({ instagram: instaErr, siteUrl: urlErr })
+      setPhase('form')
+      return
+    }
+
+    const payload = {
+      ...form,
+      instagram: normalizedInstagram,
+      siteUrl:   normalizedUrl,
+      turnstileToken,
     }
 
     try {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, turnstileToken }),
+        body: JSON.stringify(payload),
       })
       if (!response.ok) {
         const err = await response.json().catch(() => ({}))
@@ -273,29 +425,28 @@ export default function AISection() {
               setLoadingStep(event.step)
             } else if (event.type === 'delta') {
               setPhase('streaming')
-              textBuffer += event.text
-              clearTimeout(flushTimer)
-              flushTimer = setTimeout(flush, 120)
+              target += event.text
+              ensureTyping()
             } else if (event.type === 'done') {
-              clearTimeout(flushTimer)
-              flush()
-              setPlanName(event.planName)
-              setPhase('done')
+              streamEnded = true
+              pendingPlan = event.planName
+              ensureTyping()
+              finish()
             } else if (event.type === 'error') {
-              clearTimeout(flushTimer)
+              clearInterval(typeTimer); typeTimer = null
               setErrorMsg(event.message)
               setPhase('error')
             }
           } catch { /* skip malformed lines */ }
         }
       }
-      // Safety flush if stream closed without explicit done
-      clearTimeout(flushTimer)
-      flush()
-      setPhase(p => p === 'streaming' ? 'done' : p)
+      // Stream encerrado — deixa o typewriter terminar de revelar o texto
+      streamEnded = true
+      ensureTyping()
+      finish()
 
     } catch (err) {
-      clearTimeout(flushTimer)
+      clearInterval(typeTimer); typeTimer = null
       setErrorMsg(err.message || 'Erro de conexão. Tente novamente.')
       setPhase('error')
     }
@@ -304,7 +455,7 @@ export default function AISection() {
   const handleViewPlan = () => {
     const category = planName ? PLAN_CATEGORIES[planName] : null
     if (!category) return
-    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent('openPricingPlan', { detail: { category, planName } }))
     }, 500)
@@ -357,6 +508,7 @@ export default function AISection() {
 
           {/* Right — form / result */}
           <motion.div
+            className="ai-right-panel"
             initial={{ opacity: 0, x: 32 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, delay: 0.3 }}
@@ -410,15 +562,11 @@ export default function AISection() {
                   style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
                 >
                   <Field label="Descrição da marca">
-                    <textarea rows={4} maxLength={300} value={form.brandDescription}
+                    <textarea rows={4} value={form.brandDescription}
                       onChange={setField('brandDescription')} {...focusHandlers}
                       placeholder="Ex: somos uma cafeteria artesanal em São Paulo focada em experiência e qualidade..."
                       style={baseInput}
                     />
-                    <div style={{ textAlign: 'right', fontSize: '10px', marginTop: '3px',
-                      color: form.brandDescription.length > 280 ? 'rgba(220,100,80,0.8)' : 'rgba(243,235,226,0.2)' }}>
-                      {form.brandDescription.length}/300
-                    </div>
                   </Field>
 
                   <Field label="Principais problemas atuais" optional>
@@ -429,22 +577,61 @@ export default function AISection() {
                     />
                   </Field>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '14px' }}>
+                  <div className="ai-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '4px' }}>
                     <Field label="Site da empresa" optional>
-                      <input type="text" value={form.siteUrl}
-                        onChange={setField('siteUrl')} {...focusHandlers}
-                        placeholder="meusite.com"
-                        style={{ ...baseInput, padding: '10px 13px' }}
+                      <input
+                        type="text"
+                        value={form.siteUrl}
+                        onChange={setField('siteUrl')}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(184,147,90,0.45)')}
+                        onBlur={handleUrlBlur}
+                        placeholder="meusite.com ou https://..."
+                        style={{
+                          ...baseInput, padding: '10px 13px',
+                          borderColor: fieldErrors.siteUrl ? 'rgba(220,80,80,0.5)' : 'rgba(243,235,226,0.09)',
+                        }}
                       />
+                      {fieldErrors.siteUrl && (
+                        <p style={{ color: 'rgba(220,80,80,0.75)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                          {fieldErrors.siteUrl}
+                        </p>
+                      )}
+                      {fieldHints.siteUrl && !fieldErrors.siteUrl && (
+                        <p style={{ color: 'rgba(184,147,90,0.7)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                          {fieldHints.siteUrl}
+                        </p>
+                      )}
                     </Field>
-                    <Field label="Instagram (sem @)" optional>
-                      <input type="text" value={form.instagram}
-                        onChange={setField('instagram')} {...focusHandlers}
-                        placeholder="yardenlab_"
-                        style={{ ...baseInput, padding: '10px 13px' }}
+                    <Field label="Instagram" optional>
+                      <input
+                        type="text"
+                        value={form.instagram}
+                        onChange={setField('instagram')}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(184,147,90,0.45)')}
+                        onBlur={handleInstagramBlur}
+                        placeholder="@usuario ou link do perfil"
+                        style={{
+                          ...baseInput, padding: '10px 13px',
+                          borderColor: fieldErrors.instagram ? 'rgba(220,80,80,0.5)' : 'rgba(243,235,226,0.09)',
+                        }}
                       />
+                      {fieldErrors.instagram && (
+                        <p style={{ color: 'rgba(220,80,80,0.75)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                          {fieldErrors.instagram}
+                        </p>
+                      )}
+                      {fieldHints.instagram && !fieldErrors.instagram && (
+                        <p style={{ color: 'rgba(184,147,90,0.7)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                          {fieldHints.instagram}
+                        </p>
+                      )}
                     </Field>
                   </div>
+
+                  {/* Dica: formatos aceitos */}
+                  <p style={{ color: 'rgba(243,235,226,0.18)', fontSize: '10px', letterSpacing: '0.04em', marginBottom: '14px', lineHeight: 1.55 }}>
+                    Aceita @usuario, link do Instagram ou URL do site em qualquer formato. Você também pode incluir esses dados na descrição acima.
+                  </p>
 
                   <TurnstileWidget onVerify={handleTurnstileVerify} />
 
@@ -643,8 +830,14 @@ export default function AISection() {
         @media (max-width: 900px) {
           .ai-grid { grid-template-columns: 1fr !important; height: auto !important; }
           .ai-grid > *:first-child { display: none !important; }
-          .ai-grid > * { height: auto !important; min-height: 320px; }
+          .ai-grid > * { height: auto !important; min-height: unset; }
+          .ai-right-panel {
+            height: auto !important;
+            max-height: 72vh !important;
+            overflow-y: auto !important;
+          }
           .ai-features { grid-template-columns: repeat(2, 1fr) !important; }
+          .ai-fields-row { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 540px) {
           .ai-features { grid-template-columns: 1fr !important; }
