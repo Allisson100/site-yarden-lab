@@ -176,6 +176,7 @@ function MediaCard({
   onTogglePlay,
   onToggleSound,
   onFullscreen,
+  onOpen,
 }) {
   const [hovered, setHovered] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -190,7 +191,9 @@ function MediaCard({
         height: cardHeight ?? "100%",
         background: "#090104",
         overflow: "hidden",
+        cursor: "pointer",
       }}
+      onClick={onOpen}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -370,6 +373,7 @@ function MediaCard({
       {/* Controles (só para vídeos carregados) */}
       {isVideo && loaded && !hasError && (
         <div
+          onClick={(e) => e.stopPropagation()}
           style={{
             position: "absolute",
             bottom: 0,
@@ -481,6 +485,137 @@ function MediaCard({
   );
 }
 
+// ── Lightbox — tela cheia ao clicar em foto/vídeo ─────────────────────────────
+function Lightbox({ items, initialIdx, onClose }) {
+  const [idx, setIdx] = useState(initialIdx);
+  const videoRef = useRef(null);
+  const item = items[idx];
+
+  const prev = () => setIdx((i) => (i - 1 + items.length) % items.length);
+  const next = () => setIdx((i) => (i + 1) % items.length);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  useEffect(() => {
+    if (item.type === "video" && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [idx]);
+
+  const goNativeFullscreen = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    (v.requestFullscreen || v.webkitRequestFullscreen || v.webkitEnterFullscreen || (() => {})).call(v);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 4000,
+        background: "rgba(9,1,4,0.97)",
+        backdropFilter: "blur(12px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "100vw" }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+          >
+            {item.type === "photo" ? (
+              <img
+                src={item.src}
+                alt={item.title}
+                style={{ maxWidth: "94vw", maxHeight: "86vh", objectFit: "contain", display: "block" }}
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={item.src}
+                controls
+                autoPlay
+                playsInline
+                style={{ maxWidth: "94vw", maxHeight: "86vh", display: "block", background: "#000" }}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Barra inferior */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "12px 2px 0", gap: "16px" }}>
+          <span style={{ color: "rgba(243,235,226,0.4)", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+            {item.title}
+          </span>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexShrink: 0 }}>
+            <span style={{ color: "rgba(243,235,226,0.25)", fontSize: "10px" }}>
+              {idx + 1} / {items.length}
+            </span>
+            {item.type === "video" && (
+              <button
+                onClick={goNativeFullscreen}
+                style={{ background: "none", border: "1px solid rgba(243,235,226,0.2)", color: "rgba(243,235,226,0.5)", padding: "5px 12px", cursor: "pointer", fontSize: "9px", letterSpacing: "0.16em", textTransform: "uppercase" }}
+              >
+                Tela cheia
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Setas */}
+      {[{ dir: "prev", pos: "left", action: prev }, { dir: "next", pos: "right", action: next }].map(({ dir, pos, action }) => (
+        <button
+          key={dir}
+          onClick={(e) => { e.stopPropagation(); action(); }}
+          style={{ position: "fixed", [pos]: "16px", top: "50%", transform: "translateY(-50%)", background: "rgba(9,1,4,0.65)", border: "1px solid rgba(243,235,226,0.1)", color: "rgba(243,235,226,0.65)", width: 46, height: 46, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            {dir === "prev" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
+          </svg>
+        </button>
+      ))}
+
+      {/* Fechar */}
+      <button
+        onClick={onClose}
+        style={{ position: "fixed", top: 16, right: 16, background: "rgba(9,1,4,0.65)", border: "1px solid rgba(243,235,226,0.12)", color: "rgba(243,235,226,0.65)", width: 42, height: 42, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </motion.div>
+  );
+}
+
 // ── Seção principal ───────────────────────────────────────────────────────────
 export default function MediaReel() {
   const sectionRef = useRef(null);
@@ -499,6 +634,7 @@ export default function MediaReel() {
 
   const [paused, setPaused] = useState(MEDIA.map(() => false));
   const [soundIdx, setSoundIdx] = useState(null);
+  const [lightbox, setLightbox] = useState(null); // idx aberto no lightbox | null
 
   useEffect(() => {
     if (!inView) return;
@@ -548,6 +684,7 @@ export default function MediaReel() {
       onTogglePlay: () => togglePlay(idx),
       onToggleSound: () => toggleSound(idx),
       onFullscreen: () => goFullscreen(idx),
+      onOpen: () => setLightbox(idx),
       ...extra,
     };
   };
@@ -621,8 +758,10 @@ export default function MediaReel() {
             que o mercado reconhece.
           </p>
         </motion.div>
+      </div>
 
-        {/* ── Grid ──────────────────────────────────────────────── */}
+      {/* ── Grid (fora do container: full-bleed no mobile) ───────── */}
+      <div className="mr-grid-wrap">
         <div className="mr-grid">
           {MEDIA.map((item, idx) => (
             <motion.div
@@ -642,6 +781,13 @@ export default function MediaReel() {
         </div>
       </div>
 
+      {/* Lightbox — tela cheia */}
+      <AnimatePresence>
+        {lightbox !== null && (
+          <Lightbox items={MEDIA} initialIdx={lightbox} onClose={() => setLightbox(null)} />
+        )}
+      </AnimatePresence>
+
       {/* Linha inferior decorativa */}
       <div
         style={{
@@ -656,6 +802,15 @@ export default function MediaReel() {
       />
 
       <style>{`
+        /* Wrapper do grid: alinhado ao container no desktop, full-bleed no mobile */
+        .mr-grid-wrap {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 60px;
+        }
+        @media (max-width: 1024px) { .mr-grid-wrap { padding: 0 40px; } }
+        @media (max-width: 768px)  { .mr-grid-wrap { padding: 0; } }  /* sem padding lateral no mobile */
+
         .mr-grid {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr;
