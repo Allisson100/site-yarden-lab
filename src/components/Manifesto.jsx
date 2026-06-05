@@ -15,7 +15,7 @@ export default function Manifesto() {
       id="manifesto"
       style={{ background: "var(--cream)", padding: "140px 0" }}
     >
-      <div className="container">
+      <div className="container" ref={ref}>
         <div
           style={{
             display: "grid",
@@ -24,7 +24,6 @@ export default function Manifesto() {
             alignItems: "center",
           }}
           className="manifesto-grid"
-          ref={ref}
         >
           {/* Left — Image */}
           <motion.div
@@ -105,10 +104,7 @@ export default function Manifesto() {
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <p
-              className="section-label"
-              style={{ color: "var(--sienna)", marginBottom: "32px" }}
-            >
+            <p className="section-label" style={{ color: "var(--sienna)", marginBottom: "28px" }}>
               Quem Somos
             </p>
 
@@ -122,21 +118,16 @@ export default function Manifesto() {
                 marginBottom: "36px",
               }}
             >
-              Marcas premium
+              Marcas premium merecem
               <br />
-              merecem{" "}
-              <em style={{ fontStyle: "italic", color: "var(--espresso)" }}>
-                inteligência
-              </em>
-              <br />
-              de verdade.
+              <em style={{ fontStyle: "italic" }}>inteligência de verdade.</em>
             </h2>
 
             <div
               style={{
                 width: "48px",
                 height: "1px",
-                background: "var(--cream)",
+                background: "var(--sienna)",
                 marginBottom: "32px",
               }}
             />
