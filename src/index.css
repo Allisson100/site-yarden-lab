@@ -235,13 +235,11 @@ html {
   scrollbar-color: var(--cream) var(--espresso);
 }
 
-/* Não-desktop (tablet/mobile): track TRANSPARENTE, só o thumb aparece */
+/* Não-desktop (tablet/mobile): SEM scrollbar fixa — só o overlay nativo do
+   sistema (aquele indicador que aparece ao rolar e some sozinho) */
 @media (max-width: 1024px) {
-  ::-webkit-scrollbar-track { background: transparent !important; }
-  ::-webkit-scrollbar-thumb {
-    border-color: transparent !important;   /* remove a borda espresso do thumb */
-  }
-  html { scrollbar-color: var(--cream) transparent; }
+  ::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
+  html { scrollbar-width: none; }   /* Firefox */
 }
 
 /* Selection */

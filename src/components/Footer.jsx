@@ -2,9 +2,9 @@ import YardenLogo from './YardenLogo'
 
 const navLinks = [
   { label: 'Quem Somos', href: '#manifesto' },
-  { label: 'Soluções', href: '#services' },
+  { label: 'Portfólio', href: '#portfolio' },
   { label: 'Inteligência IA', href: '#ai' },
-  { label: 'Planos', href: '#pricing' },
+  { label: 'Planos', href: '#plans' },
   { label: 'Contato', href: '#contact' },
 ]
 
