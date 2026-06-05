@@ -13,7 +13,7 @@ export default function Manifesto() {
   return (
     <section
       id="manifesto"
-      style={{ background: "var(--cream)", padding: "140px 0" }}
+      style={{ background: "var(--cream)", padding: "clamp(64px, 9vw, 130px) 0" }}
     >
       <div className="container" ref={ref}>
         <div

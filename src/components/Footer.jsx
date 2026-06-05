@@ -21,7 +21,7 @@ export default function Footer() {
   return (
     <footer style={{ background: 'var(--espresso)', borderTop: '1px solid rgba(243,235,226,0.06)' }}>
       {/* Main footer */}
-      <div className="container" style={{ padding: '80px 60px 60px' }}>
+      <div className="container footer-inner" style={{ padding: '80px 60px 60px' }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: '2fr 1fr 1fr 1fr',
@@ -238,7 +238,10 @@ export default function Footer() {
           .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
         }
         @media (max-width: 640px) {
-          .footer-grid { grid-template-columns: 1fr !important; }
+          /* 2 colunas no mobile; a marca ocupa a linha inteira no topo */
+          .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px 24px !important; }
+          .footer-grid > *:first-child { grid-column: 1 / -1 !important; }
+          .footer-inner { padding: 64px 24px 48px !important; }
         }
       `}</style>
     </footer>

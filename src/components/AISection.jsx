@@ -450,12 +450,15 @@ export default function AISection() {
     }
   }, []);
 
+  // NOTE: o botão NÃO depende mais do token do Turnstile — em alguns mobiles o
+  // widget do Cloudflare não autocompleta, o que travava o botão. O token ainda
+  // é enviado quando disponível e validado no backend; a proteção contra abuso
+  // fica garantida pelo rate-limit (3 análises/dia por IP).
   const canSubmit =
     phase === "form" &&
     form.brandDescription.trim().length >= 1 &&
     !fieldErrors.instagram &&
-    !fieldErrors.siteUrl &&
-    (import.meta.env.DEV || !siteKey || turnstileToken.length > 0);
+    !fieldErrors.siteUrl;
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
@@ -598,7 +601,7 @@ export default function AISection() {
   return (
     <section
       id="ai"
-      style={{ background: "var(--espresso)", padding: "140px 0" }}
+      style={{ background: "var(--espresso)", padding: "clamp(64px, 9vw, 130px) 0" }}
     >
       <div className="container" ref={ref}>
         {/* ── Header ─────────────────────────────────────────── */}

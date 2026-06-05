@@ -48,16 +48,26 @@ async function validateTurnstile(token) {
   const secret = process.env.TURNSTILE_SECRET_KEY
   if (!secret) return // skip when secret not configured
 
+  // Sem token (ex: o widget do Cloudflare não autocompletou em alguns mobiles):
+  // não bloqueia o usuário — a proteção contra abuso fica por conta do rate-limit.
+  // O Turnstile só é validado de forma estrita quando um token É enviado.
+  if (!token) return
+
   const form = new URLSearchParams()
   form.append('secret', secret)
-  form.append('response', token || '')
+  form.append('response', token)
 
-  const resp = await fetch('https://challenges.cloudflare.com/turnstile/v1/siteverify', {
-    method: 'POST',
-    body: form,
-  })
-  const data = await resp.json()
-  if (!data.success) throw new Error('Verificação de segurança falhou. Recarregue a página e tente novamente.')
+  try {
+    const resp = await fetch('https://challenges.cloudflare.com/turnstile/v1/siteverify', {
+      method: 'POST',
+      body: form,
+    })
+    const data = await resp.json()
+    if (!data.success) throw new Error('Verificação de segurança falhou. Recarregue a página e tente novamente.')
+  } catch (err) {
+    // Repassa erro de verificação explícita; ignora falhas de rede (rate-limit protege).
+    if (err.message && err.message.includes('Verificação')) throw err
+  }
 }
 
 // ─── Rate limit ───────────────────────────────────────────────────────────────

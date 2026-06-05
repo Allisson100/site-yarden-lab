@@ -235,6 +235,15 @@ html {
   scrollbar-color: var(--cream) var(--espresso);
 }
 
+/* Não-desktop (tablet/mobile): track TRANSPARENTE, só o thumb aparece */
+@media (max-width: 1024px) {
+  ::-webkit-scrollbar-track { background: transparent !important; }
+  ::-webkit-scrollbar-thumb {
+    border-color: transparent !important;   /* remove a borda espresso do thumb */
+  }
+  html { scrollbar-color: var(--cream) transparent; }
+}
+
 /* Selection */
 ::selection {
   background: var(--espresso);

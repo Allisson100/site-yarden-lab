@@ -233,7 +233,7 @@ export default function PlansSection() {
   const gridPlans    = PLANS.slice(1)    // 6 planos restantes
 
   return (
-    <section id="plans" style={{ background: 'var(--cream)', padding: '140px 0 100px' }}>
+    <section id="plans" style={{ background: 'var(--cream)', padding: 'clamp(64px, 9vw, 130px) 0 clamp(56px, 8vw, 100px)' }}>
       <div className="container" ref={ref}>
 
         {/* Cabeçalho */}
