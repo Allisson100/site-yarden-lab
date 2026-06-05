@@ -19,7 +19,7 @@ const services = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: 'var(--burgundy-deep)', borderTop: '1px solid rgba(243,235,226,0.06)' }}>
+    <footer style={{ background: 'var(--espresso)', borderTop: '1px solid rgba(243,235,226,0.06)' }}>
       {/* Main footer */}
       <div className="container" style={{ padding: '80px 60px 60px' }}>
         <div style={{
@@ -93,9 +93,9 @@ export default function Footer() {
                     cursor: 'pointer',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'var(--gold)'
-                    e.currentTarget.style.color = 'var(--gold)'
-                    e.currentTarget.style.background = 'rgba(184,147,90,0.06)'
+                    e.currentTarget.style.borderColor = 'var(--cream)'
+                    e.currentTarget.style.color = 'var(--cream)'
+                    e.currentTarget.style.background = 'rgba(243, 235, 226,0.06)'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = 'rgba(243,235,226,0.12)'

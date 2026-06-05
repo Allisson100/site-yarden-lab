@@ -255,11 +255,11 @@ export default function InstagramFeed() {
         >
           <p style={{
             fontSize: '9px', fontWeight: 700, letterSpacing: '0.28em',
-            textTransform: 'uppercase', color: 'var(--gold)',
+            textTransform: 'uppercase', color: 'var(--cream)',
             display: 'flex', alignItems: 'center', gap: '10px',
             marginBottom: '14px',
           }}>
-            <span style={{ width: 24, height: 1, background: 'var(--gold)', display: 'inline-block', opacity: 0.5 }} />
+            <span style={{ width: 24, height: 1, background: 'var(--cream)', display: 'inline-block', opacity: 0.5 }} />
             Nossa Produção
           </p>
           <h2 style={{
@@ -268,7 +268,7 @@ export default function InstagramFeed() {
             color: 'var(--cream)', marginBottom: '10px',
           }}>
             Estética que converte<br />
-            <em style={{ fontStyle: 'italic', color: 'var(--gold-light)' }}>e posiciona.</em>
+            <em style={{ fontStyle: 'italic', color: 'var(--cream)' }}>e posiciona.</em>
           </h2>
           <p style={{ color: 'rgba(243,235,226,0.4)', fontSize: '13px', lineHeight: 1.65, fontWeight: 300 }}>
             Cada projeto nasce de uma estratégia — e termina com uma identidade que o mercado reconhece.

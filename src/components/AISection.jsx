@@ -1,15 +1,15 @@
-import { useRef, useState, useCallback } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useRef, useState, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
 const PLAN_CATEGORIES = {
-  'Diagnóstico Yarden':        'Entrada',
-  'Plano Travessia':           'Projetos',
-  'Sprint de Captação':        'Projetos',
-  'Sprint Inteligência':       'Projetos',
-  'Operação Corrente Light':   'Recorrente',
-  'Operação Corrente Standard':'Recorrente',
-  'Operação Yarden 360':       'Recorrente',
-}
+  "Diagnóstico Yarden": "Entrada",
+  "Plano Travessia": "Projetos",
+  "Sprint de Captação": "Projetos",
+  "Sprint Inteligência": "Projetos",
+  "Operação Corrente Light": "Recorrente",
+  "Operação Corrente Standard": "Recorrente",
+  "Operação Yarden 360": "Recorrente",
+};
 
 // ─── Input normalization & validation ────────────────────────────────────────
 
@@ -20,13 +20,13 @@ const PLAN_CATEGORIES = {
  * Retorna o username limpo (sem @ e sem URL).
  */
 function normalizeInstagram(raw) {
-  if (!raw) return ''
-  const s = raw.trim()
+  if (!raw) return "";
+  const s = raw.trim();
   // Extrai usuário de URL do Instagram
-  const urlMatch = s.match(/(?:instagram\.com|instagr\.am)\/([A-Za-z0-9._]+)/i)
-  if (urlMatch) return urlMatch[1]
+  const urlMatch = s.match(/(?:instagram\.com|instagr\.am)\/([A-Za-z0-9._]+)/i);
+  if (urlMatch) return urlMatch[1];
   // Remove @ inicial
-  return s.replace(/^@+/, '').trim()
+  return s.replace(/^@+/, "").trim();
 }
 
 /**
@@ -34,75 +34,93 @@ function normalizeInstagram(raw) {
  * Adiciona https:// se não houver protocolo.
  */
 function normalizeUrl(raw) {
-  if (!raw) return ''
-  const s = raw.trim()
-  if (!s) return ''
-  if (/^https?:\/\//i.test(s)) return s
-  if (s.startsWith('//')) return 'https:' + s
-  if (s.includes('.')) return 'https://' + s
-  return s
+  if (!raw) return "";
+  const s = raw.trim();
+  if (!s) return "";
+  if (/^https?:\/\//i.test(s)) return s;
+  if (s.startsWith("//")) return "https:" + s;
+  if (s.includes(".")) return "https://" + s;
+  return s;
 }
 
 /** Valida username do Instagram após normalização. '' = válido */
 function validateInstagram(val) {
-  if (!val) return ''
+  if (!val) return "";
   if (!/^[A-Za-z0-9._]{1,30}$/.test(val))
-    return 'Usuário inválido — use letras, números, _ ou .'
-  return ''
+    return "Usuário inválido — use letras, números, _ ou .";
+  return "";
 }
 
 /** Valida URL após normalização. '' = válido */
 function validateUrl(val) {
-  if (!val) return ''
-  try { new URL(val); return '' }
-  catch { return 'URL inválida — ex: meusite.com.br' }
+  if (!val) return "";
+  try {
+    new URL(val);
+    return "";
+  } catch {
+    return "URL inválida — ex: meusite.com.br";
+  }
 }
 
 // ─── Left panel: clean oversized brand symbol only ───────────────────────────
 function BrandSymbolPanel({ phase }) {
-  const isActive = phase === 'loading' || phase === 'streaming'
-  const isDone   = phase === 'done'
+  const isActive = phase === "loading" || phase === "streaming";
+  const isDone = phase === "done";
 
   return (
-    <div style={{
-      height: '100%',
-      background: 'transparent',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
+    <div
+      style={{
+        height: "100%",
+        background: "transparent",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       {/* Symbol — oversized, bleeds in all directions */}
       <motion.div
-        animate={isActive
-          ? { scale: [1, 1.05, 1], opacity: [0.5, 0.92, 0.5] }
-          : { scale: 1, opacity: isDone ? 1 : 0.6 }
+        animate={
+          isActive
+            ? { scale: [1, 1.05, 1], opacity: [0.5, 0.92, 0.5] }
+            : { scale: 1, opacity: isDone ? 1 : 0.6 }
         }
         transition={{
-          scale:   { duration: 5.5, repeat: isActive ? Infinity : 0, ease: 'easeInOut' },
-          opacity: { duration: 5.5, repeat: isActive ? Infinity : 0, ease: 'easeInOut' },
+          scale: {
+            duration: 5.5,
+            repeat: isActive ? Infinity : 0,
+            ease: "easeInOut",
+          },
+          opacity: {
+            duration: 5.5,
+            repeat: isActive ? Infinity : 0,
+            ease: "easeInOut",
+          },
         }}
         style={{
-          position: 'absolute',
-          inset: '-42%',
-          pointerEvents: 'none',
+          position: "absolute",
+          inset: "-42%",
+          pointerEvents: "none",
         }}
       >
         {/* Wrapper de rotação — gira enquanto analisa (só desktop, painel já oculto no mobile) */}
         <motion.div
           animate={isActive ? { rotate: 360 } : { rotate: 0 }}
-          transition={isActive
-            ? { duration: 14, repeat: Infinity, ease: 'linear' }
-            : { duration: 1.2, ease: 'easeOut' }
+          transition={
+            isActive
+              ? { duration: 14, repeat: Infinity, ease: "linear" }
+              : { duration: 1.2, ease: "easeOut" }
           }
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: "100%", height: "100%" }}
         >
           <img
             src="/logos/yarden-symbol.svg"
             alt=""
             style={{
-              width: '100%', height: '100%', objectFit: 'contain',
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
               opacity: isActive ? 0.28 : isDone ? 0.32 : 0.14,
-              filter: 'grayscale(20%)',
-              transition: 'opacity 0.8s ease',
+              filter: "grayscale(20%)",
+              transition: "opacity 0.8s ease",
             }}
           />
         </motion.div>
@@ -110,398 +128,534 @@ function BrandSymbolPanel({ phase }) {
 
       {/* Subtle gold glow that pulses during analysis */}
       <motion.div
-        animate={isActive
-          ? { opacity: [0.04, 0.14, 0.04] }
-          : { opacity: isDone ? 0.1 : 0.02 }
+        animate={
+          isActive
+            ? { opacity: [0.04, 0.14, 0.04] }
+            : { opacity: isDone ? 0.1 : 0.02 }
         }
-        transition={{ duration: 4, repeat: isActive ? Infinity : 0, ease: 'easeInOut' }}
+        transition={{
+          duration: 4,
+          repeat: isActive ? Infinity : 0,
+          ease: "easeInOut",
+        }}
         style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse at center, rgba(184,147,90,0.18) 0%, transparent 70%)',
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background:
+            "radial-gradient(ellipse at center, rgba(243, 235, 226,0.18) 0%, transparent 70%)",
         }}
       />
     </div>
-  )
+  );
 }
 
 // ─── Inline markdown: renders **bold** (and hides stray ** while typing) ──────
 function renderInline(text) {
-  let t = text
+  let t = text;
   // Remove a dangling unmatched ** mid-typing so the asterisks never flash
-  const markers = (t.match(/\*\*/g) || []).length
+  const markers = (t.match(/\*\*/g) || []).length;
   if (markers % 2 === 1) {
-    const last = t.lastIndexOf('**')
-    t = t.slice(0, last) + t.slice(last + 2)
+    const last = t.lastIndexOf("**");
+    t = t.slice(0, last) + t.slice(last + 2);
   }
-  const parts = t.split(/(\*\*[^*]+?\*\*)/g)
+  const parts = t.split(/(\*\*[^*]+?\*\*)/g);
   return parts.map((part, idx) => {
-    const m = part.match(/^\*\*([^*]+?)\*\*$/)
+    const m = part.match(/^\*\*([^*]+?)\*\*$/);
     if (m) {
       return (
-        <strong key={idx} style={{ color: 'var(--cream)', fontWeight: 600 }}>
+        <strong key={idx} style={{ color: "var(--cream)", fontWeight: 600 }}>
           {m[1]}
         </strong>
-      )
+      );
     }
-    return <span key={idx}>{part}</span>
-  })
+    return <span key={idx}>{part}</span>;
+  });
 }
 
 // ─── Streaming text renderer with section formatting ──────────────────────────
 function StreamText({ text, streaming }) {
-  const lines = text.split('\n')
+  const lines = text.split("\n");
 
   return (
     <div>
       {lines.map((line, i) => {
-        const headerMatch = line.trim().match(/^---\s*(.+?)\s*---$/)
+        const headerMatch = line.trim().match(/^---\s*(.+?)\s*---$/);
         if (headerMatch) {
           return (
-            <div key={i} style={{
-              color: 'var(--gold)',
-              fontSize: '9px', letterSpacing: '0.22em',
-              textTransform: 'uppercase', fontWeight: 700,
-              marginTop: i === 0 ? 0 : '22px', marginBottom: '10px',
-              paddingBottom: '8px',
-              borderBottom: '1px solid rgba(184,147,90,0.15)',
-            }}>
+            <div
+              key={i}
+              style={{
+                color: "var(--cream)",
+                fontSize: "9px",
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                marginTop: i === 0 ? 0 : "22px",
+                marginBottom: "10px",
+                paddingBottom: "8px",
+                borderBottom: "1px solid rgba(243, 235, 226,0.15)",
+              }}
+            >
               {renderInline(headerMatch[1])}
             </div>
-          )
+          );
         }
         if (/^[•\-]\s/.test(line.trim())) {
           return (
-            <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '7px', color: 'rgba(243,235,226,0.75)' }}>
-              <span style={{ color: 'var(--gold)', flexShrink: 0, marginTop: '2px' }}>—</span>
-              <span style={{ fontSize: '13px', lineHeight: 1.75, fontWeight: 300 }}>
-                {renderInline(line.trim().replace(/^[•\-]\s*/, ''))}
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: "10px",
+                marginBottom: "7px",
+                color: "rgba(243,235,226,0.75)",
+              }}
+            >
+              <span
+                style={{
+                  color: "var(--cream)",
+                  flexShrink: 0,
+                  marginTop: "2px",
+                }}
+              >
+                —
+              </span>
+              <span
+                style={{ fontSize: "13px", lineHeight: 1.75, fontWeight: 300 }}
+              >
+                {renderInline(line.trim().replace(/^[•\-]\s*/, ""))}
               </span>
             </div>
-          )
+          );
         }
-        if (!line.trim()) return <div key={i} style={{ height: '8px' }} />
+        if (!line.trim()) return <div key={i} style={{ height: "8px" }} />;
 
-        const isLast = i === lines.length - 1
+        const isLast = i === lines.length - 1;
         return (
-          <div key={i} style={{ color: 'rgba(243,235,226,0.72)', fontSize: '13px', lineHeight: 1.78, fontWeight: 300, marginBottom: '2px' }}>
+          <div
+            key={i}
+            style={{
+              color: "rgba(243,235,226,0.72)",
+              fontSize: "13px",
+              lineHeight: 1.78,
+              fontWeight: 300,
+              marginBottom: "2px",
+            }}
+          >
             {renderInline(line)}
             {streaming && isLast && (
               <motion.span
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ duration: 0.85, repeat: Infinity }}
-                style={{ display: 'inline-block', width: 2, height: '13px', background: 'var(--gold)', verticalAlign: 'text-bottom', marginLeft: 2 }}
+                style={{
+                  display: "inline-block",
+                  width: 2,
+                  height: "13px",
+                  background: "var(--cream)",
+                  verticalAlign: "text-bottom",
+                  marginLeft: 2,
+                }}
               />
             )}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 // ─── Shared field label wrapper ───────────────────────────────────────────────
 function Field({ label, optional, children }) {
   return (
-    <div style={{ marginBottom: '14px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-        <label style={{ color: 'rgba(243,235,226,0.45)', fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600 }}>
+    <div style={{ marginBottom: "14px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "6px",
+        }}
+      >
+        <label
+          style={{
+            color: "rgba(243,235,226,0.45)",
+            fontSize: "9px",
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            fontWeight: 600,
+          }}
+        >
           {label}
         </label>
-        {optional && <span style={{ color: 'rgba(243,235,226,0.2)', fontSize: '9px', letterSpacing: '0.06em' }}>opcional</span>}
+        {optional && (
+          <span
+            style={{
+              color: "rgba(243,235,226,0.2)",
+              fontSize: "9px",
+              letterSpacing: "0.06em",
+            }}
+          >
+            opcional
+          </span>
+        )}
       </div>
       {children}
     </div>
-  )
+  );
 }
 
 const baseInput = {
-  width: '100%', boxSizing: 'border-box',
-  background: 'rgba(243,235,226,0.03)',
-  border: '1px solid rgba(243,235,226,0.09)',
-  color: 'var(--cream)', padding: '10px 13px',
-  fontSize: '13px', fontFamily: 'inherit', fontWeight: 300,
-  outline: 'none', resize: 'none',
-  transition: 'border-color 0.2s',
-}
+  width: "100%",
+  boxSizing: "border-box",
+  background: "rgba(243,235,226,0.03)",
+  border: "1px solid rgba(243,235,226,0.09)",
+  color: "var(--cream)",
+  padding: "10px 13px",
+  fontSize: "13px",
+  fontFamily: "inherit",
+  fontWeight: 300,
+  outline: "none",
+  resize: "none",
+  transition: "border-color 0.2s",
+};
 
 const focusHandlers = {
-  onFocus: e => (e.target.style.borderColor = 'rgba(184,147,90,0.45)'),
-  onBlur:  e => (e.target.style.borderColor = 'rgba(243,235,226,0.09)'),
-}
+  onFocus: (e) => (e.target.style.borderColor = "rgba(243, 235, 226,0.45)"),
+  onBlur: (e) => (e.target.style.borderColor = "rgba(243,235,226,0.09)"),
+};
 
 // ─── Turnstile (only in production) ──────────────────────────────────────────
 function TurnstileWidget({ onVerify }) {
-  const containerRef = useRef(null)
-  const widgetId = useRef(null)
-  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
+  const containerRef = useRef(null);
+  const widgetId = useRef(null);
+  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
   // In dev mode skip entirely
-  if (import.meta.env.DEV || !siteKey) return null
+  if (import.meta.env.DEV || !siteKey) return null;
 
   const initWidget = () => {
-    if (!containerRef.current || !window.turnstile) return
+    if (!containerRef.current || !window.turnstile) return;
     widgetId.current = window.turnstile.render(containerRef.current, {
-      sitekey: siteKey, theme: 'dark', size: 'normal',
+      sitekey: siteKey,
+      theme: "dark",
+      size: "normal",
       callback: onVerify,
-      'expired-callback': () => onVerify(''),
-      'error-callback': () => onVerify(''),
-    })
-  }
+      "expired-callback": () => onVerify(""),
+      "error-callback": () => onVerify(""),
+    });
+  };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const mountedRef = useRef(false)
+  const mountedRef = useRef(false);
   if (!mountedRef.current) {
-    mountedRef.current = true
-    if (typeof window !== 'undefined') {
+    mountedRef.current = true;
+    if (typeof window !== "undefined") {
       if (window.turnstile) {
-        setTimeout(initWidget, 0)
-      } else if (!document.getElementById('cf-turnstile-script')) {
-        const s = document.createElement('script')
-        s.id = 'cf-turnstile-script'
-        s.src = 'https://challenges.cloudflare.com/turnstile/v1/api.js'
-        s.async = s.defer = true
-        s.onload = initWidget
-        document.head.appendChild(s)
+        setTimeout(initWidget, 0);
+      } else if (!document.getElementById("cf-turnstile-script")) {
+        const s = document.createElement("script");
+        s.id = "cf-turnstile-script";
+        s.src = "https://challenges.cloudflare.com/turnstile/v1/api.js";
+        s.async = s.defer = true;
+        s.onload = initWidget;
+        document.head.appendChild(s);
       }
     }
   }
 
-  return <div ref={containerRef} style={{ margin: '14px 0' }} />
+  return <div ref={containerRef} style={{ margin: "14px 0" }} />;
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-const PANEL_HEIGHT = 580
+const PANEL_HEIGHT = 580;
 
 export default function AISection() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
-  const [form, setForm] = useState({ brandDescription: '', mainProblems: '', siteUrl: '', instagram: '' })
+  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+  const [form, setForm] = useState({
+    brandDescription: "",
+    mainProblems: "",
+    siteUrl: "",
+    instagram: "",
+  });
   const [turnstileToken, setTurnstileToken] = useState(
-    (import.meta.env.DEV || !siteKey) ? 'dev-bypass' : ''
-  )
+    import.meta.env.DEV || !siteKey ? "dev-bypass" : "",
+  );
 
-  const [phase, setPhase] = useState('form')
-  const [loadingStep, setLoadingStep] = useState('')
-  const [displayedText, setDisplayedText] = useState('')
-  const [planName, setPlanName] = useState(null)
-  const [errorMsg, setErrorMsg] = useState('')
-  const [fieldErrors, setFieldErrors] = useState({ instagram: '', siteUrl: '' })
-  const [fieldHints,  setFieldHints]  = useState({ instagram: '', siteUrl: '' })
+  const [phase, setPhase] = useState("form");
+  const [loadingStep, setLoadingStep] = useState("");
+  const [displayedText, setDisplayedText] = useState("");
+  const [planName, setPlanName] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    instagram: "",
+    siteUrl: "",
+  });
+  const [fieldHints, setFieldHints] = useState({ instagram: "", siteUrl: "" });
 
-  const handleTurnstileVerify = useCallback(token => setTurnstileToken(token), [])
-  const setField = key => e => setForm(prev => ({ ...prev, [key]: e.target.value }))
+  const handleTurnstileVerify = useCallback(
+    (token) => setTurnstileToken(token),
+    [],
+  );
+  const setField = (key) => (e) =>
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
   // ── Blur handlers: normaliza e valida ────────────────────────────────────
-  const handleInstagramBlur = useCallback(e => {
-    const raw        = e.target.value
-    const normalized = normalizeInstagram(raw)
-    const error      = validateInstagram(normalized)
-    const changed    = normalized !== raw && raw.trim() !== ''
+  const handleInstagramBlur = useCallback((e) => {
+    const raw = e.target.value;
+    const normalized = normalizeInstagram(raw);
+    const error = validateInstagram(normalized);
+    const changed = normalized !== raw && raw.trim() !== "";
 
-    if (normalized !== raw) setForm(prev => ({ ...prev, instagram: normalized }))
-    setFieldErrors(prev => ({ ...prev, instagram: error }))
+    if (normalized !== raw)
+      setForm((prev) => ({ ...prev, instagram: normalized }));
+    setFieldErrors((prev) => ({ ...prev, instagram: error }));
     e.target.style.borderColor = error
-      ? 'rgba(220,80,80,0.5)'
-      : 'rgba(243,235,226,0.09)'
+      ? "rgba(220,80,80,0.5)"
+      : "rgba(243,235,226,0.09)";
 
     if (changed && !error) {
-      setFieldHints(prev => ({ ...prev, instagram: '✓ formato detectado automaticamente' }))
-      setTimeout(() => setFieldHints(prev => ({ ...prev, instagram: '' })), 2800)
+      setFieldHints((prev) => ({
+        ...prev,
+        instagram: "✓ formato detectado automaticamente",
+      }));
+      setTimeout(
+        () => setFieldHints((prev) => ({ ...prev, instagram: "" })),
+        2800,
+      );
     }
-  }, [])
+  }, []);
 
-  const handleUrlBlur = useCallback(e => {
-    const raw        = e.target.value
-    const normalized = normalizeUrl(raw)
-    const error      = validateUrl(normalized)
-    const changed    = normalized !== raw && raw.trim() !== ''
+  const handleUrlBlur = useCallback((e) => {
+    const raw = e.target.value;
+    const normalized = normalizeUrl(raw);
+    const error = validateUrl(normalized);
+    const changed = normalized !== raw && raw.trim() !== "";
 
-    if (normalized !== raw) setForm(prev => ({ ...prev, siteUrl: normalized }))
-    setFieldErrors(prev => ({ ...prev, siteUrl: error }))
+    if (normalized !== raw)
+      setForm((prev) => ({ ...prev, siteUrl: normalized }));
+    setFieldErrors((prev) => ({ ...prev, siteUrl: error }));
     e.target.style.borderColor = error
-      ? 'rgba(220,80,80,0.5)'
-      : 'rgba(243,235,226,0.09)'
+      ? "rgba(220,80,80,0.5)"
+      : "rgba(243,235,226,0.09)";
 
     if (changed && !error) {
-      setFieldHints(prev => ({ ...prev, siteUrl: '✓ https:// adicionado' }))
-      setTimeout(() => setFieldHints(prev => ({ ...prev, siteUrl: '' })), 2800)
+      setFieldHints((prev) => ({ ...prev, siteUrl: "✓ https:// adicionado" }));
+      setTimeout(
+        () => setFieldHints((prev) => ({ ...prev, siteUrl: "" })),
+        2800,
+      );
     }
-  }, [])
+  }, []);
 
   const canSubmit =
-    phase === 'form' &&
+    phase === "form" &&
     form.brandDescription.trim().length >= 1 &&
     !fieldErrors.instagram &&
     !fieldErrors.siteUrl &&
-    (import.meta.env.DEV || !siteKey || turnstileToken.length > 0)
+    (import.meta.env.DEV || !siteKey || turnstileToken.length > 0);
 
   const handleSubmit = async () => {
-    if (!canSubmit) return
-    setPhase('loading')
-    setLoadingStep('Iniciando análise...')
-    setDisplayedText('')
-    setPlanName(null)
-    setErrorMsg('')
+    if (!canSubmit) return;
+    setPhase("loading");
+    setLoadingStep("Iniciando análise...");
+    setDisplayedText("");
+    setPlanName(null);
+    setErrorMsg("");
 
     // Typewriter — SSE tokens accumulate into `target`; a timer reveals the
     // text character-by-character for a natural "AI typing" effect.
-    let target      = ''     // tudo que já foi recebido
-    let revealed    = 0      // caracteres já exibidos
-    let typeTimer   = null
-    let streamEnded = false
-    let pendingPlan = null
+    let target = ""; // tudo que já foi recebido
+    let revealed = 0; // caracteres já exibidos
+    let typeTimer = null;
+    let streamEnded = false;
+    let pendingPlan = null;
 
     const finish = () => {
-      if (!streamEnded || revealed < target.length) return
-      clearInterval(typeTimer); typeTimer = null
-      setPlanName(pendingPlan)
-      setPhase('done')
-    }
+      if (!streamEnded || revealed < target.length) return;
+      clearInterval(typeTimer);
+      typeTimer = null;
+      setPlanName(pendingPlan);
+      setPhase("done");
+    };
 
     const ensureTyping = () => {
-      if (typeTimer) return
+      if (typeTimer) return;
       typeTimer = setInterval(() => {
         if (revealed < target.length) {
-          const remaining = target.length - revealed
+          const remaining = target.length - revealed;
           // acelera quando está muito atrás, desacelera perto do fim
-          const step = remaining > 160 ? 4 : remaining > 60 ? 2 : 1
-          revealed = Math.min(target.length, revealed + step)
-          setDisplayedText(target.slice(0, revealed))
+          const step = remaining > 160 ? 4 : remaining > 60 ? 2 : 1;
+          revealed = Math.min(target.length, revealed + step);
+          setDisplayedText(target.slice(0, revealed));
         } else {
-          finish()
+          finish();
         }
-      }, 14)
-    }
+      }, 14);
+    };
 
     // Normaliza campos opcionais antes de enviar
-    const normalizedInstagram = normalizeInstagram(form.instagram)
-    const normalizedUrl       = normalizeUrl(form.siteUrl)
+    const normalizedInstagram = normalizeInstagram(form.instagram);
+    const normalizedUrl = normalizeUrl(form.siteUrl);
 
     // Valida após normalização (caso usuário não tenha saído do campo)
-    const instaErr = validateInstagram(normalizedInstagram)
-    const urlErr   = validateUrl(normalizedUrl)
+    const instaErr = validateInstagram(normalizedInstagram);
+    const urlErr = validateUrl(normalizedUrl);
     if (instaErr || urlErr) {
-      setFieldErrors({ instagram: instaErr, siteUrl: urlErr })
-      setPhase('form')
-      return
+      setFieldErrors({ instagram: instaErr, siteUrl: urlErr });
+      setPhase("form");
+      return;
     }
 
     const payload = {
       ...form,
       instagram: normalizedInstagram,
-      siteUrl:   normalizedUrl,
+      siteUrl: normalizedUrl,
       turnstileToken,
-    }
+    };
 
     try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      })
+      });
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
-        throw new Error(err.error || `Erro ${response.status}`)
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || `Erro ${response.status}`);
       }
 
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-      let sseBuffer = ''
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let sseBuffer = "";
 
       while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-        sseBuffer += decoder.decode(value, { stream: true })
-        const lines = sseBuffer.split('\n')
-        sseBuffer = lines.pop()
+        const { done, value } = await reader.read();
+        if (done) break;
+        sseBuffer += decoder.decode(value, { stream: true });
+        const lines = sseBuffer.split("\n");
+        sseBuffer = lines.pop();
 
         for (const line of lines) {
-          if (!line.startsWith('data: ')) continue
+          if (!line.startsWith("data: ")) continue;
           try {
-            const event = JSON.parse(line.slice(6))
-            if (event.type === 'loading') {
-              setLoadingStep(event.step)
-            } else if (event.type === 'delta') {
-              setPhase('streaming')
-              target += event.text
-              ensureTyping()
-            } else if (event.type === 'done') {
-              streamEnded = true
-              pendingPlan = event.planName
-              ensureTyping()
-              finish()
-            } else if (event.type === 'error') {
-              clearInterval(typeTimer); typeTimer = null
-              setErrorMsg(event.message)
-              setPhase('error')
+            const event = JSON.parse(line.slice(6));
+            if (event.type === "loading") {
+              setLoadingStep(event.step);
+            } else if (event.type === "delta") {
+              setPhase("streaming");
+              target += event.text;
+              ensureTyping();
+            } else if (event.type === "done") {
+              streamEnded = true;
+              pendingPlan = event.planName;
+              ensureTyping();
+              finish();
+            } else if (event.type === "error") {
+              clearInterval(typeTimer);
+              typeTimer = null;
+              setErrorMsg(event.message);
+              setPhase("error");
             }
-          } catch { /* skip malformed lines */ }
+          } catch {
+            /* skip malformed lines */
+          }
         }
       }
       // Stream encerrado — deixa o typewriter terminar de revelar o texto
-      streamEnded = true
-      ensureTyping()
-      finish()
-
+      streamEnded = true;
+      ensureTyping();
+      finish();
     } catch (err) {
-      clearInterval(typeTimer); typeTimer = null
-      setErrorMsg(err.message || 'Erro de conexão. Tente novamente.')
-      setPhase('error')
+      clearInterval(typeTimer);
+      typeTimer = null;
+      setErrorMsg(err.message || "Erro de conexão. Tente novamente.");
+      setPhase("error");
     }
-  }
+  };
 
   const handleViewPlan = () => {
-    const category = planName ? PLAN_CATEGORIES[planName] : null
-    if (!category) return
-    document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })
+    const category = planName ? PLAN_CATEGORIES[planName] : null;
+    if (!category) return;
+    document.getElementById("plans")?.scrollIntoView({ behavior: "smooth" });
     setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('openPricingPlan', { detail: { category, planName } }))
-    }, 500)
-  }
+      window.dispatchEvent(
+        new CustomEvent("openPricingPlan", { detail: { category, planName } }),
+      );
+    }, 500);
+  };
 
   const reset = () => {
-    setPhase('form'); setDisplayedText(''); setPlanName(null); setErrorMsg('')
-    setTurnstileToken((import.meta.env.DEV || !siteKey) ? 'dev-bypass' : '')
-  }
+    setPhase("form");
+    setDisplayedText("");
+    setPlanName(null);
+    setErrorMsg("");
+    setTurnstileToken(import.meta.env.DEV || !siteKey ? "dev-bypass" : "");
+  };
 
   return (
-    <section id="ai" style={{ background: 'var(--burgundy-deep)', padding: '140px 0' }}>
+    <section
+      id="ai"
+      style={{ background: "var(--espresso)", padding: "140px 0" }}
+    >
       <div className="container" ref={ref}>
-
         {/* ── Header ─────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          style={{ marginBottom: '80px', maxWidth: '800px' }}
+          style={{ marginBottom: "80px", maxWidth: "800px" }}
         >
-          <p className="section-label" style={{ color: 'var(--gold)' }}>Inteligência Aplicada</p>
-          <h2 style={{
-            fontFamily: 'var(--font-serif)', fontWeight: 300,
-            fontSize: 'clamp(36px, 5vw, 68px)', lineHeight: 1.05,
-            color: 'var(--cream)', marginBottom: '20px',
-          }}>
+          <p className="section-label" style={{ color: "var(--cream)" }}>
+            Inteligência Aplicada
+          </p>
+          <h2
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontWeight: 300,
+              fontSize: "clamp(36px, 5vw, 68px)",
+              lineHeight: 1.05,
+              color: "var(--cream)",
+              marginBottom: "20px",
+            }}
+          >
             Descreva sua marca.
             <br />
-            <em style={{ fontStyle: 'italic', color: 'var(--gold-light)' }}>A IA diagnostica e indica o caminho.</em>
+            <em style={{ fontStyle: "italic", color: "var(--cream)" }}>
+              Diagnostico feito pela IA para indicar o melhor caminho.
+            </em>
           </h2>
-          <p style={{ color: 'rgba(243,235,226,0.5)', fontSize: 'clamp(14px, 1.4vw, 16px)', lineHeight: 1.7, fontWeight: 300 }}>
-            Análise real gerada por IA — diagnóstico honesto, pontos críticos e plano recomendado.
-            Gratuita e em menos de 60 segundos.
+          <p
+            style={{
+              color: "rgba(243,235,226,0.5)",
+              fontSize: "clamp(14px, 1.4vw, 16px)",
+              lineHeight: 1.7,
+              fontWeight: 300,
+            }}
+          >
+            Análise real gerada por IA — diagnóstico honesto, pontos críticos e
+            plano recomendado. Gratuita e em menos de 60 segundos.
           </p>
         </motion.div>
 
         {/* ── Grid ─────────────────────────────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', height: `${PANEL_HEIGHT}px` }} className="ai-grid">
-
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "2px",
+            height: `${PANEL_HEIGHT}px`,
+          }}
+          className="ai-grid"
+        >
           {/* Left — dimensions panel */}
           <motion.div
             initial={{ opacity: 0, x: -32 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, delay: 0.2 }}
-            style={{ height: `${PANEL_HEIGHT}px`, overflow: 'hidden' }}
+            style={{ height: `${PANEL_HEIGHT}px`, overflow: "hidden" }}
           >
             <BrandSymbolPanel phase={phase} />
           </motion.div>
@@ -513,92 +667,188 @@ export default function AISection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, delay: 0.3 }}
             style={{
-              background: '#1e080a',
-              padding: '40px 36px',
-              display: 'flex', flexDirection: 'column',
-              height: `${PANEL_HEIGHT}px`, overflow: 'hidden',
+              background: "#1e080a",
+              padding: "40px 36px",
+              display: "flex",
+              flexDirection: "column",
+              height: `${PANEL_HEIGHT}px`,
+              overflow: "hidden",
             }}
           >
             {/* ── Static header — always visible ────────────────── */}
-            <div style={{ flexShrink: 0, marginBottom: '22px', paddingBottom: '18px', borderBottom: '1px solid rgba(243,235,226,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <span style={{ color: 'var(--gold)', fontSize: '9px', letterSpacing: '0.28em', textTransform: 'uppercase', fontWeight: 700 }}>
+            <div
+              style={{
+                flexShrink: 0,
+                marginBottom: "22px",
+                paddingBottom: "18px",
+                borderBottom: "1px solid rgba(243,235,226,0.05)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "10px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "var(--cream)",
+                    fontSize: "9px",
+                    letterSpacing: "0.28em",
+                    textTransform: "uppercase",
+                    fontWeight: 700,
+                  }}
+                >
                   Yarden Intelligence
                 </span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "7px" }}
+                >
                   <motion.div
                     animate={
-                      phase === 'loading' || phase === 'streaming'
+                      phase === "loading" || phase === "streaming"
                         ? { opacity: [0.3, 1, 0.3] }
                         : { opacity: 1 }
                     }
-                    transition={{ duration: 1.4, repeat: (phase === 'loading' || phase === 'streaming') ? Infinity : 0 }}
+                    transition={{
+                      duration: 1.4,
+                      repeat:
+                        phase === "loading" || phase === "streaming"
+                          ? Infinity
+                          : 0,
+                    }}
                     style={{
-                      width: 5, height: 5, borderRadius: '50%',
-                      background: phase === 'done' ? 'rgba(120,200,120,0.9)' : 'var(--gold)',
+                      width: 5,
+                      height: 5,
+                      borderRadius: "50%",
+                      background:
+                        phase === "done"
+                          ? "rgba(120,200,120,0.9)"
+                          : "var(--cream)",
                     }}
                   />
-                  <span style={{ color: 'rgba(243,235,226,0.35)', fontSize: '10px', letterSpacing: '0.1em' }}>
-                    {phase === 'done'      ? 'Análise concluída' :
-                     phase === 'loading'   ? 'Processando...'    :
-                     phase === 'streaming' ? 'Analisando...'     :
-                     phase === 'error'     ? 'Erro na análise'   :
-                                            'Aguardando dados'}
+                  <span
+                    style={{
+                      color: "rgba(243,235,226,0.35)",
+                      fontSize: "10px",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    {phase === "done"
+                      ? "Análise concluída"
+                      : phase === "loading"
+                        ? "Processando..."
+                        : phase === "streaming"
+                          ? "Analisando..."
+                          : phase === "error"
+                            ? "Erro na análise"
+                            : "Aguardando dados"}
                   </span>
                 </div>
               </div>
-              <p style={{ color: 'rgba(243,235,226,0.5)', fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 600, margin: 0 }}>
+              <p
+                style={{
+                  color: "rgba(243,235,226,0.5)",
+                  fontSize: "9px",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                  margin: 0,
+                }}
+              >
                 Diagnóstico Gratuito de Marca
               </p>
             </div>
 
             <AnimatePresence mode="wait">
-
               {/* FORM */}
-              {phase === 'form' && (
-                <motion.div key="form"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -8 }}
+              {phase === "form" && (
+                <motion.div
+                  key="form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.3 }}
                   className="ai-form-content"
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    overflow: "hidden",
+                  }}
                 >
                   <Field label="Descrição da marca">
-                    <textarea rows={4} value={form.brandDescription}
-                      onChange={setField('brandDescription')} {...focusHandlers}
+                    <textarea
+                      rows={4}
+                      value={form.brandDescription}
+                      onChange={setField("brandDescription")}
+                      {...focusHandlers}
                       placeholder="Ex: somos uma cafeteria artesanal em São Paulo focada em experiência e qualidade..."
                       style={baseInput}
                     />
                   </Field>
 
                   <Field label="Principais problemas atuais" optional>
-                    <textarea rows={2} value={form.mainProblems}
-                      onChange={setField('mainProblems')} {...focusHandlers}
+                    <textarea
+                      rows={2}
+                      value={form.mainProblems}
+                      onChange={setField("mainProblems")}
+                      {...focusHandlers}
                       placeholder="Ex: baixo engajamento, identidade visual inconsistente..."
                       style={baseInput}
                     />
                   </Field>
 
-                  <div className="ai-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '4px' }}>
+                  <div
+                    className="ai-fields-row"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: "12px",
+                      marginBottom: "4px",
+                    }}
+                  >
                     <Field label="Site da empresa" optional>
                       <input
                         type="text"
                         value={form.siteUrl}
-                        onChange={setField('siteUrl')}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(184,147,90,0.45)')}
+                        onChange={setField("siteUrl")}
+                        onFocus={(e) =>
+                          (e.target.style.borderColor = "rgba(243, 235, 226,0.45)")
+                        }
                         onBlur={handleUrlBlur}
                         placeholder="meusite.com ou https://..."
                         style={{
-                          ...baseInput, padding: '10px 13px',
-                          borderColor: fieldErrors.siteUrl ? 'rgba(220,80,80,0.5)' : 'rgba(243,235,226,0.09)',
+                          ...baseInput,
+                          padding: "10px 13px",
+                          borderColor: fieldErrors.siteUrl
+                            ? "rgba(220,80,80,0.5)"
+                            : "rgba(243,235,226,0.09)",
                         }}
                       />
                       {fieldErrors.siteUrl && (
-                        <p style={{ color: 'rgba(220,80,80,0.75)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                        <p
+                          style={{
+                            color: "rgba(220,80,80,0.75)",
+                            fontSize: "10px",
+                            marginTop: "4px",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
                           {fieldErrors.siteUrl}
                         </p>
                       )}
                       {fieldHints.siteUrl && !fieldErrors.siteUrl && (
-                        <p style={{ color: 'rgba(184,147,90,0.7)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                        <p
+                          style={{
+                            color: "rgba(243, 235, 226,0.7)",
+                            fontSize: "10px",
+                            marginTop: "4px",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
                           {fieldHints.siteUrl}
                         </p>
                       )}
@@ -607,22 +857,41 @@ export default function AISection() {
                       <input
                         type="text"
                         value={form.instagram}
-                        onChange={setField('instagram')}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(184,147,90,0.45)')}
+                        onChange={setField("instagram")}
+                        onFocus={(e) =>
+                          (e.target.style.borderColor = "rgba(243, 235, 226,0.45)")
+                        }
                         onBlur={handleInstagramBlur}
                         placeholder="@usuario ou link do perfil"
                         style={{
-                          ...baseInput, padding: '10px 13px',
-                          borderColor: fieldErrors.instagram ? 'rgba(220,80,80,0.5)' : 'rgba(243,235,226,0.09)',
+                          ...baseInput,
+                          padding: "10px 13px",
+                          borderColor: fieldErrors.instagram
+                            ? "rgba(220,80,80,0.5)"
+                            : "rgba(243,235,226,0.09)",
                         }}
                       />
                       {fieldErrors.instagram && (
-                        <p style={{ color: 'rgba(220,80,80,0.75)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                        <p
+                          style={{
+                            color: "rgba(220,80,80,0.75)",
+                            fontSize: "10px",
+                            marginTop: "4px",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
                           {fieldErrors.instagram}
                         </p>
                       )}
                       {fieldHints.instagram && !fieldErrors.instagram && (
-                        <p style={{ color: 'rgba(184,147,90,0.7)', fontSize: '10px', marginTop: '4px', letterSpacing: '0.04em' }}>
+                        <p
+                          style={{
+                            color: "rgba(243, 235, 226,0.7)",
+                            fontSize: "10px",
+                            marginTop: "4px",
+                            letterSpacing: "0.04em",
+                          }}
+                        >
                           {fieldHints.instagram}
                         </p>
                       )}
@@ -630,30 +899,67 @@ export default function AISection() {
                   </div>
 
                   {/* Dica: formatos aceitos */}
-                  <p style={{ color: 'rgba(243,235,226,0.18)', fontSize: '10px', letterSpacing: '0.04em', marginBottom: '14px', lineHeight: 1.55 }}>
-                    Aceita @usuario, link do Instagram ou URL do site em qualquer formato. Você também pode incluir esses dados na descrição acima.
+                  <p
+                    style={{
+                      color: "rgba(243,235,226,0.18)",
+                      fontSize: "10px",
+                      letterSpacing: "0.04em",
+                      marginBottom: "14px",
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    Aceita @usuario, link do Instagram ou URL do site em
+                    qualquer formato. Você também pode incluir esses dados na
+                    descrição acima.
                   </p>
 
                   <TurnstileWidget onVerify={handleTurnstileVerify} />
 
                   <div className="ai-form-spacer" style={{ flex: 1 }} />
 
-                  <button onClick={handleSubmit} disabled={!canSubmit}
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!canSubmit}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      width: '100%', padding: '14px',
-                      background: canSubmit ? 'var(--gold)' : 'rgba(184,147,90,0.15)',
-                      color: canSubmit ? '#fff' : 'rgba(243,235,226,0.25)',
-                      border: 'none', cursor: canSubmit ? 'pointer' : 'default',
-                      fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em',
-                      textTransform: 'uppercase', fontFamily: 'inherit',
-                      transition: 'background 0.3s',
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      width: "100%",
+                      padding: "14px",
+                      background: canSubmit
+                        ? "var(--espresso)"
+                        : "rgba(243, 235, 226,0.08)",
+                      color: canSubmit ? "var(--cream)" : "rgba(243,235,226,0.25)",
+                      border: canSubmit ? "1px solid rgba(243,235,226,0.3)" : "none",
+                      cursor: canSubmit ? "pointer" : "default",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      fontFamily: "inherit",
+                      transition: "background 0.3s",
                     }}
-                    onMouseEnter={e => { if (canSubmit) e.currentTarget.style.background = 'var(--gold-light)' }}
-                    onMouseLeave={e => { if (canSubmit) e.currentTarget.style.background = 'var(--gold)' }}
+                    onMouseEnter={(e) => {
+                      if (canSubmit)
+                        e.currentTarget.style.background = "var(--sienna)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (canSubmit)
+                        e.currentTarget.style.background = "var(--espresso)";
+                    }}
                   >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                      <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35M11 8v6M8 11h6" />
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.35-4.35M11 8v6M8 11h6" />
                     </svg>
                     Analisar minha marca
                   </button>
@@ -661,61 +967,178 @@ export default function AISection() {
               )}
 
               {/* LOADING */}
-              {phase === 'loading' && (
-                <motion.div key="loading"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              {phase === "loading" && (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '28px' }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "28px",
+                  }}
                 >
-                  <div style={{ width: '180px', overflow: 'hidden', height: '1px', background: 'rgba(243,235,226,0.06)' }}>
+                  <div
+                    style={{
+                      width: "180px",
+                      overflow: "hidden",
+                      height: "1px",
+                      background: "rgba(243,235,226,0.06)",
+                    }}
+                  >
                     <motion.div
-                      animate={{ x: ['-100%', '200%'] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-                      style={{ height: '100%', width: '45%', background: 'linear-gradient(to right, transparent, var(--gold), transparent)' }}
+                      animate={{ x: ["-100%", "200%"] }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      style={{
+                        height: "100%",
+                        width: "45%",
+                        background:
+                          "linear-gradient(to right, transparent, var(--cream), transparent)",
+                      }}
                     />
                   </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <motion.p animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.3, repeat: Infinity }}
-                      style={{ color: 'rgba(243,235,226,0.5)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <div style={{ textAlign: "center" }}>
+                    <motion.p
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 1.3, repeat: Infinity }}
+                      style={{
+                        color: "rgba(243,235,226,0.5)",
+                        fontSize: "11px",
+                        letterSpacing: "0.14em",
+                        textTransform: "uppercase",
+                        marginBottom: "8px",
+                      }}
+                    >
                       {loadingStep}
                     </motion.p>
-                    <p style={{ color: 'rgba(243,235,226,0.2)', fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '13px' }}>
+                    <p
+                      style={{
+                        color: "rgba(243,235,226,0.2)",
+                        fontFamily: "var(--font-serif)",
+                        fontStyle: "italic",
+                        fontSize: "13px",
+                      }}
+                    >
                       Analisando sua marca...
                     </p>
                   </div>
-                  <div style={{ width: '100px', overflow: 'hidden', height: '1px', background: 'rgba(243,235,226,0.04)' }}>
+                  <div
+                    style={{
+                      width: "100px",
+                      overflow: "hidden",
+                      height: "1px",
+                      background: "rgba(243,235,226,0.04)",
+                    }}
+                  >
                     <motion.div
-                      animate={{ x: ['200%', '-100%'] }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: 'linear', delay: 0.5 }}
-                      style={{ height: '100%', width: '45%', background: 'linear-gradient(to right, transparent, rgba(184,147,90,0.35), transparent)' }}
+                      animate={{ x: ["200%", "-100%"] }}
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "linear",
+                        delay: 0.5,
+                      }}
+                      style={{
+                        height: "100%",
+                        width: "45%",
+                        background:
+                          "linear-gradient(to right, transparent, rgba(243, 235, 226,0.35), transparent)",
+                      }}
                     />
                   </div>
                 </motion.div>
               )}
 
               {/* STREAMING / DONE */}
-              {(phase === 'streaming' || phase === 'done') && (
-                <motion.div key="result"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}
+              {(phase === "streaming" || phase === "done") && (
+                <motion.div
+                  key="result"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4 }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: 0,
+                  }}
                 >
                   {/* Top bar */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexShrink: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "16px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
                       <motion.div
-                        animate={phase === 'streaming' ? { opacity: [0.4, 1, 0.4] } : { opacity: 1 }}
+                        animate={
+                          phase === "streaming"
+                            ? { opacity: [0.4, 1, 0.4] }
+                            : { opacity: 1 }
+                        }
                         transition={{ duration: 1.2, repeat: Infinity }}
-                        style={{ width: 5, height: 5, borderRadius: '50%', background: phase === 'done' ? 'rgba(120,200,120,0.9)' : 'var(--gold)' }}
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: "50%",
+                          background:
+                            phase === "done"
+                              ? "rgba(120,200,120,0.9)"
+                              : "var(--cream)",
+                        }}
                       />
-                      <span style={{ color: 'var(--gold)', fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 700 }}>
-                        {phase === 'streaming' ? 'Analisando...' : 'Diagnóstico Concluído'}
+                      <span
+                        style={{
+                          color: "var(--cream)",
+                          fontSize: "9px",
+                          letterSpacing: "0.22em",
+                          textTransform: "uppercase",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {phase === "streaming"
+                          ? "Analisando..."
+                          : "Diagnóstico Concluído"}
                       </span>
                     </div>
-                    {phase === 'done' && (
-                      <button onClick={reset}
-                        style={{ background: 'none', border: 'none', color: 'rgba(243,235,226,0.3)', fontSize: '11px', cursor: 'pointer', letterSpacing: '0.06em' }}
-                        onMouseEnter={e => e.currentTarget.style.color = 'rgba(243,235,226,0.65)'}
-                        onMouseLeave={e => e.currentTarget.style.color = 'rgba(243,235,226,0.3)'}
+                    {phase === "done" && (
+                      <button
+                        onClick={reset}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "rgba(243,235,226,0.3)",
+                          fontSize: "11px",
+                          cursor: "pointer",
+                          letterSpacing: "0.06em",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.color =
+                            "rgba(243,235,226,0.65)")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.color =
+                            "rgba(243,235,226,0.3)")
+                        }
                       >
                         Nova análise →
                       </button>
@@ -723,7 +1146,15 @@ export default function AISection() {
                   </div>
 
                   {/* Scrollable result — capped height */}
-                  <div className="analysis-result" style={{ flex: 1, overflowY: 'auto', minHeight: 0, paddingRight: '6px' }}>
+                  <div
+                    className="analysis-result"
+                    style={{
+                      flex: 1,
+                      overflowY: "auto",
+                      minHeight: 0,
+                      paddingRight: "6px",
+                    }}
+                  >
                     {/* Stable container — only fades in once; text grows in batches every 120 ms */}
                     <motion.div
                       key="stream-result"
@@ -731,40 +1162,97 @@ export default function AISection() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35 }}
                     >
-                      <StreamText text={displayedText} streaming={phase === 'streaming'} />
+                      <StreamText
+                        text={displayedText}
+                        streaming={phase === "streaming"}
+                      />
                     </motion.div>
                   </div>
 
                   {/* CTA after done */}
                   <AnimatePresence>
-                    {phase === 'done' && planName && (
+                    {phase === "done" && planName && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.45, delay: 0.25 }}
-                        style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(243,235,226,0.07)', flexShrink: 0 }}
+                        style={{
+                          marginTop: "20px",
+                          paddingTop: "16px",
+                          borderTop: "1px solid rgba(243,235,226,0.07)",
+                          flexShrink: 0,
+                        }}
                       >
-                        <p style={{ color: 'rgba(243,235,226,0.35)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                        <p
+                          style={{
+                            color: "rgba(243,235,226,0.35)",
+                            fontSize: "9px",
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            marginBottom: "10px",
+                          }}
+                        >
                           Plano recomendado
                         </p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontStyle: 'italic', color: 'var(--cream)', fontWeight: 300 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "14px",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: "var(--font-serif)",
+                              fontSize: "17px",
+                              fontStyle: "italic",
+                              color: "var(--cream)",
+                              fontWeight: 300,
+                            }}
+                          >
                             {planName}
                           </span>
-                          <button onClick={handleViewPlan}
+                          <button
+                            onClick={handleViewPlan}
                             style={{
-                              display: 'flex', alignItems: 'center', gap: '6px',
-                              background: 'none', border: '1px solid rgba(184,147,90,0.3)',
-                              color: 'var(--gold)', padding: '6px 14px',
-                              fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em',
-                              textTransform: 'uppercase', cursor: 'pointer',
-                              fontFamily: 'inherit', transition: 'all 0.25s',
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "6px",
+                              background: "none",
+                              border: "1px solid rgba(243, 235, 226,0.3)",
+                              color: "var(--cream)",
+                              padding: "6px 14px",
+                              fontSize: "9px",
+                              fontWeight: 700,
+                              letterSpacing: "0.14em",
+                              textTransform: "uppercase",
+                              cursor: "pointer",
+                              fontFamily: "inherit",
+                              transition: "all 0.25s",
                             }}
-                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(184,147,90,0.08)'; e.currentTarget.style.borderColor = 'var(--gold)' }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'none'; e.currentTarget.style.borderColor = 'rgba(184,147,90,0.3)' }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background =
+                                "rgba(243, 235, 226,0.08)";
+                              e.currentTarget.style.borderColor = "var(--cream)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "none";
+                              e.currentTarget.style.borderColor =
+                                "rgba(243, 235, 226,0.3)";
+                            }}
                           >
                             Ver detalhes do plano
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg
+                              width="10"
+                              height="10"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
                               <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                           </button>
@@ -776,55 +1264,149 @@ export default function AISection() {
               )}
 
               {/* ERROR */}
-              {phase === 'error' && (
-                <motion.div key="error"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              {phase === "error" && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: "16px",
+                  }}
                 >
-                  <div style={{ background: 'rgba(200,80,80,0.05)', border: '1px solid rgba(200,80,80,0.18)', padding: '18px 20px' }}>
-                    <p style={{ color: 'rgba(200,80,80,0.8)', fontSize: '13px', lineHeight: 1.65, fontWeight: 300 }}>{errorMsg}</p>
-                  </div>
-                  <button onClick={reset}
+                  <div
                     style={{
-                      background: 'none', border: '1px solid rgba(243,235,226,0.12)',
-                      color: 'rgba(243,235,226,0.45)', padding: '11px', fontSize: '10px',
-                      cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase',
-                      fontFamily: 'inherit', transition: 'all 0.25s',
+                      background: "rgba(200,80,80,0.05)",
+                      border: "1px solid rgba(200,80,80,0.18)",
+                      padding: "18px 20px",
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(243,235,226,0.3)'; e.currentTarget.style.color = 'var(--cream)' }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(243,235,226,0.12)'; e.currentTarget.style.color = 'rgba(243,235,226,0.45)' }}
+                  >
+                    <p
+                      style={{
+                        color: "rgba(200,80,80,0.8)",
+                        fontSize: "13px",
+                        lineHeight: 1.65,
+                        fontWeight: 300,
+                      }}
+                    >
+                      {errorMsg}
+                    </p>
+                  </div>
+                  <button
+                    onClick={reset}
+                    style={{
+                      background: "none",
+                      border: "1px solid rgba(243,235,226,0.12)",
+                      color: "rgba(243,235,226,0.45)",
+                      padding: "11px",
+                      fontSize: "10px",
+                      cursor: "pointer",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      fontFamily: "inherit",
+                      transition: "all 0.25s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor =
+                        "rgba(243,235,226,0.3)";
+                      e.currentTarget.style.color = "var(--cream)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor =
+                        "rgba(243,235,226,0.12)";
+                      e.currentTarget.style.color = "rgba(243,235,226,0.45)";
+                    }}
                   >
                     Tentar novamente
                   </button>
                 </motion.div>
               )}
-
             </AnimatePresence>
           </motion.div>
         </div>
 
         {/* ── AI features strip ────────────────────────────────── */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.5 }}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2px', marginTop: '2px' }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "2px",
+            marginTop: "2px",
+          }}
           className="ai-features"
         >
           {[
-            { icon: '◈', title: 'Análise de Audiência',        desc: 'IA monitora comentários e DMs identificando objeções e oportunidades.' },
-            { icon: '◇', title: 'Auto-resposta Inteligente',   desc: 'Respostas automáticas em DM com personalidade da sua marca.' },
-            { icon: '○', title: 'Dashboard de Marca',          desc: 'Relatórios mensais gerados por IA com recomendações estratégicas.' },
-            { icon: '△', title: 'Inteligência de Mercado',     desc: 'IA monitora concorrentes e tendências em tempo real.' },
-          ].map(f => (
-            <div key={f.title} style={{ background: '#180709', padding: '36px 28px', borderTop: '1px solid rgba(243,235,226,0.05)' }}>
-              <div style={{ color: 'var(--gold)', fontSize: '20px', marginBottom: '16px', lineHeight: 1 }}>{f.icon}</div>
-              <h4 style={{ color: 'var(--cream)', fontSize: '14px', fontWeight: 500, marginBottom: '10px', letterSpacing: '0.02em' }}>{f.title}</h4>
-              <p style={{ color: 'rgba(243,235,226,0.45)', fontSize: '13px', lineHeight: 1.6, fontWeight: 300 }}>{f.desc}</p>
+            {
+              icon: "◈",
+              title: "Análise de Audiência",
+              desc: "IA monitora comentários e DMs identificando objeções e oportunidades.",
+            },
+            {
+              icon: "◇",
+              title: "Auto-resposta Inteligente",
+              desc: "Respostas automáticas em DM com personalidade da sua marca.",
+            },
+            {
+              icon: "○",
+              title: "Dashboard de Marca",
+              desc: "Relatórios mensais gerados por IA com recomendações estratégicas.",
+            },
+            {
+              icon: "△",
+              title: "Inteligência de Mercado",
+              desc: "IA monitora concorrentes e tendências em tempo real.",
+            },
+          ].map((f) => (
+            <div
+              key={f.title}
+              style={{
+                background: "#180709",
+                padding: "36px 28px",
+                borderTop: "1px solid rgba(243,235,226,0.05)",
+              }}
+            >
+              <div
+                style={{
+                  color: "var(--cream)",
+                  fontSize: "20px",
+                  marginBottom: "16px",
+                  lineHeight: 1,
+                }}
+              >
+                {f.icon}
+              </div>
+              <h4
+                style={{
+                  color: "var(--cream)",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  marginBottom: "10px",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {f.title}
+              </h4>
+              <p
+                style={{
+                  color: "rgba(243,235,226,0.45)",
+                  fontSize: "13px",
+                  lineHeight: 1.6,
+                  fontWeight: 300,
+                }}
+              >
+                {f.desc}
+              </p>
             </div>
           ))}
-        </motion.div>
+        </motion.div> */}
       </div>
 
       <style>{`
@@ -848,8 +1430,8 @@ export default function AISection() {
         }
         .analysis-result::-webkit-scrollbar { width: 2px; }
         .analysis-result::-webkit-scrollbar-track { background: transparent; }
-        .analysis-result::-webkit-scrollbar-thumb { background: rgba(184,147,90,0.2); border-radius: 2px; }
+        .analysis-result::-webkit-scrollbar-thumb { background: rgba(243, 235, 226,0.2); border-radius: 2px; }
       `}</style>
     </section>
-  )
+  );
 }

@@ -77,8 +77,8 @@ const PLANS = [
 /* ── Card de plano (sempre aberto) ──────────────────────────────────── */
 function PlanCard({ plan, index, inView, isHighlighted }) {
   const hl    = plan.highlight
-  const gold  = 'var(--gold)'
-  const goldL = 'var(--gold-light)'
+  const gold  = 'var(--cream)'
+  const goldL = 'var(--cream)'
 
   return (
     <motion.div
@@ -87,14 +87,14 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: Math.min(index * 0.07, 0.5) }}
       style={{
-        background: hl ? 'var(--burgundy)' : '#ffffff',
+        background: hl ? 'var(--espresso)' : '#ffffff',
         padding: plan.featured ? '52px 60px' : '40px 36px',
         position: 'relative',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: plan.featured ? 'column' : 'column',
         boxShadow: isHighlighted
-          ? '0 0 0 2px var(--gold), 0 8px 40px rgba(184,147,90,0.22)'
+          ? '0 0 0 2px var(--cream), 0 8px 40px rgba(243, 235, 226,0.22)'
           : 'none',
         transition: 'box-shadow 0.6s ease',
         ...(plan.featured ? { gridColumn: '1 / -1' } : {}),
@@ -107,10 +107,11 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
 
       {/* Ícone + badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-        <div style={{ color: hl ? goldL : 'var(--burgundy-mid)', flexShrink: 0 }}>{plan.icon}</div>
+        <div style={{ color: hl ? goldL : 'var(--sienna)', flexShrink: 0 }}>{plan.icon}</div>
         <span style={{
-          background: hl ? gold : 'var(--off-white)',
-          color: hl ? '#fff' : 'rgba(54,15,17,0.5)',
+          background: hl ? 'var(--espresso)' : 'var(--cream)',
+          color: hl ? 'var(--cream)' : 'rgba(54,15,17,0.5)',
+          border: hl ? '1px solid rgba(243,235,226,0.3)' : 'none',
           fontSize: '8px', fontWeight: 700, letterSpacing: '0.2em',
           textTransform: 'uppercase', padding: '4px 10px',
         }}>
@@ -122,17 +123,17 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
       <h3 style={{
         fontFamily: 'var(--font-serif)', fontWeight: 400,
         fontSize: plan.featured ? 'clamp(22px,2.8vw,36px)' : 'clamp(18px,1.8vw,24px)',
-        color: hl ? 'var(--cream)' : 'var(--burgundy)',
+        color: hl ? 'var(--cream)' : 'var(--espresso)',
         lineHeight: 1.15, marginBottom: '8px',
       }}>
         {plan.name}
       </h3>
-      <p style={{ color: hl ? goldL : 'var(--burgundy-mid)', fontSize: '13px', fontStyle: 'italic', fontFamily: 'var(--font-serif)', marginBottom: '28px', lineHeight: 1.4 }}>
+      <p style={{ color: hl ? goldL : 'var(--sienna)', fontSize: '13px', fontStyle: 'italic', fontFamily: 'var(--font-serif)', marginBottom: '28px', lineHeight: 1.4 }}>
         {plan.tagline}
       </p>
 
       {/* Divisória dourada */}
-      <div style={{ height: 1, background: hl ? 'rgba(184,147,90,0.35)' : 'rgba(54,15,17,0.08)', marginBottom: '28px' }} />
+      <div style={{ height: 1, background: hl ? 'rgba(243, 235, 226,0.35)' : 'rgba(54,15,17,0.08)', marginBottom: '28px' }} />
 
       {/* Layout interno: 2 cols no featured, 1 col nos demais */}
       <div className="plan-inner" style={{
@@ -144,7 +145,7 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
       }}>
         {/* Esquerda: para quem + descrição */}
         <div>
-          <div style={{ borderLeft: `2px solid ${hl ? 'rgba(184,147,90,0.5)' : gold}`, paddingLeft: '16px', marginBottom: '18px' }}>
+          <div style={{ borderLeft: `2px solid ${hl ? 'rgba(243, 235, 226,0.5)' : gold}`, paddingLeft: '16px', marginBottom: '18px' }}>
             <p style={{ color: hl ? 'rgba(243,235,226,0.6)' : 'rgba(54,15,17,0.58)', fontSize: '13px', lineHeight: 1.8, fontStyle: 'italic', fontFamily: 'var(--font-serif)', fontWeight: 300 }}>
               {plan.forWho}
             </p>
@@ -176,13 +177,14 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
               display: 'inline-flex', alignItems: 'center', gap: '10px',
               padding: '14px 28px',
               marginTop: '28px',
-              background: hl ? gold : 'var(--burgundy)',
-              color: '#fff', fontSize: '11px', fontWeight: 600,
+              background: 'var(--espresso)',
+              color: 'var(--cream)', fontSize: '11px', fontWeight: 600,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               textDecoration: 'none', transition: 'background 0.3s ease',
+              border: hl ? '1px solid rgba(243,235,226,0.3)' : 'none',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = hl ? 'var(--gold-light)' : 'var(--burgundy-mid)'}
-            onMouseLeave={e => e.currentTarget.style.background = hl ? gold : 'var(--burgundy)'}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--sienna)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--espresso)'}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -197,7 +199,7 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
         <div style={{
           position: 'absolute', top: '-60px', right: '-60px',
           width: '240px', height: '240px',
-          background: 'radial-gradient(circle, rgba(184,147,90,0.13) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(243, 235, 226,0.13) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
       )}
@@ -231,7 +233,7 @@ export default function PlansSection() {
   const gridPlans    = PLANS.slice(1)    // 6 planos restantes
 
   return (
-    <section id="plans" style={{ background: 'var(--off-white)', padding: '140px 0 100px' }}>
+    <section id="plans" style={{ background: 'var(--cream)', padding: '140px 0 100px' }}>
       <div className="container" ref={ref}>
 
         {/* Cabeçalho */}
@@ -242,8 +244,8 @@ export default function PlansSection() {
           style={{ marginBottom: '72px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '40px' }}
         >
           <div>
-            <p className="section-label" style={{ color: 'var(--burgundy-mid)' }}>Nossas Soluções</p>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(34px,5vw,66px)', lineHeight: 1.05, color: 'var(--burgundy)' }}>
+            <p className="section-label" style={{ color: 'var(--sienna)' }}>Nossas Soluções</p>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(34px,5vw,66px)', lineHeight: 1.05, color: 'var(--espresso)' }}>
               Seis produtos.<br />
               <em style={{ fontStyle: 'italic' }}>Um método.</em>
             </h2>

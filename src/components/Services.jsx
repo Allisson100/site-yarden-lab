@@ -107,7 +107,7 @@ export default function Services() {
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section id="services" style={{ background: 'var(--off-white)', padding: '140px 0' }}>
+    <section id="services" style={{ background: 'var(--cream)', padding: '140px 0' }}>
       <div className="container">
         <motion.div
           ref={ref}
@@ -116,7 +116,7 @@ export default function Services() {
           transition={{ duration: 0.8 }}
           style={{ marginBottom: '80px' }}
         >
-          <p className="section-label" style={{ color: 'var(--burgundy-mid)' }}>
+          <p className="section-label" style={{ color: 'var(--sienna)' }}>
             Nossas Soluções
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '40px', flexWrap: 'wrap' }}>
@@ -125,7 +125,7 @@ export default function Services() {
               fontWeight: 300,
               fontSize: 'clamp(36px, 5vw, 68px)',
               lineHeight: 1.05,
-              color: 'var(--burgundy)',
+              color: 'var(--espresso)',
               maxWidth: '620px',
             }}>
               Seis produtos.
@@ -158,7 +158,7 @@ export default function Services() {
               transition={{ duration: 0.7, delay: i * 0.08 }}
               onClick={() => goToPricingCard(s.pricingCategory, s.planName)}
               style={{
-                background: s.highlight ? 'var(--burgundy)' : 'white',
+                background: s.highlight ? 'var(--espresso)' : 'white',
                 padding: '52px 44px',
                 position: 'relative',
                 cursor: 'pointer',
@@ -179,7 +179,7 @@ export default function Services() {
               </div>
 
               <div style={{
-                color: s.highlight ? 'var(--gold-light)' : 'var(--burgundy-mid)',
+                color: s.highlight ? 'var(--cream)' : 'var(--sienna)',
                 marginBottom: '24px',
               }}>
                 {s.icon}
@@ -190,14 +190,14 @@ export default function Services() {
                 fontWeight: 400,
                 fontSize: 'clamp(20px, 2vw, 26px)',
                 lineHeight: 1.2,
-                color: s.highlight ? 'var(--cream)' : 'var(--burgundy)',
+                color: s.highlight ? 'var(--cream)' : 'var(--espresso)',
                 marginBottom: '10px',
               }}>
                 {s.name}
               </h3>
 
               <p style={{
-                color: s.highlight ? 'var(--gold-light)' : 'var(--burgundy-mid)',
+                color: s.highlight ? 'var(--cream)' : 'var(--sienna)',
                 fontSize: '13px',
                 fontStyle: 'italic',
                 fontFamily: 'var(--font-serif)',
@@ -209,7 +209,7 @@ export default function Services() {
               <div style={{
                 width: '36px',
                 height: '1px',
-                background: s.highlight ? 'rgba(243,235,226,0.25)' : 'var(--sand)',
+                background: s.highlight ? 'rgba(243,235,226,0.25)' : 'var(--dusk)',
                 marginBottom: '20px',
               }} />
 
@@ -225,7 +225,7 @@ export default function Services() {
 
               {/* Footer — arrow only, no price */}
               <div style={{
-                borderTop: `1px solid ${s.highlight ? 'rgba(243,235,226,0.12)' : 'var(--off-white)'}`,
+                borderTop: `1px solid ${s.highlight ? 'rgba(243,235,226,0.12)' : 'var(--cream)'}`,
                 paddingTop: '24px',
                 marginTop: '32px',
                 display: 'flex',
@@ -242,9 +242,9 @@ export default function Services() {
                 </span>
                 <div style={{
                   width: '36px', height: '36px',
-                  border: `1px solid ${s.highlight ? 'rgba(243,235,226,0.25)' : 'var(--sand)'}`,
+                  border: `1px solid ${s.highlight ? 'rgba(243,235,226,0.25)' : 'var(--dusk)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: s.highlight ? 'var(--cream)' : 'var(--burgundy)',
+                  color: s.highlight ? 'var(--cream)' : 'var(--espresso)',
                   transition: 'all 0.3s ease',
                   flexShrink: 0,
                 }}>
@@ -259,7 +259,7 @@ export default function Services() {
                   position: 'absolute',
                   top: '-40px', right: '-40px',
                   width: '160px', height: '160px',
-                  background: 'radial-gradient(circle, rgba(184,147,90,0.15) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, rgba(243, 235, 226,0.15) 0%, transparent 70%)',
                   pointerEvents: 'none',
                 }} />
               )}

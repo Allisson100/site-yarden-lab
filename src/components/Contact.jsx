@@ -131,7 +131,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="contact-section" style={{
-      background: 'var(--burgundy)',
+      background: 'var(--espresso)',
       padding: '140px 0',
       position: 'relative',
       overflow: 'hidden',
@@ -159,7 +159,7 @@ export default function Contact() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9 }}
           >
-            <p className="section-label" style={{ color: 'var(--gold)' }}>
+            <p className="section-label" style={{ color: 'var(--cream)' }}>
               Contato
             </p>
             <h2 style={{
@@ -172,7 +172,7 @@ export default function Contact() {
             }}>
               Vamos construir
               <br />
-              <em style={{ fontStyle: 'italic', color: 'var(--gold-light)' }}>juntos.</em>
+              <em style={{ fontStyle: 'italic', color: 'var(--cream)' }}>juntos.</em>
             </h2>
 
             <p style={{
@@ -207,7 +207,7 @@ export default function Contact() {
                     width: '44px', height: '44px',
                     border: '1px solid rgba(243,235,226,0.15)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--gold)',
+                    color: 'var(--cream)',
                     flexShrink: 0,
                     transition: 'border-color 0.2s, background 0.2s',
                   }}>
@@ -249,10 +249,10 @@ export default function Contact() {
                 >
                   <div style={{
                     width: '64px', height: '64px',
-                    border: '1px solid var(--gold)',
+                    border: '1px solid var(--cream)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     margin: '0 auto 28px',
-                    color: 'var(--gold)',
+                    color: 'var(--cream)',
                     fontSize: '24px',
                   }}>
                     ✓
@@ -274,7 +274,7 @@ export default function Contact() {
               ) : (
                 <motion.form key="form" onSubmit={handleSubmit}>
                   <p style={{
-                    color: 'var(--gold)',
+                    color: 'var(--cream)',
                     fontSize: '10px',
                     letterSpacing: '0.22em',
                     textTransform: 'uppercase',
@@ -371,7 +371,7 @@ export default function Contact() {
                         href={`https://wa.me/${WA_NUMBER}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: 'var(--gold-light)', textDecoration: 'underline' }}
+                        style={{ color: 'var(--cream)', textDecoration: 'underline' }}
                       >
                         Falar pelo WhatsApp
                       </a>

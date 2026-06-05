@@ -45,7 +45,7 @@ export default function Process() {
           transition={{ duration: 0.8 }}
           style={{ marginBottom: '80px' }}
         >
-          <p className="section-label" style={{ color: 'var(--burgundy-mid)' }}>
+          <p className="section-label" style={{ color: 'var(--sienna)' }}>
             Como Trabalhamos
           </p>
           <h2 style={{
@@ -53,7 +53,7 @@ export default function Process() {
             fontWeight: 300,
             fontSize: 'clamp(36px, 5vw, 68px)',
             lineHeight: 1.05,
-            color: 'var(--burgundy)',
+            color: 'var(--espresso)',
             maxWidth: '640px',
           }}>
             Método que gera
@@ -69,7 +69,7 @@ export default function Process() {
             top: '36px',
             left: '10%', right: '10%',
             height: '1px',
-            background: 'linear-gradient(to right, transparent, var(--sand) 20%, var(--sand) 80%, transparent)',
+            background: 'linear-gradient(to right, transparent, var(--dusk) 20%, var(--dusk) 80%, transparent)',
             zIndex: 0,
           }} className="process-line" />
 
@@ -84,7 +84,7 @@ export default function Process() {
               {/* Step number bubble */}
               <div style={{
                 width: '72px', height: '72px',
-                border: '1px solid var(--sand)',
+                border: '1px solid var(--dusk)',
                 background: 'var(--cream)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: '36px',
@@ -93,13 +93,13 @@ export default function Process() {
                 <div style={{
                   position: 'absolute',
                   inset: '6px',
-                  background: i === 0 ? 'var(--burgundy)' : 'transparent',
+                  background: i === 0 ? 'var(--espresso)' : 'transparent',
                   transition: 'background 0.3s',
                 }} />
                 <span style={{
                   fontFamily: 'var(--font-serif)',
                   fontSize: '22px',
-                  color: i === 0 ? 'var(--cream)' : 'var(--burgundy)',
+                  color: i === 0 ? 'var(--cream)' : 'var(--espresso)',
                   position: 'relative',
                   zIndex: 1,
                   fontWeight: 300,
@@ -112,7 +112,7 @@ export default function Process() {
                 fontSize: '10px',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color: 'var(--gold)',
+                color: 'var(--cream)',
                 marginBottom: '10px',
                 fontWeight: 600,
               }}>
@@ -123,7 +123,7 @@ export default function Process() {
                 fontFamily: 'var(--font-serif)',
                 fontWeight: 400,
                 fontSize: 'clamp(22px, 2.5vw, 30px)',
-                color: 'var(--burgundy)',
+                color: 'var(--espresso)',
                 marginBottom: '16px',
               }}>
                 {step.title}

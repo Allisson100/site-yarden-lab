@@ -162,7 +162,7 @@ export default function Pricing() {
   }, [])
 
   return (
-    <section id="pricing" style={{ background: 'var(--sand)', padding: '140px 0' }}>
+    <section id="pricing" style={{ background: 'var(--dusk)', padding: '140px 0' }}>
       <div className="container" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 32 }}
@@ -171,7 +171,7 @@ export default function Pricing() {
           style={{ marginBottom: '80px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '40px' }}
         >
           <div>
-            <p className="section-label" style={{ color: 'var(--burgundy-mid)' }}>
+            <p className="section-label" style={{ color: 'var(--sienna)' }}>
               Soluções
             </p>
             <h2 style={{
@@ -179,7 +179,7 @@ export default function Pricing() {
               fontWeight: 300,
               fontSize: 'clamp(36px, 5vw, 68px)',
               lineHeight: 1.05,
-              color: 'var(--burgundy)',
+              color: 'var(--espresso)',
             }}>
               O produto certo
               <br />
@@ -224,15 +224,15 @@ export default function Pricing() {
                 <span style={{ color: 'rgba(54,15,17,0.35)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase' }}>
                   {String(ci + 1).padStart(2, '0')}
                 </span>
-                <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 400, color: 'var(--burgundy)' }}>
+                <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 400, color: 'var(--espresso)' }}>
                   {category.category}
                 </span>
-                <span style={{ background: 'var(--sand)', color: 'rgba(54,15,17,0.5)', fontSize: '10px', padding: '4px 10px', letterSpacing: '0.1em' }}>
+                <span style={{ background: 'var(--dusk)', color: 'rgba(54,15,17,0.5)', fontSize: '10px', padding: '4px 10px', letterSpacing: '0.1em' }}>
                   {category.items.length} {category.items.length === 1 ? 'produto' : 'produtos'}
                 </span>
               </div>
               <div style={{
-                color: 'var(--burgundy)',
+                color: 'var(--espresso)',
                 transform: expandedCategory === category.category ? 'rotate(45deg)' : 'rotate(0)',
                 transition: 'transform 0.3s ease',
                 fontSize: '22px',
@@ -256,19 +256,19 @@ export default function Pricing() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: pi * 0.08 }}
                     style={{
-                      background: plan.highlight ? 'var(--burgundy)' : 'var(--cream)',
+                      background: plan.highlight ? 'var(--espresso)' : 'var(--cream)',
                       padding: '44px 36px',
                       position: 'relative',
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
-                      boxShadow: highlightedPlan === plan.name ? '0 0 0 2px var(--gold), 0 0 24px rgba(184,147,90,0.25)' : 'none',
+                      boxShadow: highlightedPlan === plan.name ? '0 0 0 2px var(--cream), 0 0 24px rgba(243, 235, 226,0.25)' : 'none',
                       transition: 'box-shadow 0.6s ease',
                     }}
                   >
                     <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '20px' }}>
                       <span style={{
-                        background: plan.highlight ? 'var(--gold)' : 'var(--sand)',
+                        background: plan.highlight ? 'var(--cream)' : 'var(--dusk)',
                         color: plan.highlight ? '#fff' : 'rgba(54,15,17,0.6)',
                         fontSize: '9px',
                         fontWeight: 700,
@@ -284,14 +284,14 @@ export default function Pricing() {
                       fontFamily: 'var(--font-serif)',
                       fontWeight: 400,
                       fontSize: 'clamp(20px, 2vw, 26px)',
-                      color: plan.highlight ? 'var(--cream)' : 'var(--burgundy)',
+                      color: plan.highlight ? 'var(--cream)' : 'var(--espresso)',
                       marginBottom: '16px',
                     }}>
                       {plan.name}
                     </h3>
 
                     <div style={{
-                      borderLeft: `2px solid ${plan.highlight ? 'rgba(184,147,90,0.5)' : 'var(--gold)'}`,
+                      borderLeft: `2px solid ${plan.highlight ? 'rgba(243, 235, 226,0.5)' : 'var(--cream)'}`,
                       paddingLeft: '16px',
                       marginBottom: '24px',
                     }}>
@@ -318,7 +318,7 @@ export default function Pricing() {
                     </p>
 
                     <div style={{
-                      borderTop: `1px solid ${plan.highlight ? 'rgba(243,235,226,0.12)' : 'var(--sand)'}`,
+                      borderTop: `1px solid ${plan.highlight ? 'rgba(243,235,226,0.12)' : 'var(--dusk)'}`,
                       paddingTop: '20px',
                       marginBottom: '28px',
                       flex: 1,
@@ -334,7 +334,7 @@ export default function Pricing() {
                             fontSize: '13px',
                             lineHeight: 1.5,
                           }}>
-                            <span style={{ color: plan.highlight ? 'var(--gold-light)' : 'var(--gold)', marginTop: '3px', flexShrink: 0 }}>✓</span>
+                            <span style={{ color: plan.highlight ? 'var(--cream)' : 'var(--cream)', marginTop: '3px', flexShrink: 0 }}>✓</span>
                             {f}
                           </li>
                         ))}
@@ -352,7 +352,7 @@ export default function Pricing() {
                         justifyContent: 'center',
                         gap: '8px',
                         padding: '14px 24px',
-                        background: plan.highlight ? 'var(--gold)' : 'var(--burgundy)',
+                        background: plan.highlight ? 'var(--cream)' : 'var(--espresso)',
                         color: '#fff',
                         fontSize: '11px',
                         fontWeight: 600,
@@ -361,8 +361,8 @@ export default function Pricing() {
                         textDecoration: 'none',
                         transition: 'background 0.3s ease',
                       }}
-                      onMouseEnter={e => e.currentTarget.style.background = plan.highlight ? 'var(--gold-light)' : 'var(--burgundy-mid)'}
-                      onMouseLeave={e => e.currentTarget.style.background = plan.highlight ? 'var(--gold)' : 'var(--burgundy)'}
+                      onMouseEnter={e => e.currentTarget.style.background = plan.highlight ? 'var(--cream)' : 'var(--sienna)'}
+                      onMouseLeave={e => e.currentTarget.style.background = plan.highlight ? 'var(--cream)' : 'var(--espresso)'}
                     >
                       {/* WhatsApp minimal icon */}
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -376,7 +376,7 @@ export default function Pricing() {
                         position: 'absolute',
                         bottom: '-60px', right: '-60px',
                         width: '200px', height: '200px',
-                        background: 'radial-gradient(circle, rgba(184,147,90,0.12) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, rgba(243, 235, 226,0.12) 0%, transparent 70%)',
                         pointerEvents: 'none',
                       }} />
                     )}

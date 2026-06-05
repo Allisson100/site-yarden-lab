@@ -108,11 +108,11 @@ function BtnIcon({ onClick, title, active, children }) {
       style={{
         background: 'none', border: 'none', cursor: 'pointer', padding: '5px 9px',
         display: 'flex', alignItems: 'center',
-        color: active ? 'var(--gold)' : 'rgba(243,235,226,0.6)',
+        color: active ? 'var(--cream)' : 'rgba(243,235,226,0.6)',
         transition: 'color 0.2s',
       }}
-      onMouseEnter={e => (e.currentTarget.style.color = 'var(--gold)')}
-      onMouseLeave={e => (e.currentTarget.style.color = active ? 'var(--gold)' : 'rgba(243,235,226,0.6)')}
+      onMouseEnter={e => (e.currentTarget.style.color = 'var(--cream)')}
+      onMouseLeave={e => (e.currentTarget.style.color = active ? 'var(--cream)' : 'rgba(243,235,226,0.6)')}
     >
       {children}
     </button>
@@ -120,7 +120,7 @@ function BtnIcon({ onClick, title, active, children }) {
 }
 
 // ─── Video card ───────────────────────────────────────────────────────────────
-function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight, onTogglePlay, onToggleSound, onFullscreen }) {
+function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight, shouldLoad, onTogglePlay, onToggleSound, onFullscreen }) {
   const [hovered,  setHovered]  = useState(false)
   const [hasError, setHasError] = useState(false)
   const [loaded,   setLoaded]   = useState(false)
@@ -136,15 +136,15 @@ function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight,
         <VideoPlaceholder video={video} featured={featured} />
       )}
 
-      {/* Video element */}
+      {/* Video element — src só é definido quando shouldLoad=true (seção próxima do viewport) */}
       {!hasError && (
         <video
           ref={refCallback}
-          src={video.src}
+          src={shouldLoad ? video.src : undefined}
           loop
           muted
           playsInline
-          preload="metadata"
+          preload={shouldLoad ? (featured ? 'auto' : 'metadata') : 'none'}
           onError={() => setHasError(true)}
           onLoadedData={() => setLoaded(true)}
           style={{
@@ -166,13 +166,13 @@ function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight,
       {/* Diagonal accent line */}
       <div style={{
         position: 'absolute', top: 0, right: featured ? '38%' : '24%', width: '1px', height: '100%',
-        background: 'linear-gradient(to bottom, transparent, rgba(184,147,90,0.1), transparent)',
+        background: 'linear-gradient(to bottom, transparent, rgba(243, 235, 226,0.1), transparent)',
         pointerEvents: 'none',
       }} />
 
       {/* Top: id + category */}
       <div style={{ position: 'absolute', top: 18, left: 20, right: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ color: 'rgba(184,147,90,0.9)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.3em', fontFamily: 'var(--font-serif)' }}>
+        <span style={{ color: 'rgba(243, 235, 226,0.9)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.3em', fontFamily: 'var(--font-serif)' }}>
           {video.id}
         </span>
         <span style={{ color: 'rgba(243,235,226,0.3)', fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', border: '1px solid rgba(243,235,226,0.09)', padding: '3px 8px' }}>
@@ -212,7 +212,7 @@ function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight,
 
       {/* Sound-on indicator */}
       {hasSound && (
-        <div style={{ position: 'absolute', bottom: 32, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, var(--gold), rgba(184,147,90,0.2), transparent)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: 32, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, var(--cream), rgba(243, 235, 226,0.2), transparent)', pointerEvents: 'none' }} />
       )}
 
       {/* Controls bar — only when video is loaded */}
@@ -261,9 +261,12 @@ function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight,
 
 // ─── Main section ─────────────────────────────────────────────────────────────
 export default function VideoReel() {
-  const sectionRef = useRef(null)
-  const inView     = useInView(sectionRef, { once: true, margin: '-100px' })
-  const domRefs    = useRef([])
+  const sectionRef  = useRef(null)
+  // shouldLoad: dispara 500px ANTES da seção aparecer → vídeos já carregando quando o usuário chegar
+  const shouldLoad  = useInView(sectionRef, { once: true, margin: '500px' })
+  // inView: dispara quando a seção entra de fato na tela → aciona autoplay e animações
+  const inView      = useInView(sectionRef, { once: true, margin: '-100px' })
+  const domRefs     = useRef([])
 
   const setRef  = (idx) => (el) => { domRefs.current[idx] = el }
 
@@ -308,6 +311,7 @@ export default function VideoReel() {
     refCallback:    setRef(idx),
     paused:         paused[idx],
     hasSound:       soundIdx === idx,
+    shouldLoad,                            // ← lazy-load controlado
     onTogglePlay:   () => togglePlay(idx),
     onToggleSound:  () => toggleSound(idx),
     onFullscreen:   () => goFullscreen(idx),
@@ -318,7 +322,7 @@ export default function VideoReel() {
     <section id="videos" style={{ background: '#060002', padding: '140px 0', position: 'relative' }} ref={sectionRef}>
 
       {/* Top rule */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, transparent, rgba(184,147,90,0.3), transparent)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, transparent, rgba(243, 235, 226,0.3), transparent)' }} />
 
       <div className="container">
 
@@ -330,11 +334,11 @@ export default function VideoReel() {
           style={{ marginBottom: '56px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '32px' }}
         >
           <div>
-            <p className="section-label" style={{ color: 'var(--gold)' }}>A Marca em Movimento</p>
+            <p className="section-label" style={{ color: 'var(--cream)' }}>A Marca em Movimento</p>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(36px,5vw,68px)', lineHeight: 1.05, color: 'var(--cream)' }}>
               Por dentro
               <br />
-              <em style={{ fontStyle: 'italic', color: 'var(--gold-light)' }}>do laboratório.</em>
+              <em style={{ fontStyle: 'italic', color: 'var(--cream)' }}>do laboratório.</em>
             </h2>
           </div>
           <p style={{ color: 'rgba(243,235,226,0.38)', maxWidth: '300px', lineHeight: 1.7, fontSize: '14px', fontWeight: 300 }}>
@@ -385,7 +389,7 @@ export default function VideoReel() {
       </div>
 
       {/* Bottom rule */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, transparent, rgba(184,147,90,0.15), transparent)' }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, transparent, rgba(243, 235, 226,0.15), transparent)' }} />
 
       <style>{`
         /* ── Top row: featured (square) + 2 stacked landscape ── */

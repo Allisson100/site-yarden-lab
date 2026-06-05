@@ -14,7 +14,7 @@ const doubled = [...words, ...words]
 export default function Ticker() {
   return (
     <div style={{
-      background: 'var(--burgundy)',
+      background: 'var(--espresso)',
       borderTop: '1px solid rgba(243,235,226,0.08)',
       borderBottom: '1px solid rgba(243,235,226,0.08)',
       overflow: 'hidden',
@@ -31,7 +31,7 @@ export default function Ticker() {
       >
         {doubled.map((word, i) => (
           <span key={i} style={{
-            color: word === '·' ? 'var(--gold)' : 'rgba(243,235,226,0.55)',
+            color: word === '·' ? 'var(--cream)' : 'rgba(243,235,226,0.55)',
             fontSize: '11px',
             fontWeight: word === '·' ? 400 : 500,
             letterSpacing: '0.18em',

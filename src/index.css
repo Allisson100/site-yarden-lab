@@ -1,14 +1,51 @@
+/* ── Big Caslon FB — títulos e texto serif ─────────────────────────── */
+@font-face {
+  font-family: 'Big Caslon FB';
+  src: url('/fonts/BigCaslonFB-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Big Caslon FB';
+  src: url('/fonts/BigCaslonFB-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Big Caslon FB';
+  src: url('/fonts/BigCaslonFB-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Big Caslon FB';
+  src: url('/fonts/BigCaslonFB-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Segoe UI Variable — texto corrido, UI, labels ────────────────── */
+@font-face {
+  font-family: 'Segoe UI Variable';
+  src: url('/fonts/SegoeUIVF.ttf') format('truetype');
+  font-weight: 100 900;   /* fonte variável — cobre todos os pesos */
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --burgundy: #360f11;
-  --burgundy-deep: #1c0608;
-  --burgundy-mid: #682d1b;
-  --cream: #f3ebe2;
-  --sand: #d8d5d2;
-  --off-white: #f0f0f0;
-  --gold: #b8935a;
-  --gold-light: #d4b07a;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
+  /* Paleta — apenas 4 cores */
+  --espresso: #360f11;
+  --sienna:   #682D1B;
+  --cream:    #F3EBE2;
+  --dusk:     #d8d5d2;
+
+  --font-serif: 'Big Caslon FB', Georgia, serif;
+  --font-sans: 'Segoe UI Variable', system-ui, sans-serif;
   --ease-luxury: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -25,7 +62,7 @@ html {
 body {
   font-family: var(--font-sans);
   background: var(--cream);
-  color: var(--burgundy);
+  color: var(--espresso);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -66,7 +103,7 @@ button {
   align-items: center;
   gap: 10px;
   background: var(--cream);
-  color: var(--burgundy);
+  color: var(--espresso);
   padding: 16px 36px;
   font-family: var(--font-sans);
   font-size: 12px;
@@ -80,7 +117,7 @@ button {
 }
 
 .btn-primary:hover {
-  background: var(--gold);
+  background: var(--cream);
   color: #fff;
   transform: translateY(-1px);
 }
@@ -89,7 +126,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: var(--burgundy);
+  background: var(--espresso);
   color: var(--cream);
   padding: 16px 36px;
   font-family: var(--font-sans);
@@ -104,7 +141,7 @@ button {
 }
 
 .btn-dark:hover {
-  background: var(--burgundy-mid);
+  background: var(--sienna);
   transform: translateY(-1px);
 }
 
@@ -144,14 +181,14 @@ button {
   margin-bottom: 20px;
 }
 
-.section-label::before {
+/* .section-label::before {
   content: '';
   display: block;
   width: 36px;
   height: 1px;
   background: currentColor;
   opacity: 0.45;
-}
+} */
 
 /* Desktop nav hidden on mobile */
 @media (max-width: 768px) {
@@ -175,22 +212,22 @@ button {
 
 /* Scrollbar — visível no desktop */
 ::-webkit-scrollbar { width: 11px; }
-::-webkit-scrollbar-track { background: var(--burgundy-deep); }
+::-webkit-scrollbar-track { background: var(--espresso); }
 ::-webkit-scrollbar-thumb {
-  background: var(--gold);
-  border: 2px solid var(--burgundy-deep);
+  background: var(--cream);
+  border: 2px solid var(--espresso);
   border-radius: 6px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+::-webkit-scrollbar-thumb:hover { background: var(--cream); }
 
 /* Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--gold) var(--burgundy-deep);
+  scrollbar-color: var(--cream) var(--espresso);
 }
 
 /* Selection */
 ::selection {
-  background: var(--burgundy);
+  background: var(--espresso);
   color: var(--cream);
 }
