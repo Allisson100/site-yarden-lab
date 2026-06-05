@@ -32,19 +32,46 @@ const steps = [
   },
 ]
 
-// Traçado do rio (Jordão) — desce serpenteando, passando por cada marco.
-// Âncoras: (34,18) (66,43) (34,68) (66,93) em viewBox 0..100 — alinhadas às bolhas.
-// O rio fica na faixa central; o texto vai para as bordas (sem sobreposição).
-const RIVER_D =
+// Rio (desktop): meandro largo na faixa central, âncoras (34,18)(66,43)(34,68)(66,93)
+const RIVER_DESKTOP =
   'M 50,7 C 50,13 34,14 34,18 C 34,30 66,31 66,43 C 66,55 34,56 34,68 C 34,80 66,81 66,93 C 66,98 56,101 52,104'
 
-// Posição de cada marco ao longo do rio (bolha sobre o rio; texto no lado de FORA)
+// Rio (mobile): meandro vertical à ESQUERDA, âncoras (18,18)(34,43)(18,68)(34,93)
+const RIVER_MOBILE =
+  'M 26,4 C 26,10 18,12 18,18 C 18,30 34,31 34,43 C 34,55 18,56 18,68 C 18,80 34,81 34,93 C 34,98 28,101 26,104'
+
+// y (vertical) e lado de cada marco — o x é definido no CSS (varia por breakpoint)
 const ANCHORS = [
-  { x: '34%', y: '13%', side: 'left' },
-  { x: '66%', y: '38%', side: 'right' },
-  { x: '34%', y: '63%', side: 'left' },
-  { x: '66%', y: '88%', side: 'right' },
+  { y: '13%', side: 'left' },
+  { y: '38%', side: 'right' },
+  { y: '63%', side: 'left' },
+  { y: '88%', side: 'right' },
 ]
+
+function River({ d, kind, inView }) {
+  return (
+    <svg
+      className={`river-svg ${kind}`}
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
+    >
+      <path d={d} fill="none" stroke="#682D1B" strokeOpacity="0.1" strokeWidth="11" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+      <motion.path
+        d={d}
+        fill="none"
+        stroke="#682D1B"
+        strokeOpacity="0.5"
+        strokeWidth="2"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        initial={{ pathLength: 0 }}
+        animate={inView ? { pathLength: 1 } : {}}
+        transition={{ duration: 3, ease: 'easeInOut' }}
+      />
+    </svg>
+  )
+}
 
 export default function Process() {
   const ref = useRef(null)
@@ -81,31 +108,9 @@ export default function Process() {
 
         {/* ── Curso do rio: os marcos seguem o traçado serpenteando ── */}
         <div className="river-flow">
-          {/* O rio */}
-          <svg
-            className="river-svg"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
-          >
-            {/* leito largo */}
-            <path d={RIVER_D} fill="none" stroke="#682D1B" strokeOpacity="0.1" strokeWidth="11" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-            {/* corrente — desenha da nascente à foz ao entrar na tela */}
-            <motion.path
-              d={RIVER_D}
-              fill="none"
-              stroke="#682D1B"
-              strokeOpacity="0.5"
-              strokeWidth="2"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              initial={{ pathLength: 0 }}
-              animate={inView ? { pathLength: 1 } : {}}
-              transition={{ duration: 3, ease: 'easeInOut' }}
-            />
-          </svg>
+          <River d={RIVER_DESKTOP} kind="desktop" inView={inView} />
+          <River d={RIVER_MOBILE}  kind="mobile"  inView={inView} />
 
-          {/* Marcos posicionados ao longo do rio */}
           {steps.map((step, i) => {
             const a = ANCHORS[i]
             const isLeft = a.side === 'left'
@@ -115,14 +120,11 @@ export default function Process() {
                 className={`river-step ${isLeft ? 'is-left' : 'is-right'}`}
                 initial={{ opacity: 0, y: 22 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.4 + i * 0.45 }}
-                style={{ position: 'absolute', top: a.y, left: 0, right: 0, height: 0, zIndex: 1 }}
+                transition={{ duration: 0.7, delay: 0.4 + i * 0.4 }}
+                style={{ '--y': a.y }}
               >
                 {/* Bolha numerada — fica sobre o rio */}
-                <div
-                  className="river-bubble"
-                  style={{ position: 'absolute', left: a.x, top: 0, transform: 'translate(-50%, -50%)' }}
-                >
+                <div className="river-bubble">
                   <div style={{
                     width: '72px', height: '72px',
                     border: '1px solid var(--sienna)',
@@ -140,21 +142,8 @@ export default function Process() {
                   </div>
                 </div>
 
-                {/* Conteúdo no lado de FORA da bolha (longe do rio, sem sobrepor) */}
-                <div
-                  className="river-text"
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    transform: 'translateY(-50%)',
-                    width: 'min(400px, 30%)',
-                    ...(isLeft
-                      // marco à esquerda → texto à ESQUERDA dele
-                      ? { right: `calc(${100 - parseInt(a.x, 10)}% + 60px)`, textAlign: 'right' }
-                      // marco à direita → texto à DIREITA dele
-                      : { left: `calc(${parseInt(a.x, 10)}% + 60px)`, textAlign: 'left' }),
-                  }}
-                >
+                {/* Conteúdo no lado de FORA da bolha (longe do rio) */}
+                <div className="river-text">
                   <div style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--sienna)', marginBottom: '12px', fontWeight: 600 }}>
                     {step.subtitle}
                   </div>
@@ -164,10 +153,9 @@ export default function Process() {
                   <p style={{ color: 'rgba(54,15,17,0.65)', fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.7, marginBottom: '18px', fontWeight: 300 }}>
                     {step.desc}
                   </p>
-                  <div style={{
+                  <div className="river-duration" style={{
                     display: 'inline-flex', alignItems: 'center', gap: '8px',
                     color: 'rgba(54,15,17,0.45)', fontSize: '12px', letterSpacing: '0.1em',
-                    flexDirection: isLeft ? 'row-reverse' : 'row',
                   }}>
                     <span style={{ width: '16px', height: '1px', background: 'currentColor', display: 'inline-block' }} />
                     {step.duration}
@@ -185,36 +173,59 @@ export default function Process() {
           height: clamp(820px, 68vw, 980px);
           margin-top: 24px;
         }
+        .river-step {
+          position: absolute;
+          top: var(--y);
+          left: 0; right: 0;
+          height: 0;
+          z-index: 1;
+        }
+        .river-bubble {
+          position: absolute;
+          top: 0;
+          transform: translate(-50%, -50%);
+        }
+        .river-text {
+          position: absolute;
+          top: 0;
+          transform: translateY(-50%);
+          width: min(400px, 30%);
+        }
+        .river-duration { flex-direction: row; }
 
-        /* ── Mobile/tablet estreito: empilha em coluna, rio reto à esquerda ── */
-        @media (max-width: 820px) {
-          .river-flow {
-            height: auto !important;
-            padding-left: 28px;
-            border-left: 2px solid rgba(104,45,27,0.25);   /* o rio, vertical */
-            margin-left: 6px;
-          }
-          .river-svg { display: none !important; }
-          .river-step {
-            position: static !important;
-            height: auto !important;
-            transform: none !important;
-            margin-bottom: 44px;
-          }
-          .river-step:last-child { margin-bottom: 0; }
-          .river-bubble {
-            position: static !important;
-            transform: none !important;
-            margin-bottom: 18px;
-            margin-left: -64px;   /* puxa a bolha sobre a linha do rio */
-          }
-          .river-text {
-            position: static !important;
-            transform: none !important;
-            width: auto !important;
+        /* Desktop/tablet: meandro largo na faixa central, texto nas bordas */
+        .is-left  .river-bubble { left: 34%; }
+        .is-right .river-bubble { left: 66%; }
+        .is-left  .river-text { right: calc(66% + 60px); text-align: right; }
+        .is-right .river-text { left:  calc(66% + 60px); text-align: left; }
+        .is-left  .river-duration { flex-direction: row-reverse; }
+
+        .river-svg.desktop { display: block; }
+        .river-svg.mobile  { display: none; }
+
+        /* ── Tablet: aperta um pouco o texto ── */
+        @media (max-width: 1024px) {
+          .river-text { width: min(320px, 30%); }
+        }
+
+        /* ── Mobile/phone: rio vertical à esquerda, texto à direita ── */
+        @media (max-width: 680px) {
+          .river-flow { height: clamp(1360px, 370vw, 1620px); margin-top: 12px; }
+          .river-svg.desktop { display: none; }
+          .river-svg.mobile  { display: block; }
+
+          .is-left  .river-bubble { left: 18%; }
+          .is-right .river-bubble { left: 34%; }
+
+          .river-text { width: 52% !important; }
+          .is-left  .river-text,
+          .is-right .river-text {
+            left: 46% !important;
+            right: auto !important;
             text-align: left !important;
           }
-          .river-text > div:last-child { flex-direction: row !important; }
+          .is-left  .river-duration,
+          .is-right .river-duration { flex-direction: row !important; }
         }
       `}</style>
     </section>
