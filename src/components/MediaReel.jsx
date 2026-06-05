@@ -28,76 +28,51 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
  */
 
 const MEDIA = [
+  // ── Bloco 1 (linhas 1-3) ──
   // 0 — vídeo grande VERTICAL (1 col × 2 linhas)
-  {
-    id: "01",
-    type: "video",
-    src: "/videos/video-01.mp4",
-    title: "Teaser",
-    category: "Awareness",
-    quote: "Yarden Lab.",
-    description: "A primeira impressão que posiciona.",
-  },
+  { id: "01", type: "video", src: "/videos/video-01.mp4", title: "Teaser",             category: "Awareness",    quote: "Yarden Lab.",                       description: "A primeira impressão que posiciona." },
   // 1 — foto LARGA horizontal (2 cols)
-  {
-    id: "02",
-    type: "photo",
-    src: "/carousel/foto-1.jpg",
-    title: "Captação Premium",
-    category: "Fotografia",
-    quote: "Estética que converte.",
-    description: "Cada imagem comunica um posicionamento.",
-  },
+  { id: "02", type: "photo", src: "/carousel/foto-1.jpg", title: "Captação Premium",   category: "Fotografia",   quote: "Estética que converte.",             description: "Cada imagem comunica um posicionamento." },
   // 2 — foto quadrada
-  {
-    id: "03",
-    type: "photo",
-    src: "/carousel/foto-2.jpg",
-    title: "Identidade Visual",
-    category: "Fotografia",
-    quote: "Presença que posiciona.",
-    description: "Branding editorial com intenção e método.",
-  },
+  { id: "03", type: "photo", src: "/carousel/foto-2.jpg", title: "Identidade Visual",  category: "Fotografia",   quote: "Presença que posiciona.",           description: "Branding editorial com intenção e método." },
   // 3 — foto quadrada
-  {
-    id: "04",
-    type: "photo",
-    src: "/carousel/foto-3.jpg",
-    title: "Branding Editorial",
-    category: "Fotografia",
-    quote: "Sua marca, com método.",
-    description: "Direção criativa premium para cada projeto.",
-  },
+  { id: "04", type: "photo", src: "/carousel/foto-3.jpg", title: "Branding Editorial", category: "Fotografia",   quote: "Sua marca, com método.",            description: "Direção criativa premium para cada projeto." },
   // 4 — foto LARGA horizontal (2 cols)
-  {
-    id: "05",
-    type: "photo",
-    src: "/carousel/foto-4.jpg",
-    title: "Posicionamento",
-    category: "Fotografia",
-    quote: "A imagem que o mercado reconhece.",
-    description: "Cada detalhe comunica valor e intenção.",
-  },
-  // 5 — vídeo
-  {
-    id: "06",
-    type: "video",
-    src: "/videos/video-02.mp4",
-    title: "Manifesto",
-    category: "Consideração",
-    quote: "Não somos uma agência.",
-    description: "A inteligência de marca que a sua empresa merece ter.",
-  },
+  { id: "05", type: "photo", src: "/carousel/foto-4.jpg", title: "Posicionamento",     category: "Fotografia",   quote: "A imagem que o mercado reconhece.", description: "Cada detalhe comunica valor e intenção." },
+  // 5 — vídeo quadrado
+  { id: "06", type: "video", src: "/videos/video-02.mp4", title: "Manifesto",          category: "Consideração", quote: "Não somos uma agência.",            description: "A inteligência de marca que a sua empresa merece ter." },
+
+  // ── Bloco 2 (linhas 4-6) — espelha o padrão ──
+  // 6 — foto LARGA horizontal (2 cols)
+  { id: "07", type: "photo", src: "/carousel/foto-5.jpg", title: "Presença Digital",   category: "Fotografia",   quote: "Conteúdo com direção criativa.",     description: "Do conceito à captação, tudo com intenção." },
+  // 7 — vídeo grande VERTICAL (1 col × 2 linhas, lado direito)
+  { id: "08", type: "video", src: "/videos/video-03.mp4", title: "O Laboratório",      category: "Conversão",    quote: "Marca premium não se faz no IG.",   description: "Processo, método e resultado — no mesmo lugar." },
+  // 8 — foto quadrada
+  { id: "09", type: "photo", src: "/carousel/foto-6.jpg", title: "Editorial",          category: "Fotografia",   quote: "Identidade que converte.",          description: "Estética de alto padrão para marcas premium." },
+  // 9 — foto quadrada
+  { id: "10", type: "photo", src: "/carousel/foto-1.jpg", title: "Direção de Arte",    category: "Fotografia",   quote: "Cada frame, uma intenção.",         description: "Composição pensada para comunicar valor." },
+  // 10 — foto LARGA horizontal (2 cols)
+  { id: "11", type: "photo", src: "/carousel/foto-2.jpg", title: "Narrativa Visual",   category: "Fotografia",   quote: "Sua história, bem contada.",        description: "Imagens que constroem percepção de marca." },
+  // 11 — vídeo quadrado
+  { id: "12", type: "video", src: "/videos/video-04.mp4", title: "A Virada",           category: "Awareness",    quote: "Marca premium vai além da estética.", description: "Método, tecnologia e estética — tudo junto." },
 ];
 
-/* Posições na grade 3×3 — cada item ocupa um col/row span definido */
+/* Posições na grade 3×6 — cada item ocupa um col/row span definido */
 const GRID_POS = [
-  { col: "1 / 2", row: "1 / 3" }, // 0: V01 — vídeo vertical grande (1 col × 2 linhas)
+  // Bloco 1
+  { col: "1 / 2", row: "1 / 3" }, // 0: V01 — vídeo vertical grande
   { col: "2 / 4", row: "1 / 2" }, // 1: P02 — foto larga (2 cols)
   { col: "2 / 3", row: "2 / 3" }, // 2: P03 — foto quadrada
   { col: "3 / 4", row: "2 / 3" }, // 3: P04 — foto quadrada
   { col: "1 / 3", row: "3 / 4" }, // 4: P05 — foto larga (2 cols)
   { col: "3 / 4", row: "3 / 4" }, // 5: V06 — vídeo quadrado
+  // Bloco 2 (espelhado)
+  { col: "1 / 3", row: "4 / 5" }, // 6: P07 — foto larga (2 cols)
+  { col: "3 / 4", row: "4 / 6" }, // 7: V08 — vídeo vertical grande (direita)
+  { col: "1 / 2", row: "5 / 6" }, // 8: P09 — foto quadrada
+  { col: "2 / 3", row: "5 / 6" }, // 9: P10 — foto quadrada
+  { col: "1 / 3", row: "6 / 7" }, // 10: P11 — foto larga (2 cols)
+  { col: "3 / 4", row: "6 / 7" }, // 11: V12 — vídeo quadrado
 ];
 
 // ── Ícone placeholder ─────────────────────────────────────────────────────────
@@ -582,7 +557,7 @@ export default function MediaReel() {
       id="portfolio"
       style={{
         background: "var(--cream)",
-        padding: "140px 0",
+        padding: "clamp(72px, 10vw, 120px) 0 clamp(48px, 6vw, 70px)",
         position: "relative",
       }}
       ref={sectionRef}

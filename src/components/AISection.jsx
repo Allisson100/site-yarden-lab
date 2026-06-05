@@ -662,7 +662,7 @@ export default function AISection() {
 
           {/* Right — form / result */}
           <motion.div
-            className="ai-right-panel"
+            className={`ai-right-panel${phase === "streaming" || phase === "done" ? " ai-scroll-result" : ""}`}
             initial={{ opacity: 0, x: 32 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, delay: 0.3 }}
@@ -1414,8 +1414,14 @@ export default function AISection() {
           .ai-grid { grid-template-columns: 1fr !important; height: auto !important; }
           .ai-grid > *:first-child { display: none !important; }
           .ai-grid > * { height: auto !important; min-height: unset; }
+          /* Form/loading: altura natural, SEM scroll */
           .ai-right-panel {
             height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+          }
+          /* Só quando a IA está gerando/concluiu: limita altura e habilita scroll */
+          .ai-right-panel.ai-scroll-result {
             max-height: 72vh !important;
             overflow-y: auto !important;
           }

@@ -37,7 +37,7 @@ export default function Process() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="method" style={{ background: 'var(--cream)', padding: '140px 0', overflow: 'hidden' }}>
+    <section id="method" style={{ background: 'var(--cream)', padding: 'clamp(60px, 8vw, 110px) 0 clamp(72px, 10vw, 140px)', overflow: 'hidden' }}>
       <div className="container" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 32 }}

@@ -124,7 +124,7 @@ export default function IntroHero() {
           pointerEvents: 'none',
         }}
       >
-        <span style={{ fontSize: '10px', letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 600 }}>
+        <span style={{ fontSize: '10px', letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>
           Scroll para começar sua nova jornada
         </span>
         <div className="intro-hint-arrow">
