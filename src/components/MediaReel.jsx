@@ -690,16 +690,15 @@ export default function MediaReel() {
         .mr-cell { min-height: 0; min-width: 0; }
         .mr-cell > * { height: 100%; }
 
-        @media (max-width: 720px) {
-          /* mobile: tudo empilhado, cada item ocupa 1 linha cheia */
-          .mr-grid {
-            grid-template-columns: 1fr !important;
-            grid-auto-rows: 260px !important;
-          }
-          .mr-cell {
-            grid-column: 1 / -1 !important;
-            grid-row: auto !important;
-          }
+        /* Tablet/mobile: mantém o MESMO grid 3 colunas, só reduz a altura das linhas */
+        @media (max-width: 900px) {
+          .mr-grid { grid-auto-rows: 200px; }
+        }
+        @media (max-width: 600px) {
+          .mr-grid { grid-auto-rows: 150px; gap: 1.5px; }
+        }
+        @media (max-width: 400px) {
+          .mr-grid { grid-auto-rows: 124px; }
         }
       `}</style>
     </section>

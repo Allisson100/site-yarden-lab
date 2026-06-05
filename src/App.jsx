@@ -1,9 +1,9 @@
+import IntroHero    from './components/IntroHero'
 import Navbar      from './components/Navbar'
 import Hero         from './components/Hero'
 import Ticker       from './components/Ticker'
 import Manifesto    from './components/Manifesto'
 import MediaReel    from './components/MediaReel'
-import InstagramFeed from './components/InstagramFeed'
 import Process      from './components/Process'
 import AISection    from './components/AISection'
 import PlansSection from './components/PlansSection'
@@ -21,14 +21,18 @@ import Footer       from './components/Footer'
 export default function App() {
   return (
     <>
+      {/* Tela de abertura — fixa no fundo, revelada ao rolar */}
+      <IntroHero />
+
+      {/* Site real — desliza por cima do intro ao rolar; volta ao subir */}
+      <div className="site-shell">
       <Navbar />
       <main>
         <Hero />
         <Ticker />
 
-        {/* Produção — desktop: grade mista fotos+vídeos | mobile: grade 3-col Instagram */}
-        <div className="desktop-only"><MediaReel /></div>
-        <div className="mobile-only"><InstagramFeed /></div>
+        {/* Produção — grade mista de fotos + vídeos (mesmo grid em todas as telas) */}
+        <MediaReel />
 
         {/* Método que gera resultado */}
         <Process />
@@ -46,6 +50,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      </div>
     </>
   )
 }

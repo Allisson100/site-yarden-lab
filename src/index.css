@@ -55,6 +55,15 @@
   padding: 0;
 }
 
+/* ── Intro v3: site real desliza por cima do splash fixo ──────────── */
+.site-shell {
+  position: relative;
+  z-index: 1;
+  margin-top: 100vh;            /* primeira tela = IntroHero (fixo no fundo) */
+  background: var(--cream);     /* cobre o intro ao subir por cima */
+  box-shadow: 0 -40px 80px rgba(28, 6, 8, 0.35);  /* sombra na borda superior */
+}
+
 html {
   scroll-behavior: smooth;
 }

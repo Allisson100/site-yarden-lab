@@ -13,11 +13,21 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Esconde a navbar do site enquanto o IntroHero (1ª tela) está visível
+  const [pastIntro, setPastIntro] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 60);
+      setPastIntro(window.scrollY > window.innerHeight * 0.72);
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -32,8 +42,11 @@ export default function Navbar() {
       <motion.nav
         className="navbar-yarden"
         initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        animate={{
+          y: pastIntro ? 0 : -80,
+          opacity: pastIntro ? 1 : 0,
+        }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         style={{
           position: "fixed",
           top: 0,
@@ -48,6 +61,7 @@ export default function Navbar() {
           background: scrolled ? "rgba(28, 6, 8, 0.96)" : "transparent",
           backdropFilter: scrolled ? "blur(24px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(243,235,226,0.08)" : "none",
+          pointerEvents: pastIntro ? "auto" : "none",
           transition:
             "background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease",
         }}
