@@ -236,10 +236,12 @@ html {
 }
 
 /* Não-desktop (tablet/mobile): SEM scrollbar fixa — só o overlay nativo do
-   sistema (aquele indicador que aparece ao rolar e some sozinho) */
+   sistema (aquele indicador que aparece ao rolar e some sozinho).
+   display:none remove a scrollbar E a reserva de espaço (evita o "tubo"
+   cream do IntroHero fixo vazando atrás do conteúdo). */
 @media (max-width: 1024px) {
-  ::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
-  html { scrollbar-width: none; }   /* Firefox */
+  html, body { scrollbar-width: none; -ms-overflow-style: none; }
+  ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
 }
 
 /* Selection */

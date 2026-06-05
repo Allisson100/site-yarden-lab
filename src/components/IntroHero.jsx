@@ -16,6 +16,7 @@ import { useEffect, useRef } from 'react'
  * o transform direto no DOM — sem depender de re-render do React.
  */
 export default function IntroHero() {
+  const rootRef  = useRef(null)   // o splash fixo
   const stageRef = useRef(null)   // container central que cresce
   const hintRef  = useRef(null)   // dica "scroll"
 
@@ -42,20 +43,34 @@ export default function IntroHero() {
       }
     }
 
-    apply()  // estado inicial
+    // Fixa a largura do splash igual à do conteúdo (clientWidth, SEM a scrollbar).
+    // Evita que o intro (fixed, largura = viewport) vaze como uma linha na direita
+    // atrás do site quando a scrollbar reserva espaço.
+    const syncWidth = () => {
+      if (rootRef.current) {
+        rootRef.current.style.width = document.documentElement.clientWidth + 'px'
+      }
+    }
+
+    const onResize = () => { apply(); syncWidth() }
+
+    apply()      // estado inicial
+    syncWidth()
     window.addEventListener('scroll', apply, { passive: true })
-    window.addEventListener('resize', apply)
+    window.addEventListener('resize', onResize)
     return () => {
       window.removeEventListener('scroll', apply)
-      window.removeEventListener('resize', apply)
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
   return (
     <div
+      ref={rootRef}
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0, left: 0, bottom: 0,
+        width: '100%',
         zIndex: 0,
         background: 'var(--cream)',
         overflow: 'hidden',
