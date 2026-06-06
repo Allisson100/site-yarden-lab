@@ -83,7 +83,7 @@ export default function Hero() {
               fontWeight: 300,
               fontSize: "clamp(52px, 6vw, 110px)",
               // fontSize: "32px",
-              fontStyle: "italic",
+              fontStyle: "normal",
               lineHeight: 1.0,
               color: "var(--cream)",
               maxWidth: "880px",

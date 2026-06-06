@@ -73,7 +73,7 @@ export default function Manifesto() {
                   fontSize: "clamp(28px, 3.5vw, 44px)",
                   fontFamily: "var(--font-serif)",
                   fontWeight: 300,
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   lineHeight: 1.1,
                 }}
               >
@@ -120,7 +120,7 @@ export default function Manifesto() {
             >
               Marcas premium merecem
               <br />
-              <em style={{ fontStyle: "italic" }}>inteligência de verdade.</em>
+              <em style={{ fontStyle: "normal" }}>inteligência de verdade.</em>
             </h2>
 
             <div

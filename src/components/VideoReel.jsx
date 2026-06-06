@@ -91,7 +91,7 @@ function VideoPlaceholder({ video, featured }) {
       <span style={{
         color: 'rgba(243,235,226,0.18)', fontSize: '9px',
         letterSpacing: '0.22em', textTransform: 'uppercase',
-        fontFamily: 'var(--font-serif)', fontStyle: 'italic',
+        fontFamily: 'var(--font-serif)', fontStyle: 'normal',
       }}>
         Vídeo em breve
       </span>
@@ -187,7 +187,7 @@ function VideoCard({ video, refCallback, paused, hasSound, featured, cardHeight,
             {video.title}
           </p>
           <p style={{
-            fontFamily: 'var(--font-serif)', fontWeight: 300, fontStyle: 'italic',
+            fontFamily: 'var(--font-serif)', fontWeight: 300, fontStyle: 'normal',
             fontSize: featured ? 'clamp(15px,1.6vw,22px)' : '14px',
             color: 'var(--cream)', lineHeight: 1.3, maxWidth: '360px',
           }}>
@@ -338,7 +338,7 @@ export default function VideoReel() {
             <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(36px,5vw,68px)', lineHeight: 1.05, color: 'var(--cream)' }}>
               Por dentro
               <br />
-              <em style={{ fontStyle: 'italic', color: 'var(--cream)' }}>do laboratório.</em>
+              <em style={{ fontStyle: 'normal', color: 'var(--cream)' }}>do laboratório.</em>
             </h2>
           </div>
           <p style={{ color: 'rgba(243,235,226,0.38)', maxWidth: '300px', lineHeight: 1.7, fontSize: '14px', fontWeight: 300 }}>

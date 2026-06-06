@@ -152,7 +152,7 @@ export default function PhotoCarousel() {
           >
             Estética que converte
             <br />
-            <em style={{ fontStyle: "italic", color: "var(--espresso)" }}>
+            <em style={{ fontStyle: "normal", color: "var(--espresso)" }}>
               e posiciona.
             </em>
           </h2>

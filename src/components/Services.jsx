@@ -130,7 +130,7 @@ export default function Services() {
             }}>
               Seis produtos.
               <br />
-              <em style={{ fontStyle: 'italic' }}>Um método.</em>
+              <em style={{ fontStyle: 'normal' }}>Um método.</em>
             </h2>
             <p style={{
               color: 'rgba(54,15,17,0.6)',
@@ -199,7 +199,7 @@ export default function Services() {
               <p style={{
                 color: s.highlight ? 'var(--cream)' : 'var(--sienna)',
                 fontSize: '13px',
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 fontFamily: 'var(--font-serif)',
                 marginBottom: '20px',
               }}>

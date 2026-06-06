@@ -10,7 +10,7 @@
   font-family: 'Big Caslon FB';
   src: url('/fonts/BigCaslonFB-Italic.woff2') format('woff2');
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
@@ -24,7 +24,7 @@
   font-family: 'Big Caslon FB';
   src: url('/fonts/BigCaslonFB-BoldItalic.woff2') format('woff2');
   font-weight: 700;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -80,6 +80,11 @@ body {
 img {
   max-width: 100%;
   display: block;
+}
+
+/* Sem itálico em lugar nenhum — a Big Caslon FB itálica prejudica a leitura */
+em, i, address, cite, dfn, var {
+  font-style: normal;
 }
 
 a {

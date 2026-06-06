@@ -77,12 +77,15 @@ const PLANS = [
 /* ── Card de plano (sempre aberto) ──────────────────────────────────── */
 function PlanCard({ plan, index, inView, isHighlighted }) {
   const hl    = plan.highlight
-  const gold  = 'var(--cream)'
-  const goldL = 'var(--cream)'
+  // Acento contextual: sienna em card branco (legível), cream em card espresso
+  const accent   = hl ? 'var(--cream)' : 'var(--sienna)'
+  const textMain = hl ? 'rgba(243,235,226,0.82)' : 'rgba(54,15,17,0.78)'
+  const textSoft = hl ? 'rgba(243,235,226,0.6)'  : 'rgba(54,15,17,0.6)'
 
   return (
     <motion.div
       id={`plan-${plan.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`}
+      className={plan.featured ? 'plan-card featured' : 'plan-card'}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: Math.min(index * 0.07, 0.5) }}
@@ -106,34 +109,33 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
       </div>
 
       {/* Ícone + badge */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-        <div style={{ color: hl ? goldL : 'var(--sienna)', flexShrink: 0 }}>{plan.icon}</div>
+      <div className="plan-badgerow" style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+        <div style={{ color: accent, flexShrink: 0 }}>{plan.icon}</div>
         <span style={{
-          background: hl ? 'var(--espresso)' : 'var(--cream)',
-          color: hl ? 'var(--cream)' : 'rgba(54,15,17,0.5)',
-          border: hl ? '1px solid rgba(243,235,226,0.3)' : 'none',
-          fontSize: '8px', fontWeight: 700, letterSpacing: '0.2em',
-          textTransform: 'uppercase', padding: '4px 10px',
+          background: hl ? 'rgba(243,235,226,0.12)' : 'var(--sienna)',
+          color: hl ? 'var(--cream)' : '#fff',
+          fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em',
+          textTransform: 'uppercase', padding: '5px 11px',
         }}>
           {plan.badge}
         </span>
       </div>
 
       {/* Nome + tagline */}
-      <h3 style={{
+      <h3 className="plan-name" style={{
         fontFamily: 'var(--font-serif)', fontWeight: 400,
-        fontSize: plan.featured ? 'clamp(22px,2.8vw,36px)' : 'clamp(18px,1.8vw,24px)',
+        fontSize: plan.featured ? 'clamp(26px,3vw,40px)' : 'clamp(22px,2vw,28px)',
         color: hl ? 'var(--cream)' : 'var(--espresso)',
-        lineHeight: 1.15, marginBottom: '8px',
+        lineHeight: 1.15, marginBottom: '10px',
       }}>
         {plan.name}
       </h3>
-      <p style={{ color: hl ? goldL : 'var(--sienna)', fontSize: '13px', fontStyle: 'italic', fontFamily: 'var(--font-serif)', marginBottom: '28px', lineHeight: 1.4 }}>
+      <p className="plan-tagline" style={{ color: accent, fontSize: '18px', fontStyle: 'normal', fontWeight: 500, fontFamily: 'var(--font-serif)', marginBottom: '28px', lineHeight: 1.45 }}>
         {plan.tagline}
       </p>
 
-      {/* Divisória dourada */}
-      <div style={{ height: 1, background: hl ? 'rgba(243, 235, 226,0.35)' : 'rgba(54,15,17,0.08)', marginBottom: '28px' }} />
+      {/* Divisória */}
+      <div style={{ height: 1, background: hl ? 'rgba(243, 235, 226,0.18)' : 'rgba(54,15,17,0.1)', marginBottom: '26px' }} />
 
       {/* Layout interno: 2 cols no featured, 1 col nos demais */}
       <div className="plan-inner" style={{
@@ -145,25 +147,27 @@ function PlanCard({ plan, index, inView, isHighlighted }) {
       }}>
         {/* Esquerda: para quem + descrição */}
         <div>
-          <div style={{ borderLeft: `2px solid ${hl ? 'rgba(243, 235, 226,0.5)' : gold}`, paddingLeft: '16px', marginBottom: '18px' }}>
-            <p style={{ color: hl ? 'rgba(243,235,226,0.6)' : 'rgba(54,15,17,0.58)', fontSize: '13px', lineHeight: 1.8, fontStyle: 'italic', fontFamily: 'var(--font-serif)', fontWeight: 300 }}>
+          <div className="plan-forwho" style={{ borderLeft: `2px solid ${accent}`, paddingLeft: '16px', marginBottom: '20px' }}>
+            <p style={{ color: textMain, fontSize: '15px', lineHeight: 1.65, fontWeight: 400 }}>
               {plan.forWho}
             </p>
           </div>
-          <p style={{ color: hl ? 'rgba(243,235,226,0.42)' : 'rgba(54,15,17,0.45)', fontSize: '13px', lineHeight: 1.75, fontWeight: 300 }}>
+          <p className="plan-desc" style={{ color: textSoft, fontSize: '14px', lineHeight: 1.7, fontWeight: 300 }}>
             {plan.description}
           </p>
         </div>
 
         {/* Direita: features + CTA */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <p style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '0.26em', textTransform: 'uppercase', color: gold, marginBottom: '14px' }}>
+          <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, marginBottom: '16px' }}>
             O que está incluído
           </p>
           <ul style={{ listStyle: 'none', flex: 1 }}>
             {plan.features.map(f => (
-              <li key={f} style={{ display: 'flex', gap: '10px', marginBottom: '9px', color: hl ? 'rgba(243,235,226,0.7)' : 'rgba(54,15,17,0.65)', fontSize: '13px', lineHeight: 1.5 }}>
-                <span style={{ color: hl ? goldL : gold, flexShrink: 0, marginTop: '2px' }}>✓</span>
+              <li key={f} style={{ display: 'flex', gap: '11px', marginBottom: '11px', color: textMain, fontSize: '14px', lineHeight: 1.5 }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
                 {f}
               </li>
             ))}
@@ -229,6 +233,49 @@ export default function PlansSection() {
     return () => window.removeEventListener('openPricingPlan', handler)
   }, [])
 
+  /* Equaliza as alturas (nome, "para quem" e descrição) entre os cards de cada
+     linha — assim a descrição e o "O que está incluído" ficam alinhados, sem
+     min-heights fixos (que criavam vão ou quebravam em larguras diferentes). */
+  useEffect(() => {
+    const CLASSES = ['plan-badgerow', 'plan-name', 'plan-tagline', 'plan-forwho', 'plan-desc']
+
+    const equalize = () => {
+      CLASSES.forEach((cls) => {
+        const els = [...document.querySelectorAll(`.plans-grid .plan-card:not(.featured) .${cls}`)]
+        if (!els.length) return
+        // reset
+        els.forEach((el) => { el.style.minHeight = '' })
+        // agrupa por linha (cards na mesma linha do grid têm o mesmo topo)
+        const rows = new Map()
+        els.forEach((el) => {
+          const card = el.closest('.plan-card')
+          const key = Math.round(card.getBoundingClientRect().top)
+          if (!rows.has(key)) rows.set(key, [])
+          rows.get(key).push(el)
+        })
+        // aplica a maior altura de cada linha
+        rows.forEach((group) => {
+          const max = Math.max(...group.map((el) => el.getBoundingClientRect().height))
+          group.forEach((el) => { el.style.minHeight = `${Math.ceil(max)}px` })
+        })
+      })
+    }
+
+    let raf
+    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(equalize) }
+
+    equalize()
+    // re-roda quando as fontes carregam (mudam a quebra de linha)
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(equalize)
+    const t = setTimeout(equalize, 400)
+    window.addEventListener('resize', onResize)
+    return () => {
+      clearTimeout(t)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
   const featuredPlan = PLANS[0]          // Yarden 360
   const gridPlans    = PLANS.slice(1)    // 6 planos restantes
 
@@ -247,7 +294,7 @@ export default function PlansSection() {
             <p className="section-label" style={{ color: 'var(--sienna)' }}>Nossas Soluções</p>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(34px,5vw,66px)', lineHeight: 1.05, color: 'var(--espresso)' }}>
               Seis produtos.<br />
-              <em style={{ fontStyle: 'italic' }}>Um método.</em>
+              <em style={{ fontStyle: 'normal' }}>Um método.</em>
             </h2>
           </div>
           <p style={{ color: 'rgba(54,15,17,0.55)', maxWidth: '340px', lineHeight: 1.8, fontSize: 'clamp(14px,1.3vw,15px)', fontWeight: 300 }}>
@@ -279,14 +326,6 @@ export default function PlansSection() {
         </div>
 
         {/* Rodapé */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.9 }}
-          style={{ textAlign: 'center', color: 'rgba(54,15,17,0.35)', fontSize: '13px', marginTop: '52px', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}
-        >
-          Não sabe por onde começar? Agende uma conversa — identificamos o produto certo para o seu momento.
-        </motion.p>
       </div>
 
       <style>{`

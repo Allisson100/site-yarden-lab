@@ -626,7 +626,7 @@ export default function AISection() {
           >
             Descreva sua marca.
             <br />
-            <em style={{ fontStyle: "italic", color: "var(--cream)" }}>
+            <em style={{ fontStyle: "normal", color: "var(--cream)" }}>
               Diagnostico feito pela IA para indicar o melhor caminho.
             </em>
           </h2>
@@ -904,11 +904,11 @@ export default function AISection() {
                   {/* Dica: formatos aceitos */}
                   <p
                     style={{
-                      color: "rgba(243,235,226,0.18)",
-                      fontSize: "10px",
-                      letterSpacing: "0.04em",
+                      color: "rgba(243,235,226,0.5)",
+                      fontSize: "12px",
+                      letterSpacing: "0.02em",
                       marginBottom: "14px",
-                      lineHeight: 1.55,
+                      lineHeight: 1.6,
                     }}
                   >
                     Aceita @usuario, link do Instagram ou URL do site em
@@ -1027,7 +1027,7 @@ export default function AISection() {
                       style={{
                         color: "rgba(243,235,226,0.2)",
                         fontFamily: "var(--font-serif)",
-                        fontStyle: "italic",
+                        fontStyle: "normal",
                         fontSize: "13px",
                       }}
                     >
@@ -1209,7 +1209,7 @@ export default function AISection() {
                             style={{
                               fontFamily: "var(--font-serif)",
                               fontSize: "17px",
-                              fontStyle: "italic",
+                              fontStyle: "normal",
                               color: "var(--cream)",
                               fontWeight: 300,
                             }}

@@ -172,7 +172,7 @@ export default function Contact() {
             }}>
               Vamos construir
               <br />
-              <em style={{ fontStyle: 'italic', color: 'var(--cream)' }}>juntos.</em>
+              <em style={{ fontStyle: 'normal', color: 'var(--cream)' }}>juntos.</em>
             </h2>
 
             <p style={{
@@ -263,7 +263,7 @@ export default function Contact() {
                     color: 'var(--cream)',
                     marginBottom: '16px',
                     fontWeight: 300,
-                    fontStyle: 'italic',
+                    fontStyle: 'normal',
                   }}>
                     Mensagem enviada.
                   </h3>

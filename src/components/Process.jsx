@@ -99,9 +99,9 @@ export default function Process() {
             maxWidth: '640px',
           }}>
             Método que gera
-            <em style={{ fontStyle: 'italic' }}> resultado real.</em>
+            <em style={{ fontStyle: 'normal' }}> resultado real.</em>
           </h2>
-          <p style={{ color: 'rgba(54,15,17,0.5)', fontSize: '14px', fontStyle: 'italic', fontFamily: 'var(--font-serif)', marginTop: '14px' }}>
+          <p style={{ color: 'var(--sienna)', fontSize: '16px', fontStyle: 'normal', fontFamily: 'var(--font-serif)', marginTop: '16px', lineHeight: 1.5 }}>
             Como o rio Jordão, nosso método tem um curso — da nascente à foz.
           </p>
         </motion.div>

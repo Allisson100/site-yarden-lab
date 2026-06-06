@@ -175,7 +175,7 @@ export default function Navbar() {
                   fontSize: "clamp(36px, 8vw, 64px)",
                   fontFamily: "var(--font-serif)",
                   fontWeight: 300,
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   lineHeight: 1.1,
                 }}
               >

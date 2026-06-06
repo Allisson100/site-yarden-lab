@@ -183,7 +183,7 @@ export default function Pricing() {
             }}>
               O produto certo
               <br />
-              <em style={{ fontStyle: 'italic' }}>para cada momento.</em>
+              <em style={{ fontStyle: 'normal' }}>para cada momento.</em>
             </h2>
           </div>
           <p style={{
@@ -299,7 +299,7 @@ export default function Pricing() {
                         color: plan.highlight ? 'rgba(243,235,226,0.65)' : 'rgba(54,15,17,0.65)',
                         fontSize: '13px',
                         lineHeight: 1.65,
-                        fontStyle: 'italic',
+                        fontStyle: 'normal',
                         fontFamily: 'var(--font-serif)',
                         fontWeight: 300,
                       }}>
@@ -396,7 +396,7 @@ export default function Pricing() {
             color: 'rgba(54,15,17,0.45)',
             fontSize: '13px',
             marginTop: '40px',
-            fontStyle: 'italic',
+            fontStyle: 'normal',
             fontFamily: 'var(--font-serif)',
           }}
         >

@@ -30,31 +30,127 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 const MEDIA = [
   // ── Bloco 1 (linhas 1-3) ──
   // 0 — vídeo grande VERTICAL (1 col × 2 linhas)
-  { id: "01", type: "video", src: "/videos/video-01.mp4", title: "Teaser",             category: "Awareness",    quote: "Yarden Lab.",                       description: "A primeira impressão que posiciona." },
+  {
+    id: "01",
+    type: "video",
+    src: "/videos/video-01.mp4",
+    title: "Teaser",
+    category: "Awareness",
+    quote: "Yarden Lab.",
+    description: "A primeira impressão que posiciona.",
+  },
   // 1 — foto LARGA horizontal (2 cols)
-  { id: "02", type: "photo", src: "/carousel/foto-1.jpg", title: "Captação Premium",   category: "Fotografia",   quote: "Estética que converte.",             description: "Cada imagem comunica um posicionamento." },
+  {
+    id: "02",
+    type: "photo",
+    src: "/carousel/foto-1.jpg",
+    title: "Captação Premium",
+    category: "Fotografia",
+    quote: "Estética que converte.",
+    description: "Cada imagem comunica um posicionamento.",
+  },
   // 2 — foto quadrada
-  { id: "03", type: "photo", src: "/carousel/foto-2.jpg", title: "Identidade Visual",  category: "Fotografia",   quote: "Presença que posiciona.",           description: "Branding editorial com intenção e método." },
+  {
+    id: "03",
+    type: "photo",
+    src: "/carousel/foto-2.jpg",
+    title: "Identidade Visual",
+    category: "Fotografia",
+    quote: "Presença que posiciona.",
+    description: "Branding editorial com intenção e método.",
+  },
   // 3 — foto quadrada
-  { id: "04", type: "photo", src: "/carousel/foto-3.jpg", title: "Branding Editorial", category: "Fotografia",   quote: "Sua marca, com método.",            description: "Direção criativa premium para cada projeto." },
+  {
+    id: "04",
+    type: "photo",
+    src: "/carousel/foto-3.jpg",
+    title: "Branding Editorial",
+    category: "Fotografia",
+    quote: "Sua marca, com método.",
+    description: "Direção criativa premium para cada projeto.",
+  },
   // 4 — foto LARGA horizontal (2 cols)
-  { id: "05", type: "photo", src: "/carousel/foto-4.jpg", title: "Posicionamento",     category: "Fotografia",   quote: "A imagem que o mercado reconhece.", description: "Cada detalhe comunica valor e intenção." },
+  {
+    id: "05",
+    type: "photo",
+    src: "/carousel/foto-4.jpg",
+    title: "Posicionamento",
+    category: "Fotografia",
+    quote: "A imagem que o mercado reconhece.",
+    description: "Cada detalhe comunica valor e intenção.",
+  },
   // 5 — vídeo quadrado
-  { id: "06", type: "video", src: "/videos/video-02.mp4", title: "Manifesto",          category: "Consideração", quote: "Não somos uma agência.",            description: "A inteligência de marca que a sua empresa merece ter." },
+  {
+    id: "06",
+    type: "video",
+    src: "/videos/video-02.mp4",
+    title: "Manifesto",
+    category: "Consideração",
+    quote: "Não somos uma agência.",
+    description: "A inteligência de marca que a sua empresa merece ter.",
+  },
 
   // ── Bloco 2 (linhas 4-6) — espelha o padrão ──
   // 6 — foto LARGA horizontal (2 cols)
-  { id: "07", type: "photo", src: "/carousel/foto-5.jpg", title: "Presença Digital",   category: "Fotografia",   quote: "Conteúdo com direção criativa.",     description: "Do conceito à captação, tudo com intenção." },
+  {
+    id: "07",
+    type: "photo",
+    src: "/carousel/foto-5.jpg",
+    title: "Presença Digital",
+    category: "Fotografia",
+    quote: "Conteúdo com direção criativa.",
+    description: "Do conceito à captação, tudo com intenção.",
+  },
   // 7 — vídeo grande VERTICAL (1 col × 2 linhas, lado direito)
-  { id: "08", type: "video", src: "/videos/video-03.mp4", title: "O Laboratório",      category: "Conversão",    quote: "Marca premium não se faz no IG.",   description: "Processo, método e resultado — no mesmo lugar." },
+  {
+    id: "08",
+    type: "video",
+    src: "/videos/video-03.mp4",
+    title: "O Laboratório",
+    category: "Conversão",
+    quote: "Marca premium não se faz no IG.",
+    description: "Processo, método e resultado — no mesmo lugar.",
+  },
   // 8 — foto quadrada
-  { id: "09", type: "photo", src: "/carousel/foto-6.jpg", title: "Editorial",          category: "Fotografia",   quote: "Identidade que converte.",          description: "Estética de alto padrão para marcas premium." },
+  {
+    id: "09",
+    type: "photo",
+    src: "/carousel/foto-6.jpg",
+    title: "Editorial",
+    category: "Fotografia",
+    quote: "Identidade que converte.",
+    description: "Estética de alto padrão para marcas premium.",
+  },
   // 9 — foto quadrada
-  { id: "10", type: "photo", src: "/carousel/foto-1.jpg", title: "Direção de Arte",    category: "Fotografia",   quote: "Cada frame, uma intenção.",         description: "Composição pensada para comunicar valor." },
+  {
+    id: "10",
+    type: "photo",
+    src: "/carousel/foto-1.jpg",
+    title: "Direção de Arte",
+    category: "Fotografia",
+    quote: "Cada frame, uma intenção.",
+    description: "Composição pensada para comunicar valor.",
+  },
   // 10 — foto LARGA horizontal (2 cols)
-  { id: "11", type: "photo", src: "/carousel/foto-2.jpg", title: "Narrativa Visual",   category: "Fotografia",   quote: "Sua história, bem contada.",        description: "Imagens que constroem percepção de marca." },
+  {
+    id: "11",
+    type: "photo",
+    src: "/carousel/foto-2.jpg",
+    title: "Narrativa Visual",
+    category: "Fotografia",
+    quote: "Sua história, bem contada.",
+    description: "Imagens que constroem percepção de marca.",
+  },
   // 11 — vídeo quadrado
-  { id: "12", type: "video", src: "/videos/video-04.mp4", title: "A Virada",           category: "Awareness",    quote: "Marca premium vai além da estética.", description: "Método, tecnologia e estética — tudo junto." },
+  {
+    id: "12",
+    type: "video",
+    src: "/videos/video-04.mp4",
+    title: "A Virada",
+    category: "Awareness",
+    quote: "Marca premium vai além da estética.",
+    description: "Método, tecnologia e estética — tudo junto.",
+  },
 ];
 
 /* Posições na grade 3×6 — cada item ocupa um col/row span definido */
@@ -127,7 +223,7 @@ function Placeholder({ isVideo, featured }) {
           letterSpacing: "0.22em",
           textTransform: "uppercase",
           fontFamily: "var(--font-serif)",
-          fontStyle: "italic",
+          fontStyle: "normal",
         }}
       >
         {isVideo ? "Vídeo em breve" : "Foto em breve"}
@@ -296,12 +392,14 @@ function MediaCard({
           {item.id}
         </span>
         <span
+          className="mr-cat"
           style={{
-            color: "rgba(243,235,226,0.28)",
+            color: "var(--cream)",
             fontSize: "9px",
+            fontWeight: 600,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            border: "1px solid rgba(243,235,226,0.09)",
+            border: "1px solid rgba(243,235,226,0.45)",
             padding: "3px 8px",
           }}
         >
@@ -311,6 +409,7 @@ function MediaCard({
 
       {/* Rodapé: título + quote + desc hover */}
       <div
+        className="mr-cardtext"
         style={{
           position: "absolute",
           bottom: isVideo ? 40 : 22,
@@ -324,11 +423,12 @@ function MediaCard({
         >
           <p
             style={{
-              color: "rgba(243,235,226,0.35)",
-              fontSize: "9px",
+              color: "var(--cream)",
+              fontSize: "10px",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              marginBottom: "6px",
+              fontWeight: 600,
+              marginBottom: "7px",
             }}
           >
             {item.title}
@@ -336,11 +436,11 @@ function MediaCard({
           <p
             style={{
               fontFamily: "var(--font-serif)",
-              fontWeight: 300,
-              fontStyle: "italic",
-              fontSize: featured ? "clamp(15px,1.6vw,22px)" : "14px",
+              fontWeight: 400,
+              fontStyle: "normal",
+              fontSize: featured ? "clamp(20px,2vw,30px)" : "18px",
               color: "var(--cream)",
-              lineHeight: 1.3,
+              lineHeight: 1.25,
               maxWidth: "360px",
             }}
           >
@@ -461,26 +561,6 @@ function MediaCard({
         </div>
       )}
 
-      {/* Badge "foto" discreto */}
-      {!isVideo && loaded && (
-        <div
-          style={{ position: "absolute", top: 10, right: 10, opacity: 0.45 }}
-        >
-          <svg
-            width="11"
-            height="11"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--cream)"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21 15 16 10 5 21" />
-          </svg>
-        </div>
-      )}
     </div>
   );
 }
@@ -517,7 +597,12 @@ function Lightbox({ items, initialIdx, onClose }) {
   const goNativeFullscreen = () => {
     const v = videoRef.current;
     if (!v) return;
-    (v.requestFullscreen || v.webkitRequestFullscreen || v.webkitEnterFullscreen || (() => {})).call(v);
+    (
+      v.requestFullscreen ||
+      v.webkitRequestFullscreen ||
+      v.webkitEnterFullscreen ||
+      (() => {})
+    ).call(v);
   };
 
   return (
@@ -540,7 +625,13 @@ function Lightbox({ items, initialIdx, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "100vw" }}
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          maxWidth: "100vw",
+        }}
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -554,7 +645,12 @@ function Lightbox({ items, initialIdx, onClose }) {
               <img
                 src={item.src}
                 alt={item.title}
-                style={{ maxWidth: "94vw", maxHeight: "86vh", objectFit: "contain", display: "block" }}
+                style={{
+                  maxWidth: "94vw",
+                  maxHeight: "86vh",
+                  objectFit: "contain",
+                  display: "block",
+                }}
               />
             ) : (
               <video
@@ -563,25 +659,62 @@ function Lightbox({ items, initialIdx, onClose }) {
                 controls
                 autoPlay
                 playsInline
-                style={{ maxWidth: "94vw", maxHeight: "86vh", display: "block", background: "#000" }}
+                style={{
+                  maxWidth: "94vw",
+                  maxHeight: "86vh",
+                  display: "block",
+                  background: "#000",
+                }}
               />
             )}
           </motion.div>
         </AnimatePresence>
 
         {/* Barra inferior */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "12px 2px 0", gap: "16px" }}>
-          <span style={{ color: "rgba(243,235,226,0.4)", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            padding: "12px 2px 0",
+            gap: "16px",
+          }}
+        >
+          <span
+            style={{
+              color: "rgba(243,235,226,0.4)",
+              fontSize: "10px",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}
+          >
             {item.title}
           </span>
-          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexShrink: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+              flexShrink: 0,
+            }}
+          >
             <span style={{ color: "rgba(243,235,226,0.25)", fontSize: "10px" }}>
               {idx + 1} / {items.length}
             </span>
             {item.type === "video" && (
               <button
                 onClick={goNativeFullscreen}
-                style={{ background: "none", border: "1px solid rgba(243,235,226,0.2)", color: "rgba(243,235,226,0.5)", padding: "5px 12px", cursor: "pointer", fontSize: "9px", letterSpacing: "0.16em", textTransform: "uppercase" }}
+                style={{
+                  background: "none",
+                  border: "1px solid rgba(243,235,226,0.2)",
+                  color: "rgba(243,235,226,0.5)",
+                  padding: "5px 12px",
+                  cursor: "pointer",
+                  fontSize: "9px",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                }}
               >
                 Tela cheia
               </button>
@@ -591,14 +724,47 @@ function Lightbox({ items, initialIdx, onClose }) {
       </div>
 
       {/* Setas */}
-      {[{ dir: "prev", pos: "left", action: prev }, { dir: "next", pos: "right", action: next }].map(({ dir, pos, action }) => (
+      {[
+        { dir: "prev", pos: "left", action: prev },
+        { dir: "next", pos: "right", action: next },
+      ].map(({ dir, pos, action }) => (
         <button
           key={dir}
-          onClick={(e) => { e.stopPropagation(); action(); }}
-          style={{ position: "fixed", [pos]: "16px", top: "50%", transform: "translateY(-50%)", background: "rgba(9,1,4,0.65)", border: "1px solid rgba(243,235,226,0.1)", color: "rgba(243,235,226,0.65)", width: 46, height: 46, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            action();
+          }}
+          style={{
+            position: "fixed",
+            [pos]: "16px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "rgba(9,1,4,0.65)",
+            border: "1px solid rgba(243,235,226,0.1)",
+            color: "rgba(243,235,226,0.65)",
+            width: 46,
+            height: 46,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(4px)",
+          }}
         >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            {dir === "prev" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 18l6-6-6-6" />}
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          >
+            {dir === "prev" ? (
+              <path d="M15 18l-6-6 6-6" />
+            ) : (
+              <path d="M9 18l6-6-6-6" />
+            )}
           </svg>
         </button>
       ))}
@@ -606,9 +772,31 @@ function Lightbox({ items, initialIdx, onClose }) {
       {/* Fechar */}
       <button
         onClick={onClose}
-        style={{ position: "fixed", top: 16, right: 16, background: "rgba(9,1,4,0.65)", border: "1px solid rgba(243,235,226,0.12)", color: "rgba(243,235,226,0.65)", width: 42, height: 42, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}
+        style={{
+          position: "fixed",
+          top: 16,
+          right: 16,
+          background: "rgba(9,1,4,0.65)",
+          border: "1px solid rgba(243,235,226,0.12)",
+          color: "rgba(243,235,226,0.65)",
+          width: 42,
+          height: 42,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backdropFilter: "blur(4px)",
+        }}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        >
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
@@ -742,7 +930,7 @@ export default function MediaReel() {
             >
               Estética que converte
               <br />
-              <em style={{ fontStyle: "italic" }}>e posiciona.</em>
+              <em style={{ fontStyle: "normal" }}>e posiciona.</em>
             </h2>
           </div>
           <p
@@ -784,7 +972,11 @@ export default function MediaReel() {
       {/* Lightbox — tela cheia */}
       <AnimatePresence>
         {lightbox !== null && (
-          <Lightbox items={MEDIA} initialIdx={lightbox} onClose={() => setLightbox(null)} />
+          <Lightbox
+            items={MEDIA}
+            initialIdx={lightbox}
+            onClose={() => setLightbox(null)}
+          />
         )}
       </AnimatePresence>
 
@@ -829,6 +1021,14 @@ export default function MediaReel() {
         }
         @media (max-width: 400px) {
           .mr-grid { grid-auto-rows: 124px; }
+        }
+
+        /* Mobile: células pequenas — esconde textos sobrepostos (ficavam
+           ilegíveis/confusos). Mantém só o número e os controles do vídeo;
+           o conteúdo completo aparece ao tocar (lightbox). */
+        @media (max-width: 600px) {
+          .mr-cat { display: none !important; }
+          .mr-cardtext { display: none !important; }
         }
       `}</style>
     </section>
