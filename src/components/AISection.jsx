@@ -481,10 +481,11 @@ export default function AISection() {
     let revealed = 0; // caracteres já exibidos
     let typeTimer = null;
     let streamEnded = false;
+    let errored = false; // se houve erro (ex: rate limit), não vira "concluído"
     let pendingPlan = null;
 
     const finish = () => {
-      if (!streamEnded || revealed < target.length) return;
+      if (errored || !streamEnded || revealed < target.length) return;
       clearInterval(typeTimer);
       typeTimer = null;
       setPlanName(pendingPlan);
@@ -492,7 +493,7 @@ export default function AISection() {
     };
 
     const ensureTyping = () => {
-      if (typeTimer) return;
+      if (errored || typeTimer) return;
       typeTimer = setInterval(() => {
         if (revealed < target.length) {
           const remaining = target.length - revealed;
@@ -564,6 +565,7 @@ export default function AISection() {
               ensureTyping();
               finish();
             } else if (event.type === "error") {
+              errored = true;
               clearInterval(typeTimer);
               typeTimer = null;
               setErrorMsg(event.message);
@@ -575,10 +577,14 @@ export default function AISection() {
         }
       }
       // Stream encerrado — deixa o typewriter terminar de revelar o texto
-      streamEnded = true;
-      ensureTyping();
-      finish();
+      // (a menos que tenha ocorrido um erro, que já mostrou sua mensagem)
+      if (!errored) {
+        streamEnded = true;
+        ensureTyping();
+        finish();
+      }
     } catch (err) {
+      errored = true;
       clearInterval(typeTimer);
       typeTimer = null;
       setErrorMsg(err.message || "Erro de conexão. Tente novamente.");
