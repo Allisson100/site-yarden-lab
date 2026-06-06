@@ -496,14 +496,14 @@ export default function AISection() {
       typeTimer = setInterval(() => {
         if (revealed < target.length) {
           const remaining = target.length - revealed;
-          // acelera quando está muito atrás, desacelera perto do fim
-          const step = remaining > 160 ? 4 : remaining > 60 ? 2 : 1;
+          // acelera só quando está MUITO atrás (pra não estourar a fila); ritmo base mais lento
+          const step = remaining > 280 ? 3 : remaining > 120 ? 2 : 1;
           revealed = Math.min(target.length, revealed + step);
           setDisplayedText(target.slice(0, revealed));
         } else {
           finish();
         }
-      }, 14);
+      }, 26);
     };
 
     // Normaliza campos opcionais antes de enviar
