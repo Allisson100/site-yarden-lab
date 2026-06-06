@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const steps = [
@@ -36,6 +36,11 @@ const steps = [
 const RIVER_DESKTOP =
   'M 50,7 C 50,13 34,14 34,18 C 34,30 66,31 66,43 C 66,55 34,56 34,68 C 34,80 66,81 66,93 C 66,98 56,101 52,104'
 
+// Rio mobile: mesmo estilo (meandro central) mas mais estreito (40↔60),
+// deixando mais espaço para o texto nas bordas.
+const RIVER_MOBILE =
+  'M 50,6 C 50,12 40,13 40,18 C 40,30 60,31 60,43 C 60,55 40,56 40,68 C 40,80 60,81 60,93 C 60,98 54,101 51,104'
+
 // y (vertical) e lado de cada marco — o x é definido no CSS (varia por breakpoint)
 const ANCHORS = [
   { y: '13%', side: 'left' },
@@ -72,39 +77,6 @@ function River({ d, kind, inView }) {
 export default function Process() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-  const flowRef = useRef(null)
-  const [mobilePath, setMobilePath] = useState('')
-
-  // No mobile (≤600px) o layout é empilhado/alternado com alturas variáveis,
-  // então o rio é desenhado dinamicamente conectando o centro real de cada bolha.
-  useEffect(() => {
-    const build = () => {
-      const flow = flowRef.current
-      if (!flow) return
-      if (window.innerWidth > 600) { setMobilePath(''); return }
-      const fr = flow.getBoundingClientRect()
-      const bubbles = [...flow.querySelectorAll('.river-bubble')]
-      if (bubbles.length < 2) return
-      const pts = bubbles.map((b) => {
-        const r = b.getBoundingClientRect()
-        return { x: r.left + r.width / 2 - fr.left, y: r.top + r.height / 2 - fr.top }
-      })
-      let d = `M ${pts[0].x} ${Math.max(0, pts[0].y - 36)} L ${pts[0].x} ${pts[0].y}`
-      for (let i = 1; i < pts.length; i++) {
-        const p = pts[i - 1], c = pts[i]
-        const midY = (p.y + c.y) / 2
-        d += ` C ${p.x} ${midY}, ${c.x} ${midY}, ${c.x} ${c.y}`
-      }
-      const last = pts[pts.length - 1]
-      d += ` L ${last.x} ${last.y + 36}`
-      setMobilePath(d)
-    }
-    build()
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(build)
-    const t = setTimeout(build, 450)
-    window.addEventListener('resize', build)
-    return () => { clearTimeout(t); window.removeEventListener('resize', build) }
-  }, [])
 
   return (
     <section id="method" style={{ background: 'var(--cream)', padding: 'clamp(60px, 8vw, 110px) 0 clamp(72px, 10vw, 140px)', overflow: 'hidden' }}>
@@ -136,19 +108,9 @@ export default function Process() {
         </motion.div>
 
         {/* ── Curso do rio: os marcos seguem o traçado serpenteando ── */}
-        <div className="river-flow" ref={flowRef}>
+        <div className="river-flow">
           <River d={RIVER_DESKTOP} kind="desktop" inView={inView} />
-
-          {/* Rio do mobile — caminho dinâmico ligando as bolhas alternadas */}
-          {mobilePath && (
-            <svg
-              className="river-svg-mobile-dyn"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
-            >
-              <path d={mobilePath} fill="none" stroke="#682D1B" strokeOpacity="0.1" strokeWidth="9" strokeLinecap="round" />
-              <path d={mobilePath} fill="none" stroke="#682D1B" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          )}
+          <River d={RIVER_MOBILE}  kind="mobile"  inView={inView} />
 
           {steps.map((step, i) => {
             const a = ANCHORS[i]
@@ -164,7 +126,7 @@ export default function Process() {
               >
                 {/* Bolha numerada — fica sobre o rio */}
                 <div className="river-bubble">
-                  <div style={{
+                  <div className="river-bubble-box" style={{
                     width: '72px', height: '72px',
                     border: '1px solid var(--sienna)',
                     background: 'var(--cream)',
@@ -183,13 +145,13 @@ export default function Process() {
 
                 {/* Conteúdo no lado de FORA da bolha (longe do rio) */}
                 <div className="river-text">
-                  <div style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--sienna)', marginBottom: '12px', fontWeight: 600 }}>
+                  <div className="river-sub" style={{ fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--sienna)', marginBottom: '12px', fontWeight: 600 }}>
                     {step.subtitle}
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 400, fontSize: 'clamp(28px, 3vw, 40px)', color: 'var(--espresso)', marginBottom: '16px', lineHeight: 1.1 }}>
+                  <h3 className="river-title" style={{ fontFamily: 'var(--font-serif)', fontWeight: 400, fontSize: 'clamp(28px, 3vw, 40px)', color: 'var(--espresso)', marginBottom: '16px', lineHeight: 1.1 }}>
                     {step.title}
                   </h3>
-                  <p style={{ color: 'rgba(54,15,17,0.65)', fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.7, marginBottom: '18px', fontWeight: 300 }}>
+                  <p className="river-desc" style={{ color: 'rgba(54,15,17,0.65)', fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.7, marginBottom: '18px', fontWeight: 300 }}>
                     {step.desc}
                   </p>
                   <div className="river-duration" style={{
@@ -247,47 +209,28 @@ export default function Process() {
           .river-text { width: min(300px, 32%); }
         }
 
-        /* ── Phone: empilha vertical, mas ALTERNANDO o lado (como o desktop) ── */
+        /* ── Phone: MESMO esquema do desktop (meandro central + texto nas bordas),
+              só com rio mais estreito (40↔60), bolha e fontes menores ── */
         @media (max-width: 600px) {
-          .river-flow {
-            height: auto !important;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            margin-top: 8px;
-            position: relative;   /* contexto para o SVG do rio (dinâmico) */
-          }
-          .river-svg { display: none !important; }            /* esconde o do desktop */
-          .river-svg-mobile-dyn { display: block !important; } /* mostra o dinâmico */
+          .river-flow { height: clamp(1120px, 300vw, 1500px); margin-top: 12px; }
 
-          .river-step {
-            position: relative !important;   /* fica ACIMA do rio (z-index) */
-            z-index: 1;
-            height: auto !important;
-            transform: none !important;
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-          }
-          .river-step.is-left  { flex-direction: row; }          /* bolha esq · texto dir */
-          .river-step.is-right { flex-direction: row-reverse; }  /* bolha dir · texto esq */
+          .river-svg.desktop { display: none; }
+          .river-svg.mobile  { display: block; }
 
-          .river-bubble {
-            position: static !important;
-            transform: none !important;
-            flex-shrink: 0;
-          }
-          .river-text {
-            position: static !important;
-            transform: none !important;
-            width: auto !important;
-            flex: 1;
-            min-width: 0;
-          }
-          .is-left  .river-text { text-align: left !important; }
-          .is-right .river-text { text-align: right !important; }
-          .is-left  .river-duration { flex-direction: row !important; }
-          .is-right .river-duration { flex-direction: row-reverse !important; }
+          .is-left  .river-bubble { left: 40%; }
+          .is-right .river-bubble { left: 60%; }
+
+          .river-bubble-box { width: 50px !important; height: 50px !important; }
+          .river-bubble-box span { font-size: 17px !important; }
+
+          .river-text { width: 30% !important; }
+          .is-left  .river-text { right: calc(60% + 34px) !important; left: auto !important; text-align: right !important; }
+          .is-right .river-text { left:  calc(60% + 34px) !important; right: auto !important; text-align: left !important; }
+
+          .river-sub   { font-size: 9px !important; letter-spacing: 0.16em !important; margin-bottom: 6px !important; }
+          .river-title { font-size: 18px !important; margin-bottom: 8px !important; }
+          .river-desc  { font-size: 12px !important; line-height: 1.5 !important; margin-bottom: 8px !important; }
+          .river-duration { font-size: 10px !important; }
         }
       `}</style>
     </section>
