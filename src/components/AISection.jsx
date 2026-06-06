@@ -372,6 +372,7 @@ const PANEL_HEIGHT = 580;
 export default function AISection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const panelRef = useRef(null);
 
   const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
   const [form, setForm] = useState({
@@ -467,6 +468,12 @@ export default function AISection() {
     setDisplayedText("");
     setPlanName(null);
     setErrorMsg("");
+
+    // Traz o painel pra vista — no mobile o botão fica no fim do form, então a
+    // tela de loading apareceria fora da viewport sem este scroll.
+    setTimeout(() => {
+      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 60);
 
     // Typewriter — SSE tokens accumulate into `target`; a timer reveals the
     // text character-by-character for a natural "AI typing" effect.
@@ -665,6 +672,7 @@ export default function AISection() {
 
           {/* Right — form / result */}
           <motion.div
+            ref={panelRef}
             className={`ai-right-panel${phase === "streaming" || phase === "done" ? " ai-scroll-result" : ""}`}
             initial={{ opacity: 0, x: 32 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}

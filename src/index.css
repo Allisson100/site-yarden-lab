@@ -97,6 +97,11 @@ button {
   font-family: var(--font-sans);
 }
 
+/* Evita o zoom automático do iOS ao focar campos (exige font-size >= 16px) */
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px !important; }
+}
+
 .container {
   max-width: 1400px;
   margin: 0 auto;
