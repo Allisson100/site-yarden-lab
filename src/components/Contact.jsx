@@ -47,7 +47,7 @@ export default function Contact() {
         form.message,
       ].join('\n')
       window.open(
-        `mailto:contato@yardenlab.com.br?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+        `mailto:contato@yardenlab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
       )
       setSent(true)
       setLoading(false)
@@ -90,8 +90,8 @@ export default function Contact() {
   const contacts = [
     {
       label: 'E-mail',
-      value: 'contato@yardenlab.com.br',
-      href: 'mailto:contato@yardenlab.com.br',
+      value: 'contato@yardenlab.com',
+      href: 'mailto:contato@yardenlab.com',
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
           <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />

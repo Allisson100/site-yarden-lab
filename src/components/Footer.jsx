@@ -1,10 +1,12 @@
 import YardenLogo from "./YardenLogo";
 
+// Em ordem das seções da página
 const navLinks = [
-  { label: "Quem Somos", href: "#manifesto" },
-  // { label: 'Portfólio', href: '#portfolio' },
+  { label: "Produção", href: "#portfolio" },
+  { label: "Método", href: "#method" },
   { label: "Inteligência IA", href: "#ai" },
   { label: "Planos", href: "#plans" },
+  { label: "Quem Somos", href: "#manifesto" },
   { label: "Contato", href: "#contact" },
 ];
 
@@ -261,7 +263,7 @@ export default function Footer() {
               style={{ display: "flex", flexDirection: "column", gap: "16px" }}
             >
               <a
-                href="mailto:contato@yardenlab.com.br"
+                href="mailto:contato@yardenlab.com"
                 style={{
                   color: "rgba(243,235,226,0.45)",
                   fontSize: "13px",
@@ -275,7 +277,7 @@ export default function Footer() {
                   (e.currentTarget.style.color = "rgba(243,235,226,0.45)")
                 }
               >
-                contato@yardenlab.com.br
+                contato@yardenlab.com
               </a>
               <p
                 style={{

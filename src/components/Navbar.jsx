@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import YardenLogo from "./YardenLogo";
 
+// Em ordem das seções da página
 const links = [
-  // { label: 'Portfólio', href: '#portfolio' },
-  { label: "Quem Somos", href: "#manifesto" },
+  { label: "Produção", href: "#portfolio" },
+  { label: "Método", href: "#method" },
   { label: "Inteligência", href: "#ai" },
   { label: "Planos", href: "#plans" },
+  { label: "Quem Somos", href: "#manifesto" },
   { label: "Contato", href: "#contact" },
 ];
 
@@ -73,7 +75,7 @@ export default function Navbar() {
         {/* Desktop */}
         <div
           className="desktop-nav"
-          style={{ display: "flex", alignItems: "center", gap: "44px" }}
+          style={{ display: "flex", alignItems: "center", gap: "30px" }}
         >
           {links.map((link) => (
             <a

@@ -36,10 +36,6 @@ const steps = [
 const RIVER_DESKTOP =
   'M 50,7 C 50,13 34,14 34,18 C 34,30 66,31 66,43 C 66,55 34,56 34,68 C 34,80 66,81 66,93 C 66,98 56,101 52,104'
 
-// Rio (mobile): meandro vertical à ESQUERDA, âncoras (18,18)(34,43)(18,68)(34,93)
-const RIVER_MOBILE =
-  'M 26,4 C 26,10 18,12 18,18 C 18,30 34,31 34,43 C 34,55 18,56 18,68 C 18,80 34,81 34,93 C 34,98 28,101 26,104'
-
 // y (vertical) e lado de cada marco — o x é definido no CSS (varia por breakpoint)
 const ANCHORS = [
   { y: '13%', side: 'left' },
@@ -109,7 +105,6 @@ export default function Process() {
         {/* ── Curso do rio: os marcos seguem o traçado serpenteando ── */}
         <div className="river-flow">
           <River d={RIVER_DESKTOP} kind="desktop" inView={inView} />
-          <River d={RIVER_MOBILE}  kind="mobile"  inView={inView} />
 
           {steps.map((step, i) => {
             const a = ANCHORS[i]
@@ -203,29 +198,49 @@ export default function Process() {
         .river-svg.desktop { display: block; }
         .river-svg.mobile  { display: none; }
 
-        /* ── Tablet: aperta um pouco o texto ── */
+        /* ── Tablet: mesmo meandro do desktop (intercalado), texto mais estreito ── */
         @media (max-width: 1024px) {
-          .river-text { width: min(320px, 30%); }
+          .river-text { width: min(300px, 32%); }
         }
 
-        /* ── Mobile/phone: rio vertical à esquerda, texto à direita ── */
-        @media (max-width: 680px) {
-          .river-flow { height: clamp(1360px, 370vw, 1620px); margin-top: 12px; }
-          .river-svg.desktop { display: none; }
-          .river-svg.mobile  { display: block; }
-
-          .is-left  .river-bubble { left: 18%; }
-          .is-right .river-bubble { left: 34%; }
-
-          .river-text { width: 52% !important; }
-          .is-left  .river-text,
-          .is-right .river-text {
-            left: 46% !important;
-            right: auto !important;
-            text-align: left !important;
+        /* ── Phone: empilha vertical, mas ALTERNANDO o lado (como o desktop) ── */
+        @media (max-width: 600px) {
+          .river-flow {
+            height: auto !important;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 8px;
           }
-          .is-left  .river-duration,
-          .is-right .river-duration { flex-direction: row !important; }
+          .river-svg { display: none !important; }
+
+          .river-step {
+            position: static !important;
+            height: auto !important;
+            transform: none !important;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+          }
+          .river-step.is-left  { flex-direction: row; }          /* bolha esq · texto dir */
+          .river-step.is-right { flex-direction: row-reverse; }  /* bolha dir · texto esq */
+
+          .river-bubble {
+            position: static !important;
+            transform: none !important;
+            flex-shrink: 0;
+          }
+          .river-text {
+            position: static !important;
+            transform: none !important;
+            width: auto !important;
+            flex: 1;
+            min-width: 0;
+          }
+          .is-left  .river-text { text-align: left !important; }
+          .is-right .river-text { text-align: right !important; }
+          .is-left  .river-duration { flex-direction: row !important; }
+          .is-right .river-duration { flex-direction: row-reverse !important; }
         }
       `}</style>
     </section>
