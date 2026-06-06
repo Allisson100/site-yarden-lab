@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const steps = [
@@ -72,6 +72,39 @@ function River({ d, kind, inView }) {
 export default function Process() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  const flowRef = useRef(null)
+  const [mobilePath, setMobilePath] = useState('')
+
+  // No mobile (≤600px) o layout é empilhado/alternado com alturas variáveis,
+  // então o rio é desenhado dinamicamente conectando o centro real de cada bolha.
+  useEffect(() => {
+    const build = () => {
+      const flow = flowRef.current
+      if (!flow) return
+      if (window.innerWidth > 600) { setMobilePath(''); return }
+      const fr = flow.getBoundingClientRect()
+      const bubbles = [...flow.querySelectorAll('.river-bubble')]
+      if (bubbles.length < 2) return
+      const pts = bubbles.map((b) => {
+        const r = b.getBoundingClientRect()
+        return { x: r.left + r.width / 2 - fr.left, y: r.top + r.height / 2 - fr.top }
+      })
+      let d = `M ${pts[0].x} ${Math.max(0, pts[0].y - 36)} L ${pts[0].x} ${pts[0].y}`
+      for (let i = 1; i < pts.length; i++) {
+        const p = pts[i - 1], c = pts[i]
+        const midY = (p.y + c.y) / 2
+        d += ` C ${p.x} ${midY}, ${c.x} ${midY}, ${c.x} ${c.y}`
+      }
+      const last = pts[pts.length - 1]
+      d += ` L ${last.x} ${last.y + 36}`
+      setMobilePath(d)
+    }
+    build()
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(build)
+    const t = setTimeout(build, 450)
+    window.addEventListener('resize', build)
+    return () => { clearTimeout(t); window.removeEventListener('resize', build) }
+  }, [])
 
   return (
     <section id="method" style={{ background: 'var(--cream)', padding: 'clamp(60px, 8vw, 110px) 0 clamp(72px, 10vw, 140px)', overflow: 'hidden' }}>
@@ -103,8 +136,19 @@ export default function Process() {
         </motion.div>
 
         {/* ── Curso do rio: os marcos seguem o traçado serpenteando ── */}
-        <div className="river-flow">
+        <div className="river-flow" ref={flowRef}>
           <River d={RIVER_DESKTOP} kind="desktop" inView={inView} />
+
+          {/* Rio do mobile — caminho dinâmico ligando as bolhas alternadas */}
+          {mobilePath && (
+            <svg
+              className="river-svg-mobile-dyn"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0, pointerEvents: 'none' }}
+            >
+              <path d={mobilePath} fill="none" stroke="#682D1B" strokeOpacity="0.1" strokeWidth="9" strokeLinecap="round" />
+              <path d={mobilePath} fill="none" stroke="#682D1B" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          )}
 
           {steps.map((step, i) => {
             const a = ANCHORS[i]
@@ -211,11 +255,14 @@ export default function Process() {
             flex-direction: column;
             gap: 40px;
             margin-top: 8px;
+            position: relative;   /* contexto para o SVG do rio (dinâmico) */
           }
-          .river-svg { display: none !important; }
+          .river-svg { display: none !important; }            /* esconde o do desktop */
+          .river-svg-mobile-dyn { display: block !important; } /* mostra o dinâmico */
 
           .river-step {
-            position: static !important;
+            position: relative !important;   /* fica ACIMA do rio (z-index) */
+            z-index: 1;
             height: auto !important;
             transform: none !important;
             display: flex;

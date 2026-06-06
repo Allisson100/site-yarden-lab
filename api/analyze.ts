@@ -4,6 +4,10 @@ import { handleAnalyze } from './_core.js'
 // All env vars without VITE_ prefix (ANTHROPIC_API_KEY, APIFY_API_TOKEN, etc.)
 // are only available here, never in the browser.
 
+// Tempo máximo da função: o scraping do Instagram (Apify) pode levar ~25s e o
+// padrão da Vercel (10s) mataria a função no meio. 60s cobre Apify + Jina + IA.
+export const maxDuration = 60
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
