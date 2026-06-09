@@ -44,6 +44,7 @@ const MEDIA = [
     id: "02",
     type: "photo",
     src: "/carousel/foto-1.jpg",
+    objPos: "center 22%",
     title: "Captação Premium",
     category: "Fotografia",
     quote: "Estética que converte.",
@@ -53,7 +54,8 @@ const MEDIA = [
   {
     id: "03",
     type: "photo",
-    src: "/carousel/foto-2.jpg",
+    src: "/carousel/foto-6.jpg",
+    objPos: "center 22%",
     title: "Identidade Visual",
     category: "Fotografia",
     quote: "Presença que posiciona.",
@@ -95,7 +97,8 @@ const MEDIA = [
   {
     id: "07",
     type: "photo",
-    src: "/carousel/foto-5.jpg",
+    src: "/carousel/foto-2.jpg",
+    objPos: "center 25%", // ← ajuste aqui: menor % sobe o enquadramento, maior % desce
     title: "Presença Digital",
     category: "Fotografia",
     quote: "Conteúdo com direção criativa.",
@@ -115,7 +118,8 @@ const MEDIA = [
   {
     id: "09",
     type: "photo",
-    src: "/carousel/foto-6.jpg",
+    src: "/carousel/foto-5.jpg",
+    objPos: "center 22%",
     title: "Editorial",
     category: "Fotografia",
     quote: "Identidade que converte.",
@@ -125,7 +129,7 @@ const MEDIA = [
   {
     id: "10",
     type: "photo",
-    src: "/carousel/foto-1.jpg",
+    src: "/carousel/foto-7.jpg",
     title: "Direção de Arte",
     category: "Fotografia",
     quote: "Cada frame, uma intenção.",
@@ -135,7 +139,7 @@ const MEDIA = [
   {
     id: "11",
     type: "photo",
-    src: "/carousel/foto-2.jpg",
+    src: "/carousel/foto-8.jpg",
     title: "Narrativa Visual",
     category: "Fotografia",
     quote: "Sua história, bem contada.",
@@ -160,8 +164,8 @@ const GRID_POS = [
   { col: "2 / 4", row: "1 / 2" }, // 1: P02 — foto larga (2 cols)
   { col: "2 / 3", row: "2 / 3" }, // 2: P03 — foto quadrada
   { col: "3 / 4", row: "2 / 3" }, // 3: P04 — foto quadrada
-  { col: "1 / 3", row: "3 / 4" }, // 4: P05 — foto larga (2 cols)
-  { col: "3 / 4", row: "3 / 4" }, // 5: V06 — vídeo quadrado
+  { col: "2 / 4", row: "3 / 4" }, // 4: P05 — foto larga (2 cols) — agora à DIREITA
+  { col: "1 / 2", row: "3 / 4" }, // 5: V06 — vídeo quadrado — agora à ESQUERDA
   // Bloco 2 (espelhado)
   { col: "1 / 3", row: "4 / 5" }, // 6: P07 — foto larga (2 cols)
   { col: "3 / 4", row: "4 / 6" }, // 7: V08 — vídeo vertical grande (direita)
@@ -311,7 +315,7 @@ function MediaCard({
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "center",
+            objectPosition: item.objPos || "center",
             transition: "transform 0.6s ease",
             transform: hovered ? "scale(1.05)" : "scale(1)",
             opacity: loaded ? 1 : 0,
