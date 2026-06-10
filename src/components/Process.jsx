@@ -102,9 +102,9 @@ export default function Process() {
             Método que gera
             <em style={{ fontStyle: 'normal' }}> resultado real.</em>
           </h2>
-          <p style={{ color: 'var(--sienna)', fontSize: '16px', fontStyle: 'normal', fontFamily: 'var(--font-serif)', marginTop: '16px', lineHeight: 1.5 }}>
+          {/* <p style={{ color: 'var(--sienna)', fontSize: '16px', fontStyle: 'normal', fontFamily: 'var(--font-serif)', marginTop: '16px', lineHeight: 1.5 }}>
             Como o rio Jordão, nosso método tem um curso — da nascente à foz.
-          </p>
+          </p> */}
         </motion.div>
 
         {/* ── Curso do rio: os marcos seguem o traçado serpenteando ── */}

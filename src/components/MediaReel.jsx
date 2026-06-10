@@ -33,9 +33,9 @@ const MEDIA = [
   {
     id: "01",
     type: "video",
-    src: "/videos/video-01.mp4",
-    title: "Teaser",
-    category: "Awareness",
+    src: "/videos/video-02.mp4",
+    title: "Manifesto",
+    category: "Manifesto",
     quote: "Yarden Lab.",
     description: "A primeira impressão que posiciona.",
   },
@@ -43,12 +43,12 @@ const MEDIA = [
   {
     id: "02",
     type: "photo",
-    src: "/carousel/foto-1.jpg",
-    objPos: "center 22%",
-    title: "Captação Premium",
-    category: "Fotografia",
-    quote: "Estética que converte.",
-    description: "Cada imagem comunica um posicionamento.",
+    src: "/carousel/foto-3.jpg",
+    objPos: "center 50%",
+    title: "Branding Editorial",
+    category: "Branding",
+    quote: "Sua marca, com método.",
+    description: "Direção criativa premium para cada projeto.",
   },
   // 2 — foto quadrada
   {
@@ -56,40 +56,42 @@ const MEDIA = [
     type: "photo",
     src: "/carousel/foto-6.jpg",
     objPos: "center 22%",
-    title: "Identidade Visual",
-    category: "Fotografia",
-    quote: "Presença que posiciona.",
-    description: "Branding editorial com intenção e método.",
+    title: "Posicionamento",
+    category: "Posicionamento",
+    quote: "A imagem que o mercado reconhece.",
+    description: "Cada detalhe comunica valor e intenção.",
   },
   // 3 — foto quadrada
   {
     id: "04",
     type: "photo",
-    src: "/carousel/foto-3.jpg",
-    title: "Branding Editorial",
-    category: "Fotografia",
-    quote: "Sua marca, com método.",
-    description: "Direção criativa premium para cada projeto.",
+    src: "/carousel/foto-1.jpg",
+    objPos: "center 22%",
+    title: "Autenticidade",
+    category: "Autenticidade",
+    quote: "O que é real, converte.",
+    description: "Sua marca com verdade, não com filtro.",
   },
   // 4 — foto LARGA horizontal (2 cols)
   {
-    id: "05",
+    id: "06",
     type: "photo",
     src: "/carousel/foto-4.jpg",
-    title: "Posicionamento",
-    category: "Fotografia",
-    quote: "A imagem que o mercado reconhece.",
-    description: "Cada detalhe comunica valor e intenção.",
+    title: "Tecnologia",
+    category: "Tecnologia",
+    quote: "Marca premium, com inteligência.",
+    description: "Dados e IA por trás de cada decisão.",
   },
   // 5 — vídeo quadrado
   {
-    id: "06",
+    id: "05",
     type: "video",
-    src: "/videos/video-02.mp4",
-    title: "Manifesto",
-    category: "Consideração",
-    quote: "Não somos uma agência.",
-    description: "A inteligência de marca que a sua empresa merece ter.",
+    src: "/videos/video-01.mp4",
+    title: "O Laboratório",
+    objPos: "center 25%",
+    category: "Método",
+    quote: "Marca premium não se faz no IG.",
+    description: "Processo, método e resultado — no mesmo lugar.",
   },
 
   // ── Bloco 2 (linhas 4-6) — espelha o padrão ──
@@ -100,7 +102,7 @@ const MEDIA = [
     src: "/carousel/foto-2.jpg",
     objPos: "center 25%", // ← ajuste aqui: menor % sobe o enquadramento, maior % desce
     title: "Presença Digital",
-    category: "Fotografia",
+    category: "Conteúdo",
     quote: "Conteúdo com direção criativa.",
     description: "Do conceito à captação, tudo com intenção.",
   },
@@ -109,10 +111,10 @@ const MEDIA = [
     id: "08",
     type: "video",
     src: "/videos/video-03.mp4",
-    title: "O Laboratório",
-    category: "Conversão",
-    quote: "Marca premium não se faz no IG.",
-    description: "Processo, método e resultado — no mesmo lugar.",
+    title: "Teaser",
+    category: "Estratégia",
+    quote: "Não somos uma agência.",
+    description: "A inteligência de marca que a sua empresa merece ter.",
   },
   // 8 — foto quadrada
   {
@@ -121,7 +123,7 @@ const MEDIA = [
     src: "/carousel/foto-5.jpg",
     objPos: "center 22%",
     title: "Editorial",
-    category: "Fotografia",
+    category: "Editorial",
     quote: "Identidade que converte.",
     description: "Estética de alto padrão para marcas premium.",
   },
@@ -131,7 +133,7 @@ const MEDIA = [
     type: "photo",
     src: "/carousel/foto-7.jpg",
     title: "Direção de Arte",
-    category: "Fotografia",
+    category: "Direção de Arte",
     quote: "Cada frame, uma intenção.",
     description: "Composição pensada para comunicar valor.",
   },
@@ -141,7 +143,7 @@ const MEDIA = [
     type: "photo",
     src: "/carousel/foto-8.jpg",
     title: "Narrativa Visual",
-    category: "Fotografia",
+    category: "Storytelling",
     quote: "Sua história, bem contada.",
     description: "Imagens que constroem percepção de marca.",
   },
@@ -151,7 +153,7 @@ const MEDIA = [
     type: "video",
     src: "/videos/video-04.mp4",
     title: "A Virada",
-    category: "Awareness",
+    category: "Estética",
     quote: "Marca premium vai além da estética.",
     description: "Método, tecnologia e estética — tudo junto.",
   },
@@ -272,7 +274,6 @@ function MediaCard({
   hasSound,
   featured,
   cardHeight,
-  shouldLoad,
   onTogglePlay,
   onToggleSound,
   onFullscreen,
@@ -307,6 +308,9 @@ function MediaCard({
         <img
           src={item.src}
           alt={item.title}
+          loading="lazy"
+          decoding="async"
+          fetchpriority={featured ? "high" : "low"}
           onLoad={() => setLoaded(true)}
           onError={() => setHasError(true)}
           style={{
@@ -323,15 +327,15 @@ function MediaCard({
         />
       )}
 
-      {/* ── Vídeo ── */}
+      {/* ── Vídeo ── carrega junto com a página (eager) ── */}
       {isVideo && !hasError && (
         <video
           ref={refCallback}
-          src={shouldLoad ? item.src : undefined}
+          src={item.src}
           loop
           muted
           playsInline
-          preload={shouldLoad ? (featured ? "auto" : "metadata") : "none"}
+          preload="auto"
           onError={() => setHasError(true)}
           onLoadedData={() => setLoaded(true)}
           style={{
@@ -340,7 +344,8 @@ function MediaCard({
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "center center",
+            // objectPosition: "center center",
+            objectPosition: item.objPos || "center",
             opacity: loaded ? 1 : 0,
             transition: "opacity 0.5s",
           }}
@@ -564,7 +569,6 @@ function MediaCard({
           </Btn>
         </div>
       )}
-
     </div>
   );
 }
@@ -811,7 +815,6 @@ function Lightbox({ items, initialIdx, onClose }) {
 // ── Seção principal ───────────────────────────────────────────────────────────
 export default function MediaReel() {
   const sectionRef = useRef(null);
-  const shouldLoad = useInView(sectionRef, { once: true, margin: "500px" });
   const inView = useInView(sectionRef, { once: true, margin: "-100px" });
   const domRefs = useRef([]);
 
@@ -828,6 +831,7 @@ export default function MediaReel() {
   const [soundIdx, setSoundIdx] = useState(null);
   const [lightbox, setLightbox] = useState(null); // idx aberto no lightbox | null
 
+  // Toca os vídeos quando a seção entra na tela (eles já carregaram com a página)
   useEffect(() => {
     if (!inView) return;
     videoIndices.forEach((i) => {
@@ -836,6 +840,7 @@ export default function MediaReel() {
     });
   }, [inView]);
 
+  // Som: só um vídeo tem áudio por vez (os demais ficam mudos)
   useEffect(() => {
     videoIndices.forEach((i) => {
       const v = domRefs.current[i];
@@ -872,7 +877,6 @@ export default function MediaReel() {
       refCallback: item.type === "video" ? setRef(idx) : undefined,
       paused: paused[idx],
       hasSound: soundIdx === idx,
-      shouldLoad,
       onTogglePlay: () => togglePlay(idx),
       onToggleSound: () => toggleSound(idx),
       onFullscreen: () => goFullscreen(idx),

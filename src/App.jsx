@@ -1,14 +1,14 @@
-import IntroHero    from './components/IntroHero'
-import Navbar      from './components/Navbar'
-import Hero         from './components/Hero'
-import Ticker       from './components/Ticker'
-import Manifesto    from './components/Manifesto'
-import MediaReel    from './components/MediaReel'
-import Process      from './components/Process'
-import AISection    from './components/AISection'
-import PlansSection from './components/PlansSection'
-import Contact      from './components/Contact'
-import Footer       from './components/Footer'
+import IntroHero from "./components/IntroHero";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Ticker from "./components/Ticker";
+import Manifesto from "./components/Manifesto";
+import MediaReel from "./components/MediaReel";
+import Process from "./components/Process";
+import AISection from "./components/AISection";
+import PlansSection from "./components/PlansSection";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 /**
  * Ordem das seções:
@@ -26,31 +26,31 @@ export default function App() {
 
       {/* Site real — desliza por cima do intro ao rolar; volta ao subir */}
       <div className="site-shell">
-      <Navbar />
-      <main>
-        <Hero />
-        <Ticker />
+        <Navbar />
+        <main>
+          <Hero />
+          <Ticker />
 
-        {/* Produção — grade mista de fotos + vídeos (mesmo grid em todas as telas) */}
-        <MediaReel />
+          {/* Método que gera resultado */}
+          <Process />
 
-        {/* Método que gera resultado */}
-        <Process />
+          {/* Produção — grade mista de fotos + vídeos (mesmo grid em todas as telas) */}
+          <MediaReel />
 
-        {/* Inteligência aplicada */}
-        <AISection />
+          {/* Inteligência aplicada */}
+          <AISection />
 
-        {/* Planos */}
-        <PlansSection />
+          {/* Planos */}
+          <PlansSection />
 
-        {/* Quem somos */}
-        <Manifesto />
+          {/* Quem somos */}
+          <Manifesto />
 
-        {/* Contato */}
-        <Contact />
-      </main>
-      <Footer />
+          {/* Contato */}
+          <Contact />
+        </main>
+        <Footer />
       </div>
     </>
-  )
+  );
 }

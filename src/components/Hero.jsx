@@ -120,7 +120,7 @@ export default function Hero() {
           </p>
 
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            <a href="#plans" className="btn-primary">
+            {/* <a href="#plans" className="btn-primary">
               Conheça as Soluções
               <svg
                 width="16"
@@ -136,9 +136,9 @@ export default function Hero() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </a> */}
             <a href="#plans" className="btn-outline-light">
-              Ver Planos
+              Conheça as Soluções
             </a>
           </div>
         </m.div>
