@@ -33,7 +33,7 @@ const MEDIA = [
   {
     id: "01",
     type: "video",
-    src: "/videos/video-02.mp4",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/video-02.mp4",
     title: "Manifesto",
     category: "Manifesto",
     quote: "Yarden Lab.",
@@ -43,7 +43,7 @@ const MEDIA = [
   {
     id: "02",
     type: "photo",
-    src: "/carousel/foto-3.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-3.jpg",
     objPos: "center 50%",
     title: "Branding Editorial",
     category: "Branding",
@@ -54,7 +54,7 @@ const MEDIA = [
   {
     id: "03",
     type: "photo",
-    src: "/carousel/foto-6.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-6.jpg",
     objPos: "center 22%",
     title: "Posicionamento",
     category: "Posicionamento",
@@ -65,7 +65,7 @@ const MEDIA = [
   {
     id: "04",
     type: "photo",
-    src: "/carousel/foto-1.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-1.jpg",
     objPos: "center 22%",
     title: "Autenticidade",
     category: "Autenticidade",
@@ -76,7 +76,7 @@ const MEDIA = [
   {
     id: "06",
     type: "photo",
-    src: "/carousel/foto-4.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-4.jpg",
     title: "Tecnologia",
     category: "Tecnologia",
     quote: "Marca premium, com inteligência.",
@@ -86,7 +86,7 @@ const MEDIA = [
   {
     id: "05",
     type: "video",
-    src: "/videos/video-01.mp4",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/video-01.mp4",
     title: "O Laboratório",
     objPos: "center 25%",
     category: "Método",
@@ -99,7 +99,7 @@ const MEDIA = [
   {
     id: "07",
     type: "photo",
-    src: "/carousel/foto-2.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-2.jpg",
     objPos: "center 25%", // ← ajuste aqui: menor % sobe o enquadramento, maior % desce
     title: "Presença Digital",
     category: "Conteúdo",
@@ -110,7 +110,7 @@ const MEDIA = [
   {
     id: "08",
     type: "video",
-    src: "/videos/video-03.mp4",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/video-03.mp4",
     title: "Teaser",
     category: "Estratégia",
     quote: "Não somos uma agência.",
@@ -120,7 +120,7 @@ const MEDIA = [
   {
     id: "09",
     type: "photo",
-    src: "/carousel/foto-5.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-5.jpg",
     objPos: "center 22%",
     title: "Editorial",
     category: "Editorial",
@@ -131,7 +131,7 @@ const MEDIA = [
   {
     id: "10",
     type: "photo",
-    src: "/carousel/foto-7.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-7.jpg",
     title: "Direção de Arte",
     category: "Direção de Arte",
     quote: "Cada frame, uma intenção.",
@@ -141,7 +141,7 @@ const MEDIA = [
   {
     id: "11",
     type: "photo",
-    src: "/carousel/foto-8.jpg",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/foto-8.jpg",
     title: "Narrativa Visual",
     category: "Storytelling",
     quote: "Sua história, bem contada.",
@@ -151,7 +151,7 @@ const MEDIA = [
   {
     id: "12",
     type: "video",
-    src: "/videos/video-04.mp4",
+    src: "https://durqlolzozhibydhetzy.supabase.co/storage/v1/object/public/YardenLabFiles/video-04.mp4",
     title: "A Virada",
     category: "Estética",
     quote: "Marca premium vai além da estética.",
@@ -327,7 +327,7 @@ function MediaCard({
         />
       )}
 
-      {/* ── Vídeo ── carrega junto com a página (eager) ── */}
+      {/* ── Vídeo ── streaming (metadata) p/ não baixar o arquivo inteiro de cara ── */}
       {isVideo && !hasError && (
         <video
           ref={refCallback}
@@ -335,7 +335,7 @@ function MediaCard({
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           onError={() => setHasError(true)}
           onLoadedData={() => setLoaded(true)}
           style={{
