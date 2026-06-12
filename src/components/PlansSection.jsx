@@ -2,282 +2,170 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const WA = '5511953107865'
-const waLink = (name) =>
-  `https://wa.me/${WA}?text=${encodeURIComponent(`Olá! Vim pelo site da Yarden Lab e gostaria de saber mais sobre o ${name}.`)}`
+const waLink = (msg) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`
 
-/* ── Planos — Yarden 360 primeiro ─────────────────────────────────── */
-const PLANS = [
-  /* 00 – DESTAQUE (largura total, topo) */
+/* ── 3 caminhos ──────────────────────────────────────────────────────
+   category casa com PLAN_CATEGORIES do AISection (Entrada/Projetos/Recorrente),
+   então o botão "Ver detalhes do plano" da IA destaca o card certo. */
+const CARDS = [
   {
-    num: '07', name: 'Operação Yarden 360',
-    badge: 'Inteligência Total de Marca', tagline: 'A Yarden vira sua inteligência de marca.',
-    forWho: 'Para marcas premium com ambição real — que querem a Yarden Lab como a inteligência de marca da empresa. Para quem entende que crescimento consistente exige método, não sorte.',
-    description: 'A Yarden Lab vira a inteligência de marca da sua empresa. Estratégia, estética, performance e IA sob um único organismo.',
-    features: ['12 posts + 8 reels/mês com direção criativa','Captação completa mensal','Gestão de tráfego pago integrada','Dashboard de marca custom','Análise mensal profunda com IA','Inteligência de mercado em tempo real','Reunião quinzenal + relatório executivo','Onboarding Plano Travessia incluído'],
-    highlight: true, cta: 'Falar sobre Yarden 360', featured: true,
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
-  },
-  /* 01-06 — grade 3 colunas */
-  {
-    num: '01', name: 'Diagnóstico Yarden',
-    badge: 'Ponto de Partida', tagline: 'O ponto de partida estratégico.',
-    forWho: 'Para marcas que precisam entender onde estão antes de dar o próximo passo — fundadores e profissionais premium que sentem que o posicionamento não traduz o valor real do que entregam.',
-    description: 'O diagnóstico essencial de marca. Posicionamento, tom de voz e diretrizes visuais entregues em 1 semana.',
-    features: ['Imersão 1,5h com founder','Posicionamento e manifesto de marca','Tom de voz e linguagem','3 pilares de comunicação','Diretrizes visuais básicas','Documento estratégico 8–12 páginas','Análise com IA incluída'],
-    highlight: false, cta: 'Quero meu Diagnóstico', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6" strokeLinecap="round"/></svg>,
+    num: '01', kicker: 'Comece aqui', category: 'Entrada',
+    name: 'Diagnóstico',
+    desc: 'Para entender onde sua marca está antes do próximo passo.',
+    tags: ['Diagnóstico Yarden'],
+    features: ['Posicionamento + manifesto', 'Tom de voz e diretrizes', 'Entrega em 1 semana'],
+    cta: 'Ver Diagnóstico',
+    wa: 'Olá! Vim pelo site da Yarden Lab e quero começar pelo Diagnóstico.',
+    featured: false,
   },
   {
-    num: '02', name: 'Plano Travessia',
-    badge: 'Estratégia + Execução', tagline: 'Estratégia completa em 4 semanas.',
-    forWho: 'Para quem quer estratégia completa de marca com 30 dias de execução real antes de comprometer com o longo prazo. Ideal para negócios em transição de posicionamento.',
-    description: 'Estratégia completa + 30 dias de execução demonstrativa. Veja funcionar antes de decidir.',
-    features: ['Imersão completa + plano de marca','Mapeamento de jornada do cliente','Calendário editorial 30 dias','1 diária de captação','8 conteúdos publicados','Setup de automações com IA','Apresentação executiva gravada'],
-    highlight: false, cta: 'Iniciar Travessia', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M3 12h18M3 6h18M3 18h18" strokeLinecap="round"/><path d="M17 3l4 3-4 3" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+    num: '02', kicker: 'Projetos', category: 'Projetos',
+    name: 'Projetos com prazo',
+    desc: 'Para um trabalho com começo, meio e fim definidos.',
+    tags: ['Plano Travessia', 'Sprint de Captação', 'Sprint Inteligência'],
+    features: ['Estratégia ou produção em volume', 'Escopo e entrega fechados', 'Ideal pra lançamento ou virada'],
+    cta: 'Ver Projetos',
+    wa: 'Olá! Vim pelo site da Yarden Lab e quero saber mais sobre os Projetos com prazo.',
+    featured: false,
   },
   {
-    num: '03', name: 'Sprint de Captação',
-    badge: 'Conteúdo Premium em Volume', tagline: '30–40 conteúdos prontos para 90 dias.',
-    forWho: 'Para marcas que têm um lançamento, evento ou precisam recarregar o calendário com conteúdo premium de uma vez — sem abrir mão da direção criativa.',
-    description: '30–40 conteúdos premium prontos para 90 dias de presença consistente.',
-    features: ['Briefing estratégico 1,5h','1 diária extendida ou 2 meias-diárias','30–40 conteúdos editados','Mix: posts, reels e stories','Calendário de uso 90 dias','Legendas com IA + curadoria editorial'],
-    highlight: false, cta: 'Iniciar Sprint de Captação', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>,
-  },
-  {
-    num: '04', name: 'Sprint Inteligência',
-    badge: 'Tecnologia & IA Aplicada', tagline: 'IA e tecnologia na sua operação.',
-    forWho: 'Para empresas que precisam implementar inteligência artificial e tecnologia na operação de marca e vendas — sem depender de TI interno ou agências genéricas.',
-    description: 'IA e tecnologia implementadas na sua operação. Diagnóstico técnico, arquitetura, build e handoff.',
-    features: ['Diagnóstico tech completo','Arquitetura de solução customizada','Implementação de ferramentas e IA','Integrações com sistemas internos','Treinamento da equipe','Documentação técnica completa','30 dias de suporte pós-entrega'],
-    highlight: false, cta: 'Iniciar Sprint Inteligência', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73A2 2 0 0 1 10 4a2 2 0 0 1 2-2z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>,
-  },
-  {
-    num: '05', name: 'Operação Corrente Light',
-    badge: 'Presença Premium', tagline: 'Presença digital gerida com método.',
-    forWho: 'Para profissionais e negócios premium que precisam de presença digital consistente e com direção criativa — sem gestão de tráfego pago.',
-    description: 'Gestão completa de presença digital com direção criativa Yarden, mês a mês.',
-    features: ['8 posts/mês + 8 reels editados','Stories sob direção Yarden','1 captação meia-diária/mês','Calendário editorial mensal','1 reunião mensal de alinhamento','Dashboard de análise com IA','Auto-resposta inteligente de DM'],
-    highlight: false, cta: 'Ativar Operação Corrente Light', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" strokeLinecap="round"/><path d="M21 3v5h-5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-  },
-  {
-    num: '06', name: 'Operação Corrente Standard',
-    badge: 'Performance + Presença', tagline: 'Presença premium aliada a tráfego pago.',
-    forWho: 'Para marcas que querem presença premium aliada a tráfego pago integrado — resultado consistente de vendas com a estética que o negócio merece.',
-    description: 'Gestão completa de presença digital + tráfego pago sob a mesma direção estratégica.',
-    features: ['Tudo do plano Corrente Light','Gestão de tráfego pago integrada','Análise de dados trimestral aprofundada','Relatório de performance mensal'],
-    highlight: false, cta: 'Ativar Operação Standard', featured: false,
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+    num: '03', kicker: 'Operação', category: 'Recorrente',
+    name: 'A Yarden rodando',
+    desc: 'Para ter a Yarden cuidando da sua marca todo mês.',
+    tags: ['Corrente Light', 'Corrente Standard', 'Yarden 360'],
+    features: ['Conteúdo + gestão mensal', 'Tráfego pago e relatórios', 'Operação contínua com IA'],
+    cta: 'Ver Operação',
+    wa: 'Olá! Vim pelo site da Yarden Lab e quero a Yarden cuidando da minha marca todo mês.',
+    featured: true,
   },
 ]
 
-/* ── Card de plano (sempre aberto) ──────────────────────────────────── */
-function PlanCard({ plan, index, inView, isHighlighted }) {
-  const hl    = plan.highlight
-  // Acento contextual: sienna em card branco (legível), cream em card espresso
-  const accent   = hl ? 'var(--cream)' : 'var(--sienna)'
-  const textMain = hl ? 'rgba(243,235,226,0.82)' : 'rgba(54,15,17,0.78)'
-  const textSoft = hl ? 'rgba(243,235,226,0.6)'  : 'rgba(54,15,17,0.6)'
+const Check = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sienna)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+)
 
+/* ── Card ────────────────────────────────────────────────────────────── */
+function PlanCard({ card, index, inView, highlighted }) {
+  const feat = card.featured
   return (
     <motion.div
-      id={`plan-${plan.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`}
-      className={plan.featured ? 'plan-card featured' : 'plan-card'}
+      id={`plan-card-${card.category.toLowerCase()}`}
+      className="plan3-card"
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: Math.min(index * 0.07, 0.5) }}
+      transition={{ duration: 0.6, delay: Math.min(index * 0.12, 0.4) }}
       style={{
-        background: hl ? 'var(--espresso)' : '#ffffff',
-        padding: plan.featured ? '52px 60px' : '40px 36px',
         position: 'relative',
-        overflow: 'hidden',
+        background: '#fff',
+        borderRadius: '18px',
+        border: feat ? '2px solid var(--espresso)' : '1px solid rgba(54,15,17,0.08)',
+        padding: 'clamp(28px,3vw,40px) clamp(24px,2.6vw,34px)',
         display: 'flex',
-        flexDirection: plan.featured ? 'column' : 'column',
-        boxShadow: isHighlighted
-          ? '0 0 0 2px var(--cream), 0 8px 40px rgba(243, 235, 226,0.22)'
-          : 'none',
-        transition: 'box-shadow 0.6s ease',
-        ...(plan.featured ? { gridColumn: '1 / -1' } : {}),
+        flexDirection: 'column',
+        boxShadow: highlighted
+          ? '0 0 0 3px var(--sienna), 0 16px 50px rgba(104,45,27,0.22)'
+          : feat
+            ? '0 14px 44px rgba(54,15,17,0.10)'
+            : '0 6px 26px rgba(54,15,17,0.05)',
+        transition: 'box-shadow 0.5s ease',
       }}
     >
-      {/* Número */}
-      <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.24em', color: hl ? 'rgba(243,235,226,0.2)' : 'rgba(54,15,17,0.18)', marginBottom: '18px' }}>
-        {plan.num}
-      </div>
-
-      {/* Ícone + badge */}
-      <div className="plan-badgerow" style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-        <div style={{ color: accent, flexShrink: 0 }}>{plan.icon}</div>
+      {/* Selo "Mais Escolhido" */}
+      {feat && (
         <span style={{
-          background: hl ? 'rgba(243,235,226,0.12)' : 'var(--sienna)',
-          color: hl ? 'var(--cream)' : '#fff',
-          fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em',
-          textTransform: 'uppercase', padding: '5px 11px',
+          position: 'absolute', top: '-13px', left: '28px',
+          background: 'var(--espresso)', color: 'var(--cream)',
+          fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em',
+          textTransform: 'uppercase', padding: '6px 14px', borderRadius: '999px',
+          whiteSpace: 'nowrap',
         }}>
-          {plan.badge}
+          Mais Escolhido
         </span>
-      </div>
+      )}
 
-      {/* Nome + tagline */}
-      <h3 className="plan-name" style={{
-        fontFamily: 'var(--font-serif)', fontWeight: 400,
-        fontSize: plan.featured ? 'clamp(26px,3vw,40px)' : 'clamp(22px,2vw,28px)',
-        color: hl ? 'var(--cream)' : 'var(--espresso)',
-        lineHeight: 1.15, marginBottom: '10px',
-      }}>
-        {plan.name}
-      </h3>
-      <p className="plan-tagline" style={{ color: accent, fontSize: '18px', fontStyle: 'normal', fontWeight: 500, fontFamily: 'var(--font-serif)', marginBottom: '28px', lineHeight: 1.45 }}>
-        {plan.tagline}
+      {/* Kicker */}
+      <p style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--sienna)', marginBottom: '16px' }}>
+        {card.num} · {card.kicker}
       </p>
 
-      {/* Divisória */}
-      <div style={{ height: 1, background: hl ? 'rgba(243, 235, 226,0.18)' : 'rgba(54,15,17,0.1)', marginBottom: '26px' }} />
+      {/* Nome */}
+      <h3 style={{ fontFamily: 'var(--font-serif)', fontWeight: 400, fontStyle: 'normal', fontSize: 'clamp(26px,2.4vw,32px)', color: 'var(--espresso)', lineHeight: 1.1, marginBottom: '14px' }}>
+        {card.name}
+      </h3>
 
-      {/* Layout interno: 2 cols no featured, 1 col nos demais */}
-      <div className="plan-inner" style={{
-        display: 'grid',
-        gridTemplateColumns: plan.featured ? '1fr 1fr' : '1fr',
-        gap: plan.featured ? '60px' : '24px',
-        alignItems: 'stretch',
-        flex: 1,
-      }}>
-        {/* Esquerda: para quem + descrição */}
-        <div>
-          <div className="plan-forwho" style={{ borderLeft: `2px solid ${accent}`, paddingLeft: '16px', marginBottom: '20px' }}>
-            <p style={{ color: textMain, fontSize: '15px', lineHeight: 1.65, fontWeight: 400 }}>
-              {plan.forWho}
-            </p>
-          </div>
-          <p className="plan-desc" style={{ color: textSoft, fontSize: '14px', lineHeight: 1.7, fontWeight: 300 }}>
-            {plan.description}
-          </p>
-        </div>
+      {/* Descrição */}
+      <p style={{ color: 'rgba(54,15,17,0.72)', fontSize: '16px', lineHeight: 1.5, marginBottom: '22px', fontWeight: 400 }}>
+        {card.desc}
+      </p>
 
-        {/* Direita: features + CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, marginBottom: '16px' }}>
-            O que está incluído
-          </p>
-          <ul style={{ listStyle: 'none', flex: 1 }}>
-            {plan.features.map(f => (
-              <li key={f} style={{ display: 'flex', gap: '11px', marginBottom: '11px', color: textMain, fontSize: '14px', lineHeight: 1.5 }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '3px' }}>
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
-                {f}
-              </li>
-            ))}
-          </ul>
-
-          <a
-            href={waLink(plan.name)}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '10px',
-              padding: '14px 28px',
-              marginTop: '28px',
-              background: 'var(--espresso)',
-              color: 'var(--cream)', fontSize: '11px', fontWeight: 600,
-              letterSpacing: '0.12em', textTransform: 'uppercase',
-              textDecoration: 'none', transition: 'background 0.3s ease',
-              border: hl ? '1px solid rgba(243,235,226,0.3)' : 'none',
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = 'var(--sienna)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'var(--espresso)'}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-            </svg>
-            {plan.cta}
-          </a>
-        </div>
+      {/* Tags */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '9px', marginBottom: '26px' }}>
+        {card.tags.map((t) => (
+          <span key={t} style={{
+            background: 'rgba(104,45,27,0.09)', color: 'var(--sienna)',
+            fontSize: '13px', fontWeight: 600, padding: '7px 14px', borderRadius: '999px',
+          }}>
+            {t}
+          </span>
+        ))}
       </div>
 
-      {/* Brilho 360 */}
-      {hl && (
-        <div style={{
-          position: 'absolute', top: '-60px', right: '-60px',
-          width: '240px', height: '240px',
-          background: 'radial-gradient(circle, rgba(243, 235, 226,0.13) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-      )}
+      {/* Features */}
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0, marginBottom: '30px' }}>
+        {card.features.map((f) => (
+          <li key={f} style={{ display: 'flex', gap: '11px', marginBottom: '13px', color: 'rgba(54,15,17,0.86)', fontSize: '16px', lineHeight: 1.4 }}>
+            <Check />
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA — empurrado para a base p/ alinhar entre os cards */}
+      <a
+        href={waLink(card.wa)}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          marginTop: 'auto',
+          display: 'block', textAlign: 'center',
+          padding: '17px 24px', borderRadius: '8px',
+          background: 'var(--espresso)', color: 'var(--cream)',
+          fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em',
+          textTransform: 'uppercase', textDecoration: 'none',
+          transition: 'background 0.3s ease',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--sienna)')}
+        onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--espresso)')}
+      >
+        {card.cta}
+      </a>
     </motion.div>
   )
 }
 
 /* ── Seção ──────────────────────────────────────────────────────────── */
 export default function PlansSection() {
-  const ref                             = useRef(null)
-  const inView                          = useInView(ref, { once: true, margin: '-60px' })
-  const [highlightedPlan, setHighlightedPlan] = useState(null)
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [highlighted, setHighlighted] = useState(null)
 
-  /* Deeplink da IA: rola até o plano e o destaca */
+  /* Deeplink da IA: rola até o card da categoria recomendada e o destaca */
   useEffect(() => {
     const handler = (e) => {
-      const { planName } = e.detail
+      const slug = (e.detail?.category || '').toLowerCase()
+      if (!slug) return
       document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' })
       setTimeout(() => {
-        setHighlightedPlan(planName)
-        const slug = planName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
-        document.getElementById(`plan-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        setTimeout(() => setHighlightedPlan(null), 2500)
-      }, 600)
+        setHighlighted(slug)
+        document.getElementById(`plan-card-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        setTimeout(() => setHighlighted(null), 2600)
+      }, 550)
     }
     window.addEventListener('openPricingPlan', handler)
     return () => window.removeEventListener('openPricingPlan', handler)
   }, [])
-
-  /* Equaliza as alturas (nome, "para quem" e descrição) entre os cards de cada
-     linha — assim a descrição e o "O que está incluído" ficam alinhados, sem
-     min-heights fixos (que criavam vão ou quebravam em larguras diferentes). */
-  useEffect(() => {
-    const CLASSES = ['plan-badgerow', 'plan-name', 'plan-tagline', 'plan-forwho', 'plan-desc']
-
-    const equalize = () => {
-      CLASSES.forEach((cls) => {
-        const els = [...document.querySelectorAll(`.plans-grid .plan-card:not(.featured) .${cls}`)]
-        if (!els.length) return
-        // reset
-        els.forEach((el) => { el.style.minHeight = '' })
-        // agrupa por linha (cards na mesma linha do grid têm o mesmo topo)
-        const rows = new Map()
-        els.forEach((el) => {
-          const card = el.closest('.plan-card')
-          const key = Math.round(card.getBoundingClientRect().top)
-          if (!rows.has(key)) rows.set(key, [])
-          rows.get(key).push(el)
-        })
-        // aplica a maior altura de cada linha
-        rows.forEach((group) => {
-          const max = Math.max(...group.map((el) => el.getBoundingClientRect().height))
-          group.forEach((el) => { el.style.minHeight = `${Math.ceil(max)}px` })
-        })
-      })
-    }
-
-    let raf
-    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(equalize) }
-
-    equalize()
-    // re-roda quando as fontes carregam (mudam a quebra de linha)
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(equalize)
-    const t = setTimeout(equalize, 400)
-    window.addEventListener('resize', onResize)
-    return () => {
-      clearTimeout(t)
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
-
-  const featuredPlan = PLANS[0]          // Yarden 360
-  const gridPlans    = PLANS.slice(1)    // 6 planos restantes
 
   return (
     <section id="plans" style={{ background: 'var(--cream)', padding: 'clamp(64px, 9vw, 130px) 0 clamp(56px, 8vw, 100px)' }}>
@@ -288,53 +176,28 @@ export default function PlansSection() {
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.75 }}
-          style={{ marginBottom: '72px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '40px' }}
+          style={{ marginBottom: 'clamp(40px,5vw,64px)', maxWidth: '720px' }}
         >
-          <div>
-            <p className="section-label" style={{ color: 'var(--sienna)' }}>Nossas Soluções</p>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontSize: 'clamp(34px,5vw,66px)', lineHeight: 1.05, color: 'var(--espresso)' }}>
-              Seis produtos.<br />
-              <em style={{ fontStyle: 'normal' }}>Um método.</em>
-            </h2>
-          </div>
-          <p style={{ color: 'rgba(54,15,17,0.55)', maxWidth: '340px', lineHeight: 1.8, fontSize: 'clamp(14px,1.3vw,15px)', fontWeight: 300 }}>
-            Da estratégia inicial à operação completa integrada com IA — o produto certo para o estágio certo da sua marca.
+          <p className="section-label" style={{ color: 'var(--sienna)' }}>Nossas Soluções</p>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontWeight: 300, fontStyle: 'normal', fontSize: 'clamp(34px,5vw,62px)', lineHeight: 1.05, color: 'var(--espresso)', marginBottom: '18px' }}>
+            Escolha por onde começar.
+          </h2>
+          <p style={{ color: 'rgba(54,15,17,0.6)', fontSize: 'clamp(15px,1.5vw,18px)', lineHeight: 1.6, fontWeight: 300 }}>
+            3 caminhos. Comece pelo ponto certo para o momento da sua marca.
           </p>
         </motion.div>
 
-        {/* ── Grade de planos ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px' }} className="plans-grid">
-
-          {/* Yarden 360 — topo, largura total */}
-          <PlanCard
-            plan={featuredPlan}
-            index={0}
-            inView={inView}
-            isHighlighted={highlightedPlan === featuredPlan.name}
-          />
-
-          {/* 6 planos em grade */}
-          {gridPlans.map((plan, i) => (
-            <PlanCard
-              key={plan.name}
-              plan={plan}
-              index={i + 1}
-              inView={inView}
-              isHighlighted={highlightedPlan === plan.name}
-            />
+        {/* Grade de 3 cards */}
+        <div className="plans3-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(16px,2vw,28px)', alignItems: 'stretch' }}>
+          {CARDS.map((card, i) => (
+            <PlanCard key={card.name} card={card} index={i} inView={inView} highlighted={highlighted === card.category.toLowerCase()} />
           ))}
         </div>
-
-        {/* Rodapé */}
       </div>
 
       <style>{`
-        @media (max-width: 1024px) {
-          .plans-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .plans-grid { grid-template-columns: 1fr !important; }
-          .plan-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
+        @media (max-width: 860px) {
+          .plans3-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>
